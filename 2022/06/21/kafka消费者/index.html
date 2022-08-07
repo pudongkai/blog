@@ -25,16 +25,16 @@
 <meta property="og:site_name" content="Eoccc的博客">
 <meta property="og:description" content="Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的所有消费组，并由消费组中的一个消费者进行消费。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://eoccc.gitee.io/.io//dongkaipu/IdeaProject/blog-source/source/_posts/img/image-20220803203252462.png">
-<meta property="og:image" content="https://eoccc.gitee.io/.io//dongkaipu/IdeaProject/blog-source/source/_posts/img/image-20220803203324669.png">
-<meta property="og:image" content="https://eoccc.gitee.io/.io//image-20220807151328147.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypbl8zq6j20nc0eeab4.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypbfi2vtj20my0f2dgw.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypavsxvoj20l80awaaj.jpg">
 <meta property="article:published_time" content="2022-06-21T14:52:41.000Z">
-<meta property="article:modified_time" content="2022-08-07T17:07:38.336Z">
+<meta property="article:modified_time" content="2022-08-07T17:11:20.864Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="kafka">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://eoccc.gitee.io/.io//dongkaipu/IdeaProject/blog-source/source/_posts/img/image-20220803203252462.png">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypbl8zq6j20nc0eeab4.jpg">
   <!-- Canonical links -->
   <link rel="canonical" href="https://eoccc.gitee.io/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/index.html">
   
@@ -338,9 +338,9 @@
 <span id="more"></span>
 <h1 id="消费者与消费组"><a class="markdownIt-Anchor" href="#消费者与消费组"></a> 消费者与消费组</h1>
 <p>某个主题中共有4个分区(Partition):P0、P1、P2、P3。有两个消费组A和B都订阅了这个主题，消费组A中有4个消费者(C0、C1、C2和C3)，消费组B中有2个消费者C4和C5)。按照Kafka默认的规则，最后的分配结果是消费组A中的每一个消费者分配到1个分区，消费组B中的每一个消费者分配到2个分区，两个消费组之间互不影响。每个消费者只能消费所分配到的分区中的消息。换言之，每一个分区只能被一个消费组中的一个消费者所消费。</p>
-<img src="/.io//dongkaipu/IdeaProject/blog-source/source/_posts/img/image-20220803203252462.png" alt="image-20220803203252462" style="zoom:50%;">
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypbl8zq6j20nc0eeab4.jpg" alt="image-20220803203252462" style="zoom:50%;">
 <p>如果消费者的个数大于分区的个数，则有的消费者会分配不到分区。</p>
-<img src="/.io//dongkaipu/IdeaProject/blog-source/source/_posts/img/image-20220803203324669.png" alt="image-20220803203324669" style="zoom:40%;">
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypbfi2vtj20my0f2dgw.jpg" alt="image-20220803203324669" style="zoom:40%;">
 <p>一个消费者只会属于一个消费组，消费模式可以分为点对点模式和发布订阅模式：</p>
 <blockquote>
 <ul>
@@ -385,7 +385,7 @@
 <p>Kafka中每条消息都有唯一的offset，用来表示消息在分区中的位置。消费者也保存了一个offset，用来记录消费到分区中某个消息所在的位置。</p>
 <p>在旧的消费者客户端中，offset是保存在zookeeper中的，而在新的消费者客户端中，是保存在kafka的内部主题__consumer_offsets中。</p>
 <p>如果消费者当前消费到了x，需要提交的位移为x+1。</p>
-<img src="/.io//image-20220807151328147.png" alt="image-20220807151328147" style="zoom:50%;">
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypavsxvoj20l80awaaj.jpg" alt="image-20220807151328147" style="zoom:50%;">
 <p><strong>消费者提交偏移量的时机</strong></p>
 <p>消费者提交偏移量，有可能会造成重复消费和消息丢失现象。</p>
 <blockquote>
