@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>深入浅出对比数组和链表 | Eoccc的博客</title>
+  <meta name="description" content="数组和链表是我们日常编程中非常常用的两种数据结构，那么它们的性能表现如何，本文由浅入深对此进行一些分析。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入浅出对比数组和链表">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="数组和链表是我们日常编程中非常常用的两种数据结构，那么它们的性能表现如何，本文由浅入深对此进行一些分析。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mtu68wqj20qy0hi403.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mtp6f6ej20iy066q32.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mtm8h8qj20qq0g2jss.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mu1a41yj20qr0g2759.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mrm2w95j20k20c2t9b.jpg">
+<meta property="article:published_time" content="2022-05-07T08:25:19.000Z">
+<meta property="article:modified_time" content="2022-08-01T04:58:42.278Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="随笔">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mtu68wqj20qy0hi403.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://gitee.com/eoccc" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/dubbo/" style="font-size: 13.2px;">dubbo</a> <a href="/tags/kafka/" style="font-size: 13.6px;">kafka</a> <a href="/tags/redis/" style="font-size: 13.8px;">redis</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 14px;">中间件</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" style="font-size: 13.4px;">技术笔记</a> <a href="/tags/%E8%B8%A9%E5%9D%91/" style="font-size: 13px;">踩坑</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 13.6px;">随笔</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="title">软引用和弱的使用场景</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/" class="title">kafka消费者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" class="title">缓存淘汰算法总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/" class="title">kafka生产者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/" class="title">深拷贝和浅拷贝工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-14T07:10:35.000Z" itemprop="datePublished">2022-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-number">1.</span> <span class="toc-text"> 内存分配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0"><span class="toc-number">2.</span> <span class="toc-text"> 添加</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5"><span class="toc-number">3.</span> <span class="toc-text"> 插入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-number">4.</span> <span class="toc-text"> 删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%8D%E5%8E%86"><span class="toc-number">5.</span> <span class="toc-text"> 遍历</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-深入浅出对比数组和链表" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深入浅出对比数组和链表
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/" class="article-date">
+	  <time datetime="2022-05-07T08:25:19.000Z" itemprop="datePublished">2022-05-07</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>数组和链表是我们日常编程中非常常用的两种数据结构，那么它们的性能表现如何，本文由浅入深对此进行一些分析。</p>
+<span id="more"></span>
+<h2 id="内存分配"><a class="markdownIt-Anchor" href="#内存分配"></a> 内存分配</h2>
+<p>在开始分析之前，我们先来了解一下数组和链表在内存中的存储方式。</p>
+<p>数组在内存中是存储在一个连续的空间。对于基础数据类型，数组的元素存储的是数据本身，对于引用类型，元素存储的是引用地址（一个Integer值）。在为数组由两部分组成：数组的元数据（16字节）、数组的元素（基本数据类型为元素本身大小，引用类型为引用地址–8个字节）。</p>
+<p>链表在内存中是分布在非连续的空间中的，通过地址指针指向下一个或上一个节点。</p>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mtu68wqj20qy0hi403.jpg" alt="image-20220610090434150" style="zoom:50%;">
+<p>在64位jvm中，内存页为内存分配的最小单位，每个内存页的大小为8个字节。因此，在为对象分配内存的时候，必须为8的倍数，如果元素占用的内存小于8个字节，也会分配8个字节。如：</p>
+<blockquote>
+<ol>
+<li><code>new int[1]</code>的大小为24个字节，即元素int的4个字节 + 4个空白字节（因为一个内存页为8个字节，） + 数组内部属性16个字节；</li>
+<li><code>new long[1]</code>的大小为24个字节，即元素long的8个字节 + 数组内部属性16个字节；</li>
+<li><code>new Node[1]</code>将会分配24个字节，即引用地址Integer的4个字节 + 4个空白字节 + 数组内部属性16个字节</li>
+</ol>
+</blockquote>
+<p>接下来我们进行测试：我们分别对boolean、int、long、Node对象新建容量从1～10的数组，然后分别统计每个数组占用内存的大小。</p>
+<p>这里我使用jol的ClassLayout工具获取对象占用的内存大小，引入依赖即可使用：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.openjdk.jol<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jol-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> <span class="keyword">throws</span> ParseException &#123;</span><br><span class="line">  System.out.println(<span class="string">&quot;capacity booleanArraySize intArraySize longArraySize nodeArraySize&quot;</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="type">boolean</span>[] booleanArray = <span class="keyword">new</span> <span class="title class_">boolean</span>[i];</span><br><span class="line">    <span class="type">int</span>[] intArray = <span class="keyword">new</span> <span class="title class_">int</span>[i];</span><br><span class="line">    <span class="type">long</span>[] longArray = <span class="keyword">new</span> <span class="title class_">long</span>[i];</span><br><span class="line">    Node[] nodeArray = <span class="keyword">new</span> <span class="title class_">Node</span>[i];</span><br><span class="line">    <span class="type">long</span> <span class="variable">booleanArraySize</span> <span class="operator">=</span> ClassLayout.parseInstance(booleanArray).instanceSize();</span><br><span class="line">    <span class="type">long</span> <span class="variable">intArraySize</span> <span class="operator">=</span> ClassLayout.parseInstance(intArray).instanceSize();</span><br><span class="line">    <span class="type">long</span> <span class="variable">longArraySize</span> <span class="operator">=</span> ClassLayout.parseInstance(longArray).instanceSize();</span><br><span class="line">    <span class="type">long</span> <span class="variable">nodeArraySize</span> <span class="operator">=</span> ClassLayout.parseInstance(nodeArray).instanceSize();</span><br><span class="line">    System.out.printf(<span class="string">&quot;%d %d %d %d %d%n&quot;</span>, i, booleanArraySize, intArraySize, longArraySize, nodeArraySize);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> Node pre;</span><br><span class="line">  <span class="keyword">private</span> Node next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>统计的结果如下表所示。如boolean数组，初始大小为24字节，除去数组自身的16字节以外，还有8个字节可以用来保存元素，boolean占用1个字节，也就是说还可以存8个boolean元素，正如实验结果一样，数组容量为1～8的时候，占用内存为24字节，当数组容量为9的时候变成32字节（24+8，即增加了一个内存页）。</p>
+<table>
+<thead>
+<tr>
+<th>capacity</th>
+<th>booleanArraySize</th>
+<th>intArraySize</th>
+<th>longArraySize</th>
+<th>nodeArraySize</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>24</td>
+<td>24</td>
+<td>24</td>
+<td>24</td>
+</tr>
+<tr>
+<td>2</td>
+<td>24</td>
+<td>24</td>
+<td>32</td>
+<td>24</td>
+</tr>
+<tr>
+<td>3</td>
+<td>24</td>
+<td>32</td>
+<td>40</td>
+<td>32</td>
+</tr>
+<tr>
+<td>4</td>
+<td>24</td>
+<td>32</td>
+<td>48</td>
+<td>32</td>
+</tr>
+<tr>
+<td>5</td>
+<td>24</td>
+<td>40</td>
+<td>56</td>
+<td>40</td>
+</tr>
+<tr>
+<td>6</td>
+<td>24</td>
+<td>40</td>
+<td>64</td>
+<td>40</td>
+</tr>
+<tr>
+<td>7</td>
+<td>24</td>
+<td>48</td>
+<td>72</td>
+<td>48</td>
+</tr>
+<tr>
+<td>8</td>
+<td>24</td>
+<td>48</td>
+<td>80</td>
+<td>48</td>
+</tr>
+<tr>
+<td>9</td>
+<td>32</td>
+<td>56</td>
+<td>88</td>
+<td>56</td>
+</tr>
+<tr>
+<td>10</td>
+<td>32</td>
+<td>56</td>
+<td>96</td>
+<td>56</td>
+</tr>
+</tbody>
+</table>
+<h2 id="添加"><a class="markdownIt-Anchor" href="#添加"></a> 添加</h2>
+<p><strong>数组插入</strong></p>
+<p>对于数组来说，在末尾添加一个元素的流程大致是这样的：</p>
+<blockquote>
+<ol>
+<li>找到数组在内存中的起始地址；</li>
+<li>根据下标计算出需要插入元素的位置的地址；</li>
+<li>如果是基本数据类型，直接将元素写入到内存中；</li>
+<li>如果是引用类型，将元素的地址写入到需要添加元素的内存地址</li>
+</ol>
+</blockquote>
+<p>如下图是一个容量为3的int数组的示例，数组中已经保存了两个元素，由于是基本类型，没有赋值的元素（即第三个元素）会初始化为0。数组在内存中的起始地址为1000，metadate占16字节，因此第一个元素的起始位置是1016，由于内存页为8个字节，保存3个元素需要两个内存页，因此数组的结束位置为1032。</p>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mtp6f6ej20iy066q32.jpg" alt="image-20220609103236268" style="zoom:67%;">
+<p>如果要在第三个位置添加一个元素，即如下操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array[<span class="number">2</span>] = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>那么会进行如下操作：</p>
+<blockquote>
+<ol>
+<li>找到数组在内存中的位置1000</li>
+<li>计算出需要插入的元素的位置：1000 + 16 + 4 * 2 = 1024</li>
+<li>判断地址是否超出数组分配的内存地址范围，超出则说明数组越界，抛出<em>IndexOutOfBoundsException</em></li>
+<li>将需要插入的值写入到指定的内存位置</li>
+</ol>
+</blockquote>
+<p><strong>链表添加元素</strong></p>
+<p>链表添加元素就比较简单，直接把Node的引用地址赋值给末尾Node的next即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail.next = <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br></pre></td></tr></table></figure>
+<p><strong>性能分析</strong></p>
+<p>数组追加元素比链表追加元素要多两个操作：计算元素的位置、判断是否越界。因此我猜测链表添加元素的速度要快一些。测试一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testAdd</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxCount</span> <span class="operator">=</span> <span class="number">1000000</span>;</span><br><span class="line">    System.out.println(<span class="string">&quot;count    array add cost&quot;</span>);</span><br><span class="line">    <span class="keyword">while</span> (count &lt; maxCount) &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">        arrayAdd(count);</span><br><span class="line">        System.out.println(count + <span class="string">&quot;    &quot;</span> + (System.nanoTime() - start));</span><br><span class="line">        count = count &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;count    link add cost&quot;</span>);</span><br><span class="line">    count = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">while</span> (count &lt; maxCount) &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">        linkAdd(count);</span><br><span class="line">        System.out.println(count + <span class="string">&quot;    &quot;</span> + (System.nanoTime() - start));</span><br><span class="line">        count = count &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node[] arrayAdd(<span class="type">int</span> count) &#123;</span><br><span class="line">    Node[] nodes = <span class="keyword">new</span> <span class="title class_">Node</span>[count];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; count - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        nodes[i] = <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> nodes;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">linkAdd</span><span class="params">(<span class="type">int</span> count)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">head</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">    <span class="type">Node</span> <span class="variable">tmp</span> <span class="operator">=</span> head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; count - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        tmp.next = <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        tmp = tmp.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分析一下数据，如下图，横坐标是元素的数量，纵坐标是耗时（纳秒）。可以看到，在一定数量范围内，数组追加元素的速度比链表要快一些，但是超过一定的数据量后，链表要快一些。</p>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mtm8h8qj20qq0g2jss.jpg" alt="image-20220610092601983" style="zoom:50%;">
+<p>图中add的耗时存在一个先增后降的过程，这里可能涉及到jvm和操作系统更底层的实现逻辑了，暂时没有分析出原因。</p>
+<h2 id="插入"><a class="markdownIt-Anchor" href="#插入"></a> 插入</h2>
+<p><strong>数组插入</strong></p>
+<p>数组的插入是一个比较重的操作，大致流程如下：</p>
+<blockquote>
+<ol>
+<li>根据下标定位到需要插入的内存地址（通过偏移量计算）</li>
+<li>将后面的元素往后移动一个位置（涉及到大块的内存移动）</li>
+<li>将新的元素写到指定的位置</li>
+</ol>
+</blockquote>
+<p>数组插入代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">arrayInsert</span><span class="params">(<span class="type">int</span> index, <span class="type">int</span> currSize, Node[] nodes, Node node)</span> &#123;</span><br><span class="line">    <span class="comment">//先把后面的元素后移一位</span></span><br><span class="line">    <span class="keyword">while</span> (currSize &gt; index) &#123;</span><br><span class="line">        nodes[currSize] = nodes[currSize - <span class="number">1</span>];</span><br><span class="line">        currSize--;</span><br><span class="line">    &#125;</span><br><span class="line">    nodes[index] = node;</span><br><span class="line">    <span class="keyword">return</span> currSize+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>链表插入</strong></p>
+<p>链表的插入比较简单，只需要修改链表的指针即可，而且只需要修改2个节点的指针（双向链表需要修改3个节点的指针）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//单向链表插入</span></span><br><span class="line"><span class="type">Node</span> <span class="variable">next</span> <span class="operator">=</span> pre.next;</span><br><span class="line">pre.next = node;</span><br><span class="line">node.next = next;</span><br></pre></td></tr></table></figure>
+<p>但是如果我们只知道要插入到第几个，还得先通过遍历定位出插入节点的位置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">linkInsert</span><span class="params">(<span class="type">int</span> index, Node head, Node node)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">tmp</span> <span class="operator">=</span> head;</span><br><span class="line">    <span class="comment">//先找到插入的位置</span></span><br><span class="line">    <span class="keyword">while</span> (index &gt; <span class="number">0</span> &amp;&amp; tmp != <span class="literal">null</span>) &#123;</span><br><span class="line">        tmp = tmp.next;</span><br><span class="line">        index--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//越界了</span></span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">next</span> <span class="operator">=</span> tmp.next;</span><br><span class="line">    tmp.next = node;</span><br><span class="line">    node.next = next;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>性能对比</strong></p>
+<p>链表不涉及内存的移动，只需要定位到插入的位置即可，复杂度为O(index)，因此我猜测链表的插入速度要快一些。我们测试在size/2的位置插入元素：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testInsert</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxSize</span> <span class="operator">=</span> <span class="number">1000000</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">currSize</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">Node</span> <span class="variable">head</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">    Node[] nodes = <span class="keyword">new</span> <span class="title class_">Node</span>[maxSize];</span><br><span class="line">    nodes[<span class="number">0</span>] = head;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">tail</span> <span class="operator">=</span> head;</span><br><span class="line">    tail = addElement(nodes, tail, <span class="number">0</span>, size);</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;count    array insert cost    link insert cost&quot;</span>);</span><br><span class="line">    <span class="keyword">while</span> (size &lt; maxSize) &#123;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">node</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> size &gt;&gt; <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">        currSize = arrayInsert(index, currSize, nodes, node);</span><br><span class="line">        System.out.print(size + <span class="string">&quot;    &quot;</span> + (System.nanoTime() - start));</span><br><span class="line"></span><br><span class="line">        start = System.nanoTime();</span><br><span class="line">        linkInsert(index, head, node);</span><br><span class="line">        System.out.println(<span class="string">&quot;    &quot;</span> + (System.nanoTime() - start));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//添加元素</span></span><br><span class="line">        size = size &lt;&lt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (size &lt; maxSize) &#123;</span><br><span class="line">            tail = addElement(nodes, tail, currSize, size);</span><br><span class="line">            currSize++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试结果：</p>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mu1a41yj20qr0g2759.jpg" alt="image-20220611150741041" style="zoom:50%;">
+<h2 id="删除"><a class="markdownIt-Anchor" href="#删除"></a> 删除</h2>
+<p>删除和插入类似，数组会导致内存块的移动，链表只需要修改节点的指针即可，这里不再赘述。</p>
+<h2 id="遍历"><a class="markdownIt-Anchor" href="#遍历"></a> 遍历</h2>
+<p>数组的遍历需要根据下标，计算出元素的地址，然后取出元素。链表的遍历依次获取元素的地址指针即可。但是由于数组在内存中是顺序保存的，操作系统加载数据的时候，会把缓存页中的数据全都加载到高速缓存，因此数据的遍历速度会比链表快。</p>
+<p>上代码测试分析：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testFor</span><span class="params">()</span> &#123;</span><br><span class="line">    Map&lt;Integer, List&lt;Long&gt;&gt; arrayCostMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    Map&lt;Integer, List&lt;Long&gt;&gt; linkCostMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxSize</span> <span class="operator">=</span> <span class="number">100000</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">currSize</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line">    <span class="comment">//为了削弱机器获胜虚拟机导致的误差，跑了10次取平均值</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; <span class="number">10</span>; j++) &#123;</span><br><span class="line">        <span class="keyword">while</span> (currSize &lt; maxSize) &#123;</span><br><span class="line">            Node[] nodeArray = createArray(currSize);</span><br><span class="line">            <span class="type">Node</span> <span class="variable">head</span> <span class="operator">=</span> createLink(nodeArray);</span><br><span class="line"></span><br><span class="line">            <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; currSize; i++) &#123;</span><br><span class="line">                <span class="type">Node</span> <span class="variable">node</span> <span class="operator">=</span> nodeArray[i];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">long</span> <span class="variable">arrayCost</span> <span class="operator">=</span> System.nanoTime() - start;</span><br><span class="line">            List&lt;Long&gt; arrayCostList = arrayCostMap.computeIfAbsent(currSize, k -&gt; <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;());</span><br><span class="line">            arrayCostList.add(arrayCost);</span><br><span class="line"></span><br><span class="line">            start = System.nanoTime();</span><br><span class="line">            <span class="type">Node</span> <span class="variable">tmp</span> <span class="operator">=</span> head;</span><br><span class="line">            <span class="keyword">while</span> (tmp != <span class="literal">null</span>) &#123;</span><br><span class="line">                tmp = tmp.next;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">long</span> <span class="variable">linkCost</span> <span class="operator">=</span> System.nanoTime() - start;</span><br><span class="line">            List&lt;Long&gt; linkCostList = linkCostMap.computeIfAbsent(currSize, k -&gt; <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;());</span><br><span class="line">            linkCostList.add(linkCost);</span><br><span class="line">            currSize = currSize &lt;&lt; <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    currSize = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">while</span> (currSize &lt; maxSize) &#123;</span><br><span class="line">        <span class="type">Double</span> <span class="variable">arrayCost</span> <span class="operator">=</span> arrayCostMap.get(currSize).stream().collect(Collectors.averagingLong(Long::<span class="keyword">new</span>));</span><br><span class="line">        <span class="type">Double</span> <span class="variable">linkCost</span> <span class="operator">=</span> linkCostMap.get(currSize).stream().collect(Collectors.averagingLong(Long::<span class="keyword">new</span>));</span><br><span class="line">        System.out.printf(<span class="string">&quot;%d %s %s%n&quot;</span>, currSize, arrayCost, linkCost);</span><br><span class="line">        currSize = currSize &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node[] createArray(<span class="type">int</span> size) &#123;</span><br><span class="line">    Node[] nodeArray = <span class="keyword">new</span> <span class="title class_">Node</span>[size];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">        nodeArray[i] = <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> nodeArray;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">createLink</span><span class="params">(Node[] nodeArray)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">head</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">    <span class="type">Node</span> <span class="variable">tmp</span> <span class="operator">=</span> head;</span><br><span class="line">    <span class="keyword">for</span> (Node node : nodeArray) &#123;</span><br><span class="line">        tmp.next = node;</span><br><span class="line">        tmp = tmp.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果分析如下图。整体来说，数组的遍历速度比链表快，尤其是在数据量比较大的时候，二者的差距越来越大。不过在前面数组和链表的遍历数组都有波动，猜测跟jvm、操作系统、硬件都有关系，感兴趣的可以和我一起研究。</p>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h35mrm2w95j20k20c2t9b.jpg" alt="image-20220612181316593" style="zoom:50%;">
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/" title="深入浅出对比数组和链表" target="_blank" rel="external">https://eoccc.gitee.io/2022/05/07/深入浅出对比数组和链表/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://gitee.com/eoccc" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://gitee.com/eoccc" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/" title="dubbo优雅停机"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/" title="dubbo服务消费"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>kafka小知识 | Eoccc的博客</title>
+  <meta name="description" content="多生产者、多消费者、高性能、可伸缩、有消息堆积能力的 **消息队列**">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka小知识">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="多生产者、多消费者、高性能、可伸缩、有消息堆积能力的 **消息队列**">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https:////upload-images.jianshu.io/upload_images/2835676-f378607bc841309a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
+<meta property="article:published_time" content="2022-04-19T14:52:41.000Z">
+<meta property="article:modified_time" content="2022-08-01T04:58:42.277Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:////upload-images.jianshu.io/upload_images/2835676-f378607bc841309a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://gitee.com/eoccc" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/dubbo/" style="font-size: 13.2px;">dubbo</a> <a href="/tags/kafka/" style="font-size: 13.6px;">kafka</a> <a href="/tags/redis/" style="font-size: 13.8px;">redis</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 14px;">中间件</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" style="font-size: 13.4px;">技术笔记</a> <a href="/tags/%E8%B8%A9%E5%9D%91/" style="font-size: 13px;">踩坑</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 13.6px;">随笔</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="title">软引用和弱的使用场景</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/" class="title">kafka消费者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" class="title">缓存淘汰算法总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/" class="title">kafka生产者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/" class="title">深拷贝和浅拷贝工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-14T07:10:35.000Z" itemprop="datePublished">2022-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka%E7%9A%84%E5%B8%B8%E8%A7%81%E5%90%8D%E8%AF%8D%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> Kafka的常见名词概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text"> Kafka文件存储机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text"> 存储格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5"><span class="toc-number">2.2.</span> <span class="toc-text"> 删除策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text"> Kafka副本同步机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E5%8F%AF%E9%9D%A0%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="toc-number">4.</span> <span class="toc-text"> Kafka数据一致性和可靠性保证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka-partition-leader%E9%80%89%E4%B8%BE"><span class="toc-number">5.</span> <span class="toc-text"> Kafka Partition leader选举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka%E6%B6%88%E6%81%AF%E5%B9%82%E7%AD%89%E6%80%A7"><span class="toc-number">6.</span> <span class="toc-text"> Kafka消息幂等性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka%E6%B6%88%E6%81%AF%E7%9A%84%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="toc-number">7.</span> <span class="toc-text"> Kafka消息的有序性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka%E8%BF%90%E7%BB%B4"><span class="toc-number">8.</span> <span class="toc-text"> Kafka运维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="toc-number">9.</span> <span class="toc-text"> 相关问题</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-kafka小知识" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      kafka小知识
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/" class="article-date">
+	  <time datetime="2022-04-19T14:52:41.000Z" itemprop="datePublished">2022-04-19</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>多生产者、多消费者、高性能、可伸缩、有消息堆积能力的 <strong>消息队列</strong> 。</p>
+<span id="more"></span>
+<p><a href="https://aidodoo.com/post/kafka/kafka%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">很好的Kafka学习网站</a></p>
+<h2 id="kafka的常见名词概念"><a class="markdownIt-Anchor" href="#kafka的常见名词概念"></a> Kafka的常见名词概念</h2>
+<ol>
+<li>
+<p><strong>Broker</strong><br>
+存储消息的服务器，一个Kafka集群由多个Broker组成</p>
+</li>
+<li>
+<p><strong>Topic（主题）</strong><br>
+每条消息发到Broker上都有一个类别，即Topic。Topic是消息逻辑上的分类概念。</p>
+</li>
+<li>
+<p><strong>Partition（分区）</strong><br>
+Partition是一个物理上的概念，每个Topic包含一个或多个Partition，每个Partition是一个文件夹。Partition的特点是 <strong>ordered &amp; immutable</strong>。每个partition都有一个broker为“leader”，其余都为“follower”。</p>
+<blockquote>
+<p>Topic、Partition与Replica</p>
+<ol>
+<li>Kafka使用 <strong>Topic</strong> 组织数据，每个主题有若干个 <strong>Partition</strong> ，每个 <strong>Partition</strong> 有多个 <strong>副本（Replica）</strong>；每个 <strong>Broker</strong> 可以保存成百上千个属于不同 <strong>Topic</strong> 的 <strong>副本（Replica）</strong>；</li>
+<li>同一个Topic不保证消息有序性，同一个Partition保证消息有序性；</li>
+<li><strong>Topic</strong> 是用户订阅时关注的逻辑概念，而 <strong>分区（Partition）</strong> 是具体存储的物理逻辑，当我们对消息有序有要求时，我们需要使用 <strong>分区器</strong> ，对消息的分区行为进行定义以满足要求；至于 <strong>副本</strong> ，这是Kafka对数据可用性、持久性做的机制，使用者不需关注。</li>
+<li>Partition的 “伸缩” 支持了 <strong>海量数据的存储</strong>、<strong>数据的高并发读取</strong>、<strong>极高的吞吐量</strong> 。</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p><strong>Replica（副本）</strong><br>
+保证系统、数据的可用性、可靠性。<br>
+4.1 “首领副本&quot;和&quot;跟随副本”<br>
+​		<strong>首领副本</strong> ：每个Partition都有一个首领副本，读写都会经过此副本；<br>
+​		<strong>跟随副本</strong> ：从 <strong>首领</strong> 那里复制消息，不处理客户端请求，<strong>首领</strong> 崩溃时，升级为新首领（控制器选取）。<br>
+4.2 “同步副本&quot;和&quot;不同步副本”<br>
+​		同步副本列表（In-Sync Replica，ISR）<br>
+​	    不同步副本列表（Outof-Sync Replicas，OSR）</p>
+<p>4.3 副本存活的条件：</p>
+<ol>
+<li>副本节点必须能与zookeeper保持会话（心跳机制）</li>
+<li>副本能复制leader上的所有写操作，并且不能落后太多</li>
+</ol>
+<p>4.4 一条消息只有被ISR中所有的节点同步完成，才算提交成功</p>
+<p>4.5 只有已提交的消息才能被消费</p>
+</li>
+<li>
+<p><strong>Message (消息)</strong></p>
+<p>传递的数据对象，主要由四部分构成，其中 <strong>offset</strong> 和 <strong>timestamp</strong> 在kafka集群中产生，key/value在producer发送数据的时候产生：</p>
+<pre><code>1. offset(偏移量)（消费者自己保存消费进度）  是一个long型整数，代表了这条消息在Partition文件中的偏移量，它是一条消息在文件中的唯一标识。
+2. key，按照key进行哈希来选择partition(默认)；key没有填的时候使用round-robin来选partition。
+3. value
+4. timestamp(插入时间)；
+</code></pre>
+</li>
+<li>
+<p><strong>生产者</strong><br>
+负责发布消息到Kafka broker。</p>
+</li>
+<li>
+<p><strong>消费者</strong><br>
+消息消费者，从Kafka broker读取消息的客户端。</p>
+</li>
+<li>
+<p><strong>消费者组</strong><br>
+消费者组（Consumer Group），多个消费者组成一个消费者组，共同消费一个Topic，每个消费者消费一部分分区；</p>
+<blockquote>
+<ol>
+<li>一个Partition分区只能被组中的一个消费者消费；</li>
+<li>若消费者数目大于partition数目，则会有消费者空置；</li>
+<li>每个Consumer属于一个特定的Consumer Group；</li>
+<li>可为每个Consumer指定group name，若不指定group name则属于默认的group；</li>
+<li>一个Topic可以被多个消费者或消费者群组共同并行读取。</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<p>​		8.1 消费者群组和分区再均衡<br>
+​         群组加入新的消费者，它会读取原本由其他消费者读取的分区；群组删除消费者，该消费者读取的分区会由其他消费者读取；这就是 <strong>分区再均衡</strong> 。再均衡为消费者群组带来了高可用性和伸缩性（放心增加、删除消费者）。</p>
+<ol start="9">
+<li>
+<p><strong>控制器</strong></p>
+<p><strong>控制器</strong> 就是一个Broker，集群中有且仅有一个控制器。所有Broker通过向zookeeper注册临时节点竞争获得。这个Broker的意义是防止 <strong>羊群效应</strong>（Zookeeper通知的客户端过多，造成zookeeper性能突然下降，影响使用），负责管理整个集群中所有分区和副本的状态，如:</p>
+<ol>
+<li>负责头领副本的选举</li>
+<li>某个Partition的ISR集合发生变化时，控制器负责通知所有Broker更新其元数据信息</li>
+</ol>
+</li>
+<li>
+<p><strong>ISR(In-Sync Replicas)</strong></p>
+<p>leader会追踪和维护ISR中所有follower的滞后状态。如果滞后太多（时间滞后<code>replica.lag.time.max.ms</code>，消息滞后<code>replica.lag.max.messages</code>），leader会把该replica从ISR中移除。被移除ISR的replica一直在追赶leader。</p>
+<p>leader写入数据后并不会commit，只有ISR列表中的所有folower同步之后才会commit，把滞后的follower移除ISR主要是避免写消息延迟。设置ISR主要是为了broker宕掉之后，重新选举partition的leader从ISR列表中选择。</p>
+<p><code>min.insync.replicas</code>: 最小的ISR个数，当ISR个数小于配置的个数，leader将变成只读，直到replica同步消息追赶上leader。</p>
+</li>
+<li>
+<p><strong>Zookeeper在kafka中的作用</strong><br>
+在Kafka集群中，Zookeeper负责 <strong>管理协调</strong> 、<strong>元数据</strong> 保存等工作。Broker、消费者和Zookeeper相连，而生产者只和Broker相连。</p>
+</li>
+<li>
+<p>Kafka使用ZooKeeper用于管理、协调；Kafka控制器的选举由Zookeeper负责；启动时，第一个在Zookeeper创建一个临时节点/controller的会成为控制器；为了防止脑裂，每个控制器都有一个epoch字段，并且是递增的，<strong>收到消息的epoch小于当前控制器epoch则忽略</strong> 。</p>
+</li>
+</ol>
+<blockquote>
+<p>脑裂：失效的HA节点认为自己仍然有效，和当前的HA节点争抢&quot;共享服务&quot;或&quot;资源&quot;，造成数据损坏，服务失败等问题。</p>
+<p>如果没有epoch，Kafka脑裂发生的情况：旧的Controller失去与Zookeeper的关联后，但这个Controller并没有意识到自己已经失效而且还保持着和其他Broker的连接，其他Broker尝试成为Controller；这时新旧Controller同时给Broker发送命令消息，造成脑裂。</p>
+</blockquote>
+<ol start="2">
+<li>Kafka将元数据信息保存在Zookeeper中，这包括<br>
+broker信息、topic信息、分区与消费者的关系、消费者消费进度(offset)等信息。<br>
+[Zookeeper在Kafka中作用](<a href="https://www.jianshu.com/p/a036405f989c">https://www.jianshu.com/p/a036405f989c</a>   zookeeper在kafka中作用)</li>
+</ol>
+<p><strong>一段话概括Kafka架构：</strong></p>
+<p>Kafka由一个或多个Broker组成，消息以Partition为单位的log文件的形式存储于Broker中，每个Topic可以对应一个或多个Partition，这为消息提供了容量上的扩展性和消费上的并发度；为了保证消息的可靠性以及可用性，每个Partition都会有多个Replica。</p>
+<h2 id="kafka文件存储机制"><a class="markdownIt-Anchor" href="#kafka文件存储机制"></a> Kafka文件存储机制</h2>
+<h3 id="存储格式"><a class="markdownIt-Anchor" href="#存储格式"></a> 存储格式</h3>
+<p>Topic是一个逻辑概念，Partition才是一个物理概念。</p>
+<ul>
+<li>
+<p>一个Partition是一个目录，topic名+id（id从0开始）</p>
+</li>
+<li>
+<p>Partition目录下包含多个大小相等 <strong>segment(段)数据文件</strong> ，这样做是为了方便删除</p>
+</li>
+<li>
+<p>segment文件由两部分组成，分别为“.index”文件和“.log”文件</p>
+<ul>
+<li>
+<p>文件名从0开始，后续的文件名是 <strong>上一个segment文件最后一条消息的offset值</strong></p>
+</li>
+<li>
+<p>数据文件存储消息实体</p>
+</li>
+<li>
+<p>索引文件存储对应数据文件部分消息的元数据（稀疏索引）</p>
+<p>（索引文件中元数据指向对应数据文件中message的物理偏移地址）</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https:////upload-images.jianshu.io/upload_images/2835676-f378607bc841309a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000" alt="img"></p>
+<h3 id="删除策略"><a class="markdownIt-Anchor" href="#删除策略"></a> 删除策略</h3>
+<p>Kafka具备消息堆积能力，但消息不能无限增长。</p>
+<p>默认规定：保留7天，或超过指定大小，如1G；达到上限时，数据会被删除。</p>
+<h2 id="kafka副本同步机制"><a class="markdownIt-Anchor" href="#kafka副本同步机制"></a> Kafka副本同步机制</h2>
+<p>Kafka同一个Partition下有多个Replica，并且分为Leader Replica和follower Replica。消息的读写都由Leader Replica完成。</p>
+<p>Leader Replica还维护<strong>ISR列表</strong>，消费者只能消费到ISR中offset最小值（高水位HW）之前的消息（不是完全的同步，又不是完全的异步，在吞吐率和可靠性之间做了均衡）。</p>
+<p>副本不同步的原因：</p>
+<ul>
+<li>慢副本：在一定周期时间内follower不能追赶上leader。最常见的原因之一是I / O瓶颈导致follower追加复制消息速度慢于从leader拉取速度。</li>
+<li>卡住副本：在一定周期时间内follower停止从leader拉取请求。follower replica卡住了是由于GC暂停或follower失效或死亡。</li>
+<li>新启动副本：当用户给主题增加副本因子时，新的follower不在同步副本列表中，直到他们完全赶上了leader日志。</li>
+</ul>
+<p><a href="https://aidodoo.com/post/kafka/kafka%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6/">副本同步机制参考</a></p>
+<h2 id="kafka数据一致性和可靠性保证"><a class="markdownIt-Anchor" href="#kafka数据一致性和可靠性保证"></a> Kafka数据一致性和可靠性保证</h2>
+<p>当producer向leader发送数据时，可以通过<code>request.required.acks</code>参数来设置数据可靠性的级别</p>
+<ul>
+<li>1（默认）：这意味着producer在ISR中的leader已成功收到的数据并得到确认后发送下一条message。如果leader宕机了，则会丢失数据。</li>
+<li>0：这意味着producer无需等待来自broker的确认而继续发送下一批消息。这种情况下数据传输效率最高，但是数据可靠性确是最低的。</li>
+<li>-1：producer需要等待ISR中的所有follower都确认接收到数据后才算一次发送完成，可靠性最高。但是这样也不能保证数据不丢失，比如当ISR中只有leader时（前面ISR那一节讲到，ISR中的成员由于某些情况会增加也会减少，最少就只剩一个leader），这样就变成了acks=1的情况。</li>
+<li>min.insync.replicas=2：ISR集合中最少有2个replica，否则写入失败。如果ISR成员数目小于2，该Partition的Leader Replica会变得可读，但不可写。只有被ISR中所有Replica同步的消息才被Commit，才能被消费者消费。</li>
+</ul>
+<h2 id="kafka-partition-leader选举"><a class="markdownIt-Anchor" href="#kafka-partition-leader选举"></a> Kafka Partition leader选举</h2>
+<p>Kafka在Zookeeper中为每一个partition动态的维护了一个ISR，这个ISR里的所有replica都跟上了leader，只有ISR里的成员才能有被选为leader的可能。</p>
+<p>（默认 unclean.leader.election.enable=false，非ISR中的副本不能够参与选举）</p>
+<p>如果Leader Replica宕机，而ISR全部不可用，为了恢复业务，我们需要重启Leader和ISR，如果失败，则需要修改配置，unclean.leader.election.enable=true。</p>
+<p>如果min.insync.replicas数目达不到，造成系统不可写，而又重启有失败，就要修改min.insync.replicas使系统可写。</p>
+<h2 id="kafka消息幂等性"><a class="markdownIt-Anchor" href="#kafka消息幂等性"></a> Kafka消息幂等性</h2>
+<p>主要考虑三种消息可靠性：</p>
+<ul>
+<li>At most once: 消息可能会丢，但绝不会重复传输</li>
+<li>At least once：消息绝不会丢，但可能会重复传输</li>
+<li>Exactly once：每条消息肯定会被传输一次且仅传输一次</li>
+</ul>
+<p>我们想要的是 <strong>Exactly once</strong> ，但在实际场景中，常常是 <strong>At least once</strong> 或者 <strong>At most once</strong> ，</p>
+<ul>
+<li>At least once：
+<ul>
+<li>producer无法判断消息是否真正提交时，会多次retry，重复发送该消息；</li>
+<li>consumer先消费消息，再commit，消费成功，但commit前crash了，下次还会接收到该消息；</li>
+</ul>
+</li>
+<li>At most once：
+<ul>
+<li>Producer的消息没发到Broker（request.required.acks=0）</li>
+<li>consumer先commit，再消费消息，消费成功，但commit前crash了，下次还会接收到该消息；</li>
+</ul>
+</li>
+</ul>
+<p>所以，一般在使用中，我们会让消息处于At least once状态，然后在consumer处理时，根据业务的特性，进行幂等处理。</p>
+<h2 id="kafka消息的有序性"><a class="markdownIt-Anchor" href="#kafka消息的有序性"></a> Kafka消息的有序性</h2>
+<p>Kafka消息同一个Topic下的消息是无序的，同一Partition下的消息是有序的。</p>
+<p>我们可以自定义分区器，使消息根据业务的具体特性进行分区。</p>
+<h2 id="kafka运维"><a class="markdownIt-Anchor" href="#kafka运维"></a> Kafka运维</h2>
+<p>硬件配置：</p>
+<ul>
+<li>磁盘吞吐量、磁盘容量、内存、网络、CPU、Broker数目等等</li>
+</ul>
+<h2 id="相关问题"><a class="markdownIt-Anchor" href="#相关问题"></a> 相关问题</h2>
+<ul>
+<li>
+<p>kafka节点之间如何复制备份的？</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.将所有Broker（假设共n个Broker）和待分配的Partition排序</span><br><span class="line">2.将第i个Partition分配到第（i mod n）个Broker上 （这个就是leader）</span><br><span class="line">3.将第i个Partition的第j个Replica分配到第（(i + j) mode n）个Broker</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>kafka消息是否会丢失？为什么？</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="strong">**网络异常：**</span> <span class="code">`request.required.acks`</span>设置为0时，不和Kafka集群进行消息接受确认，当网络发生异常等情况时，存在消息丢失的可能；</span><br><span class="line"><span class="strong">**客户端异常：**</span> 异步发送时，消息并没有直接发送至Kafka集群，而是在Client端按一定规则缓存并批量发送。在这期间，如果客户端发生死机等情况，都会导致消息的丢失；</span><br><span class="line"><span class="strong">**缓冲区满了：**</span> 异步发送时，Client端缓存的消息超出了缓冲池的大小，也存在消息丢失的可能；</span><br><span class="line"><span class="strong">**Leader副本异常：**</span> acks设置为1时，Leader副本接收成功，Kafka集群就返回成功确认信息，而Follower副本可能还在同步。这时Leader副本突然出现异常，新Leader副本(原Follower副本)未能和其保持一致，就会出现消息丢失的情况；</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>kafka最合理的配置是什么？</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="strong">**高可用配置:**</span> </span><br><span class="line">  topic配置：</span><br><span class="line"><span class="code">    replication.factor&gt;=3，即副本数至少是3个；</span></span><br><span class="line"><span class="code">    2 &lt;= min.insync.replicas &lt;= replication.factor，最小同步副本数码至少为2</span></span><br><span class="line"><span class="code">  broker的配置：</span></span><br><span class="line"><span class="code">    leader的选举条件unclean.leader.election.enable=false，非ISR中的副本不能够参与选举</span></span><br><span class="line"><span class="code">  producer的配置：</span></span><br><span class="line"><span class="code">    request.required.acks=-1(all)</span></span><br><span class="line"><span class="code">    producer.type=sync（指定消息发送是同步的）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>kafka的leader选举机制是什么？</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">所有Partition的Leader选举都由<span class="code">`controller`</span>决定。Kafka会在Zookeeper上针对每个Topic维护一个称为ISR（in-sync replica，已同步的partition副本）的集合。只有当这些副本都跟Leader中的副本同步了之后，kafka才会认为消息已提交，并反馈给消息的生产者。如果这个集合有增减，kafka会更新zookeeper上的记录。如果某个分区的Leader不可用，Kafka就会从ISR集合中选择一个副本作为新的Leader。</span><br><span class="line">如果Leader Replica宕机，而ISR全部不可用，为了恢复业务，我们需要重启Leader和ISR，如果失败，则需要修改配置，unclean.leader.election.enable=true，允许非同步的partition成为leader。</span><br><span class="line">如果min.insync.replicas数目达不到，造成系统不可写，而又重启有失败，就要修改min.insync.replicas使系统可写。</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>kafka的消息保证有几种方式？</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">`request.required.acks`</span></span><br><span class="line"><span class="strong">**1(默认):**</span> leader收到消息就向producer确认</span><br><span class="line"><span class="strong">**0:**</span> producer不关心leader有没有收到消息</span><br><span class="line"><span class="strong">**-1:**</span> leader收到消息，并且同步partition同步完成后才向producer确认</span><br><span class="line"><span class="code">`min.insync.replicas`</span></span><br><span class="line">设置ISR集合中最少的replica个数。</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Kafka如何实现高伸缩性？</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="strong">**分区再均衡**</span>  群组加入新的消费者，它会读取原本由其他消费者读取的分区；群组删除消费者，该消费者读取的分区会由其他消费者读取</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Kafka消息的有序性如何？</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在Kafka中，消息是以消息队列的方式存在，存储在Topic中，Topic有多个partition。而每一条消息根据 Key 值来分配到不同的 partition 中。在一个 Partition 中，消息是以追加的形式写入的。如果一个 Consumer 读取一个 Partition，那么数据可以被有序的消费掉。</span><br><span class="line">方案一，kafka topic 只设置一个partition分区。kafka默认保证同一个partition分区内的消息是有序的，则可以设置topic只使用一个分区，这样消息就是全局有序，缺点是只能被consumer group里的一个消费者消费，降低了性能，不适用高并发的情况。</span><br><span class="line">方案二，producer将消息发送到指定partition分区。producer可以在发送消息时可以指定需要保证顺序的几条消息发送到同一个分区，这样消费者消费时，消息就是有序。</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>producer 的写入流程</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> producer 先从 zookeeper 的 &quot;/brokers/.../state&quot; 节点找到该 partition 的 leader </span><br><span class="line"><span class="bullet">2.</span> producer 将消息发送给该 leader </span><br><span class="line"><span class="bullet">3.</span> leader 将消息写入本地 log </span><br><span class="line"><span class="bullet">4.</span> followers 从 leader pull 消息，写入本地 log 后 leader 发送 ACK </span><br><span class="line"><span class="bullet">5.</span> leader 收到所有 ISR 中的 replica 的 ACK 后，增加 HW（high watermark，最后 commit 的 offset） 并向 producer 发送 ACK</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>如何防止脑裂</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kafka中只有一个控制器controller负责分区的leader选举，同步broker的新增或删除消息，但有时由于网络问题，可能同时有两个broker认为自己是controller，这时候其他的broker就会发生脑裂。</span><br><span class="line">解决：每当新的controller产生的时候就会在zk中生成一个全新的、数值更大的controller epoch的标识，并同步给其他的broker进行保存，这样当第二个controller发送指令时，其他的broker就会自动忽略。</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/" title="kafka小知识" target="_blank" rel="external">https://eoccc.gitee.io/2022/04/19/kafka小知识/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://gitee.com/eoccc" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://gitee.com/eoccc" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/04/23/%E5%8F%8D%E5%B0%84%E5%BC%82%E5%B8%B8%EF%BC%9F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E7%9A%84%E9%94%85/" title="反射异常？类型转换的锅"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/04/15/kafka%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/" title="kafka文件存储机制"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>redis学习7-时钟周期serverCron | Eoccc的博客</title>
+  <meta name="description" content="Redis服务器的serverCron方法默认每100ms执行一次，这个方法负责管理redis的资源，保证redis能够良好的运行。本文介绍cerverCron方法的功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis学习7-时钟周期serverCron">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/03/28/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="Redis服务器的serverCron方法默认每100ms执行一次，这个方法负责管理redis的资源，保证redis能够良好的运行。本文介绍cerverCron方法的功能。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1qhfk4p4zj20wq0gumyq.jpg">
+<meta property="article:published_time" content="2022-03-28T04:10:32.000Z">
+<meta property="article:modified_time" content="2022-08-01T04:58:42.278Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1qhfk4p4zj20wq0gumyq.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/03/28/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://gitee.com/eoccc" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/dubbo/" style="font-size: 13.2px;">dubbo</a> <a href="/tags/kafka/" style="font-size: 13.6px;">kafka</a> <a href="/tags/redis/" style="font-size: 13.8px;">redis</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 14px;">中间件</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" style="font-size: 13.4px;">技术笔记</a> <a href="/tags/%E8%B8%A9%E5%9D%91/" style="font-size: 13px;">踩坑</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 13.6px;">随笔</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="title">软引用和弱的使用场景</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/" class="title">kafka消费者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" class="title">缓存淘汰算法总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/" class="title">kafka生产者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/" class="title">深拷贝和浅拷贝工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-14T07:10:35.000Z" itemprop="datePublished">2022-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%B6%E9%97%B4%E7%BC%93%E5%AD%98"><span class="toc-number">1.</span> <span class="toc-text"> 更新服务器时间缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0lru%E6%97%B6%E9%92%9F"><span class="toc-number">2.</span> <span class="toc-text"> 更新LRU时钟</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%AF%8F%E7%A7%92%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E7%9A%84%E6%AC%A1%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text"> 更新服务器每秒执行命令的次数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E5%AD%98%E5%B3%B0%E5%80%BC%E8%AE%B0%E5%BD%95"><span class="toc-number">4.</span> <span class="toc-text"> 更新服务器内存峰值记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86sigterm%E4%BF%A1%E5%8F%B7"><span class="toc-number">5.</span> <span class="toc-text"> 处理SIGTERM信号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B5%84%E6%BA%90"><span class="toc-number">6.</span> <span class="toc-text"> 管理客户端资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B5%84%E6%BA%90"><span class="toc-number">7.</span> <span class="toc-text"> 管理数据库资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E8%A2%AB%E5%BB%B6%E8%BF%9F%E7%9A%84bgrewriteaof"><span class="toc-number">8.</span> <span class="toc-text"> 执行被延迟的BGREWRITEAOF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E6%8C%81%E4%B9%85%E5%8C%96%E6%93%8D%E4%BD%9C%E7%8A%B6%E6%80%81"><span class="toc-number">9.</span> <span class="toc-text"> 检查持久化操作状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86aof%E7%BC%93%E5%86%B2%E5%8C%BA%E7%9A%84%E5%86%85%E5%AE%B9%E5%86%99%E5%85%A5%E5%88%B0%E6%96%87%E4%BB%B6"><span class="toc-number">10.</span> <span class="toc-text"> 将AOF缓冲区的内容写入到文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E5%BC%82%E6%AD%A5%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">11.</span> <span class="toc-text"> 关闭异步客户端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cronloops%E8%AE%A1%E6%95%B0%E5%99%A8%E9%80%92%E5%A2%9E"><span class="toc-number">12.</span> <span class="toc-text"> cronloops计数器递增</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-redis学习7-时钟周期serverCron" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis学习7-时钟周期serverCron
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/03/28/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="article-date">
+	  <time datetime="2022-03-28T04:10:32.000Z" itemprop="datePublished">2022-03-28</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/03/28/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Redis服务器的serverCron方法默认每100ms执行一次，这个方法负责管理redis的资源，保证redis能够良好的运行。本文介绍cerverCron方法的功能。</p>
+<span id="more"></span>
+<h2 id="更新服务器时间缓存"><a class="markdownIt-Anchor" href="#更新服务器时间缓存"></a> 更新服务器时间缓存</h2>
+<p>Redis服务器的不少功能都需要用到时间，每使用一次时间都需要进行一次系统调用，为了减少系统调用的次数，redis缓存了时间。但是由于serverCron每100ms才执行一次，缓存的时间精度不高，只有对时间精度要求不高的功能才会使用缓存的时间，如打印日志、更行服务器LRU时钟、决定是否进行持久化任务、计算服务的上线时间等。而对于对时间精度要求较高的功能，则会直接调用系统的时间，如为键设置过期时间、添加慢查询日志等。</p>
+<h2 id="更新lru时钟"><a class="markdownIt-Anchor" href="#更新lru时钟"></a> 更新LRU时钟</h2>
+<p>Redis服务器的lruclock属性保存了服务器的LRU时钟。redis的每个对象都会有一个lru属性，记录了这个对象最后一次的访问时间。当需要计算键的空转时间时，就会使用服务器的lruclock减去对象的lru。</p>
+<p>lruclock的值可以用过以下命令返回的<code>lru_clock</code>节点查看：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO server</span><br></pre></td></tr></table></figure>
+<h2 id="更新服务器每秒执行命令的次数"><a class="markdownIt-Anchor" href="#更新服务器每秒执行命令的次数"></a> 更新服务器每秒执行命令的次数</h2>
+<p>Redis会以100ms一次的频率更新每秒执行命令的次数，计算方式为抽样计算，具体如下：</p>
+<blockquote>
+<ol>
+<li>计算出上次抽样和这次抽样的时间差</li>
+<li>计算出上次抽样和本次抽样已执行的命令数的差值（即这个时间区间执行了多少命令）</li>
+<li>计算出这个时间区间每毫秒执行了多少个命令</li>
+<li>将每秒执行的命令个数乘1000，得到每秒执行的次数，缓存到一个数组中</li>
+<li>当客户端执行<code>INFO</code>命令时，redis会根据数组中记录的值计算出平均每秒执行的命令个数</li>
+</ol>
+</blockquote>
+<h2 id="更新服务器内存峰值记录"><a class="markdownIt-Anchor" href="#更新服务器内存峰值记录"></a> 更新服务器内存峰值记录</h2>
+<p>Redis的<code>stat_peak_memory</code>属性记录了服务器使用内存的峰值。serverCron每次执行都会查看当前服务器使用的内存数量，如果大于当前的<code>stat_peak_memory</code>，就会更新其值。</p>
+<p>通过一下命令的<code>used_memory_peak</code>和<code>used_memory_peak_human</code>可以查看内存使用的峰值：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO memory</span><br></pre></td></tr></table></figure>
+<h2 id="处理sigterm信号"><a class="markdownIt-Anchor" href="#处理sigterm信号"></a> 处理SIGTERM信号</h2>
+<p>Redis收到SIGTERM信号时，不会立即执行，而是通过<code>sigtermHandler</code>信号处理器，打开服务器的 <code>shutdown_asap</code>标识。serverCron每次执行都会检查这个标识，决定是否关闭服务器。如果这个标识打开，服务器会先进行RDB持久化，然后再关闭服务器。</p>
+<h2 id="管理客户端资源"><a class="markdownIt-Anchor" href="#管理客户端资源"></a> 管理客户端资源</h2>
+<p>serverCron每次执行都会对一定数量的客户端进行检查：</p>
+<blockquote>
+<ol>
+<li>如果客户端连接已经超时，关闭客户端</li>
+<li>如果客户端上一次执行命令之后，客户端输入缓冲区已经超过一定长度，会释放当前输入缓冲区，并创建一个新的</li>
+</ol>
+</blockquote>
+<h2 id="管理数据库资源"><a class="markdownIt-Anchor" href="#管理数据库资源"></a> 管理数据库资源</h2>
+<p>serverCron每次执行都会数据库中的键进行抽样检查，删除过期的键，并在需要的时候对字典进行缩容。</p>
+<p>具体见<a href="https://eoccc.gitee.io/blog/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">过期键的清除策略</a></p>
+<h2 id="执行被延迟的bgrewriteaof"><a class="markdownIt-Anchor" href="#执行被延迟的bgrewriteaof"></a> 执行被延迟的BGREWRITEAOF</h2>
+<p>Redis在执行<code>BGSAVE</code>命令期间，如果收到<code>BGREWRITEAOF</code>的请求，会等到<code>BGSAVE</code>结束后再执行，并把等待标识<code>aof_rewrite_scheduled</code>置为1。</p>
+<p>serverCron每次执行都会检查<code>BGSAVE</code>和<code>BGREWRITEAOF</code>有没有在执行，如果两个命令都没在执行，并且<code>aof_rewrite_scheduled</code>为1，就会执行<code>BGREWRITEAOF</code>命令。</p>
+<h2 id="检查持久化操作状态"><a class="markdownIt-Anchor" href="#检查持久化操作状态"></a> 检查持久化操作状态</h2>
+<p>Redis的<code>rdb_child_pid</code>和<code>aof_child_pid</code>两个属性记录了执行<code>BGSAVE</code> 和<code>BGREWRITEAOF</code>命令的子进程的pid。serverCron每次执行都会检查这两个属性，只要有一个值不为-1，就会检查有没有收到子进程的信号：</p>
+<blockquote>
+<ol>
+<li>如果收到信号，说明RDB或AOF文件已经生成成功，redis会使用心的文件替换旧的文件</li>
+<li>如果没有收到信号，说明持久化未完成，不做任何操作</li>
+</ol>
+</blockquote>
+<p>如果两个值都为-1，则说明没有在执行任何持久化操作，redis会进行以下检查：</p>
+<blockquote>
+<ol>
+<li>检查是否有被延迟的<code>BGREWRITEAOF</code>命令，有的话执行命令</li>
+<li>检查数据库是否达到持久化条件，满足条件会执行<code>BGSAVE</code>命令进行RDB持久化</li>
+<li>检查是否满足AOF重写条件，满足会执行<code>BGREWRITEAOF</code>命令重写AOF文件</li>
+</ol>
+</blockquote>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1qhfk4p4zj20wq0gumyq.jpg" alt="image-20220429123233767" style="zoom:40%;">
+<h2 id="将aof缓冲区的内容写入到文件"><a class="markdownIt-Anchor" href="#将aof缓冲区的内容写入到文件"></a> 将AOF缓冲区的内容写入到文件</h2>
+<p>如果服务器开启了AOF持久化功能，redis每次执行serverCron会检查AOF缓冲区是否有内容，如果有，会持久化到AOF文件。</p>
+<h2 id="关闭异步客户端"><a class="markdownIt-Anchor" href="#关闭异步客户端"></a> 关闭异步客户端</h2>
+<p>关闭那些使用资源超限的客户端。</p>
+<h2 id="cronloops计数器递增"><a class="markdownIt-Anchor" href="#cronloops计数器递增"></a> cronloops计数器递增</h2>
+<p>执行完serverCron方法后，会对<code>cronloops</code>属性加1，记录执行serverCron方法的次数。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2022/03/28/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" title="redis学习7-时钟周期serverCron" target="_blank" rel="external">https://eoccc.gitee.io/2022/03/28/redis学习7-时钟周期serverCron/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://gitee.com/eoccc" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://gitee.com/eoccc" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/03/30/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" title="redis学习8-复制（主从架构）"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/03/27/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="redis学习6-客户端和服务器"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

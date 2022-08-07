@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>redis学习9-哨兵Sentinel | Eoccc的博客</title>
+  <meta name="description" content="哨兵Sentinel是redis集群高可用的解决方案：由一个或多个Sentinel节点组成，监视任意多个主服务器及主服务器下的所有从服务器，当主服务器下线的时候，从其从服务器中选择一个升级成主服务器。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis学习9-哨兵Sentinel">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="哨兵Sentinel是redis集群高可用的解决方案：由一个或多个Sentinel节点组成，监视任意多个主服务器及主服务器下的所有从服务器，当主服务器下线的时候，从其从服务器中选择一个升级成主服务器。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-01T05:10:32.000Z">
+<meta property="article:modified_time" content="2022-08-01T04:58:42.278Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://gitee.com/eoccc" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/dubbo/" style="font-size: 13.2px;">dubbo</a> <a href="/tags/kafka/" style="font-size: 13.6px;">kafka</a> <a href="/tags/redis/" style="font-size: 13.8px;">redis</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 14px;">中间件</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" style="font-size: 13.4px;">技术笔记</a> <a href="/tags/%E8%B8%A9%E5%9D%91/" style="font-size: 13px;">踩坑</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 13.6px;">随笔</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="title">软引用和弱的使用场景</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/" class="title">kafka消费者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" class="title">缓存淘汰算法总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/" class="title">kafka生产者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/" class="title">深拷贝和浅拷贝工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-14T07:10:35.000Z" itemprop="datePublished">2022-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%A1%E6%81%AF"><span class="toc-number">1.</span> <span class="toc-text"> 获取服务器信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A7%82%E4%B8%8B%E7%BA%BF%E6%A3%80%E6%B5%8B"><span class="toc-number">2.</span> <span class="toc-text"> 主观下线检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF%E6%A3%80%E6%B5%8B"><span class="toc-number">3.</span> <span class="toc-text"> 客观下线检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E9%A2%86%E5%A4%B4sentinel"><span class="toc-number">4.</span> <span class="toc-text"> 选举领头Sentinel</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB"><span class="toc-number">5.</span> <span class="toc-text"> 故障转移</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E4%B8%BB%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">5.1.</span> <span class="toc-text"> 选举主服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%A4%8D%E5%88%B6%E7%9B%AE%E6%A0%87"><span class="toc-number">5.2.</span> <span class="toc-text"> 修改从服务器的复制目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A7%E4%B8%BB%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%98%E6%88%90%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">5.3.</span> <span class="toc-text"> 旧主服务器变成从服务器</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-redis学习9-哨兵Sentinel" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis学习9-哨兵Sentinel
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="article-date">
+	  <time datetime="2022-04-01T05:10:32.000Z" itemprop="datePublished">2022-04-01</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>哨兵Sentinel是redis集群高可用的解决方案：由一个或多个Sentinel节点组成，监视任意多个主服务器及主服务器下的所有从服务器，当主服务器下线的时候，从其从服务器中选择一个升级成主服务器。</p>
+<span id="more"></span>
+<h2 id="获取服务器信息"><a class="markdownIt-Anchor" href="#获取服务器信息"></a> 获取服务器信息</h2>
+<p>Sentinel会以10秒每次的频率向主服务器发送<code>INFO</code>命令，通过主服务器返回的信息，可以获得两类信息：</p>
+<blockquote>
+<ol>
+<li>主服务器本身的信息</li>
+<li>主服务器的所有从服务器的信息</li>
+</ol>
+</blockquote>
+<p>同时Sentinel会以10秒每次的频率向从服务器发送<code>INFO</code>命令，获得以下信息：</p>
+<blockquote>
+<ol>
+<li>从服务器的运行ID <code>run_id</code></li>
+<li>从服务器的角色	<code>role</code></li>
+<li>主服务器的ip地址<code>master_host</code>，主服务器的端口号<code>master_port</code></li>
+<li>主从服务器的连接状态<code>master_link_status</code></li>
+<li>从服务器的优先级<code>slave_priority</code></li>
+<li>从服务器的复制偏移量<code>slave_repl_offset</code></li>
+</ol>
+</blockquote>
+<p>Sentinel会以2秒每次的频率向主从服务器的<code>__sentinel__:hello</code>频道发送以下信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUBLISH __sentinel__:hello <span class="string">&quot;&lt;s_ip&gt;,&lt;s_port&gt;,&lt;s_runid&gt;,&lt;s_epoch&gt;,&lt;m_name&gt;,&lt;m_ip&gt;,&lt;m_port&gt;,&lt;m_epoch&gt;&quot;</span> </span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s_ip</td>
+<td>Sentiel 的IP</td>
+</tr>
+<tr>
+<td>s_port</td>
+<td>Sentiel 的端口号</td>
+</tr>
+<tr>
+<td>s_runid</td>
+<td>Sentiel 的运行id</td>
+</tr>
+<tr>
+<td>s_epoch</td>
+<td>Sentiel 的纪元</td>
+</tr>
+<tr>
+<td>m_name</td>
+<td>主服务器的名字</td>
+</tr>
+<tr>
+<td>m_ip</td>
+<td>主服务器的ip</td>
+</tr>
+<tr>
+<td>m_port</td>
+<td>主服务器的端口号</td>
+</tr>
+<tr>
+<td>m_epoch</td>
+<td>主服务器的纪元</td>
+</tr>
+</tbody>
+</table>
+<p>Sentinel与主服务器和从服务器建立连接后，会执行一下命令，订阅<code>__sentiel__:hello</code>频道的信息，解析收到的小心，并更新自己的数据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SUBSCRIBE __sentiel__:hello</span><br></pre></td></tr></table></figure>
+<p>另外，Sentinel可以通过主服务器或从服务器发送的频道信息，感知到新加入的Sentinel服务器。</p>
+<h2 id="主观下线检测"><a class="markdownIt-Anchor" href="#主观下线检测"></a> 主观下线检测</h2>
+<p>Sentinel会以每秒一次的频率向所有的主服务器、从服务器、其他Sentiel服务器发送<code>PING</code>命令，从而判断其他服务器是否在线。如果一个实例在<code>down_after_milliseconds</code>毫秒内没有回复，sentiel就会将这个实例标记为主管下线状态。</p>
+<p>如果对一个sentinel进行了如下配置，那么master在50秒内没有回复<code>PING</code>命令，sentinel就会认为master主观下线。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sentinel monitor master 127.0.0.1 6379 2</span><br><span class="line">sentinel down_after_milliseconds master 50000</span><br></pre></td></tr></table></figure>
+<p><strong>需要注意的是</strong>：每个sentinel实例可以有不同的配置，一个sentinel认为master主管下线，另一个sentinel不一定认为master主观下线。</p>
+<h2 id="客观下线检测"><a class="markdownIt-Anchor" href="#客观下线检测"></a> 客观下线检测</h2>
+<p>当一个sentinel（记为sentinelA）发现某个节点主观下线后，会向其他sentine发送一下命令，询问这个节点是否下线：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SENTINEL is-master-down-by-addr &lt;ip&gt; &lt;port&gt; &lt;current_epoch&gt; &lt;runid&gt;</span><br></pre></td></tr></table></figure>
+<p>当一个sentinel（记为sentinelB）收到这个命令的时候，会检查命令中的服务器是否下线，并回复是否赞成这个服务器已经下线。</p>
+<p>sentinelA收到其他sentinel的回复以后，会判断其他sentinel是否赞成这个服务器已经下线，如果赞成票达到配置的数量以后，就会将这个服务器标记成客观下线。</p>
+<p>如一下配置表示支持master主观下线的票数达到3票，就会将master标记为客观下线：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sentinel monitor master 127.0.0.1 6379 5</span><br></pre></td></tr></table></figure>
+<p>**需要注意的是：**不同的sentinel判断客观下线的条件不同，根据sentinel的配置决定。</p>
+<h2 id="选举领头sentinel"><a class="markdownIt-Anchor" href="#选举领头sentinel"></a> 选举领头Sentinel</h2>
+<p>当一个主服务器下线之后，负责监视的sentinel会进行协商，选举出一个领头的sentinel，由领头的sentinel主持故障转移。选举领头sentinel的规则如下：</p>
+<blockquote>
+<ol>
+<li>每次选举，不论选举是否成功，所有sentinel的纪元都会加1</li>
+<li>在一个纪元里，一个sentinel有一次将某个sentinel设置为leader的机会，而且一旦设置，在这个纪元里就不会再更改</li>
+<li>每个发现主服务器客观下线的sentinel都会要求其他sentinel将自己设置为leader（最终只会有一个成功）</li>
+<li>担任leader的规则是先到先得：最先发现主服务器客观下线的sentinel会率先发起选举投票</li>
+<li>如果有某个sentinel收到半数以上的投票，则成为leader</li>
+<li>如果在限定的时间内没有选举成功，那么各个sentinel会隔一段时间之后再次选举，直到选举出leader</li>
+</ol>
+</blockquote>
+<h2 id="故障转移"><a class="markdownIt-Anchor" href="#故障转移"></a> 故障转移</h2>
+<p>选举出sentinel的leader以后，leader就会主持故障转移：</p>
+<blockquote>
+<ol>
+<li>在主服务器的所有从服务器中选出一个，成为主服务器</li>
+<li>让其他从服务器复制这个新的主服务器</li>
+<li>原来的主服务器恢复以后，成为新的主服务器的从服务器</li>
+</ol>
+</blockquote>
+<h3 id="选举主服务器"><a class="markdownIt-Anchor" href="#选举主服务器"></a> 选举主服务器</h3>
+<p>哨兵leader会把所有从服务器保存在一个列表中，从中选择出一个状态良好、数据完整的服务器，成为新的主服务器：</p>
+<blockquote>
+<ol>
+<li>删除列表中所有处于下线状态的服务器</li>
+<li>删除列表中最近5秒内没有回复sentinel的<code>INFO</code>命令的服务器</li>
+<li>删除与主服务器断开连接超过<code>down_after_milliseconds * 10</code>毫秒的服务器</li>
+<li>选择出列表中剩余的服务器中优先级最高的一个</li>
+<li>如果有多个优先级一样的服务器，选择其中偏移量最大的一个</li>
+<li>如果有多个偏移量一样的服务器，选择其中运行ID最小的一个</li>
+</ol>
+</blockquote>
+<p>向选出的服务器发送以下命令，并以每秒一次的频率向其发送<code>INFO</code>命令，当其<code>role</code>属性由&quot;slave&quot;变成&quot;master&quot;，则成功变成主服务器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SLAVEOF no one</span><br></pre></td></tr></table></figure>
+<h3 id="修改从服务器的复制目标"><a class="markdownIt-Anchor" href="#修改从服务器的复制目标"></a> 修改从服务器的复制目标</h3>
+<p>当新的主服务器出现后，leader会向所有的从服务器发送<code>SLAVEOF</code>命令，让它们复制新的主服务器。</p>
+<h3 id="旧主服务器变成从服务器"><a class="markdownIt-Anchor" href="#旧主服务器变成从服务器"></a> 旧主服务器变成从服务器</h3>
+<p>当旧服务器恢复重连的时候，sentinel会向其发送<code>SLAVEOF</code>命令，让其成为新主服务的从服务器。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" title="redis学习9-哨兵Sentinel" target="_blank" rel="external">https://eoccc.gitee.io/2022/04/01/redis学习9-哨兵Sentinel/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://gitee.com/eoccc" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://gitee.com/eoccc" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/04/02/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" title="redis学习10-集群"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/03/30/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" title="redis学习8-复制（主从架构）"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

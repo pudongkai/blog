@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>多级共享缓存解决方案 | Eoccc的博客</title>
+  <meta name="description" content="本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：多级缓存、共享缓存。附缓存框架调研：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;imyjy&#x2F;p&#x2F;15695160.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多级共享缓存解决方案">
+<meta property="og:url" content="https://eoccc.gitee.io/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：多级缓存、共享缓存。附缓存框架调研：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;imyjy&#x2F;p&#x2F;15695160.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1vj8mki86j20z20miq4r.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1vevqyox4j218i0jgdi2.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1vdkcdmzoj21c80hydi0.jpg">
+<meta property="article:published_time" content="2021-12-13T06:10:32.000Z">
+<meta property="article:modified_time" content="2022-08-01T04:58:42.278Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="技术笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1vj8mki86j20z20miq4r.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://gitee.com/eoccc" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/dubbo/" style="font-size: 13.2px;">dubbo</a> <a href="/tags/kafka/" style="font-size: 13.6px;">kafka</a> <a href="/tags/redis/" style="font-size: 13.8px;">redis</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 14px;">中间件</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" style="font-size: 13.4px;">技术笔记</a> <a href="/tags/%E8%B8%A9%E5%9D%91/" style="font-size: 13px;">踩坑</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 13.6px;">随笔</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="title">软引用和弱的使用场景</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/" class="title">kafka消费者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" class="title">缓存淘汰算法总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/" class="title">kafka生产者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/" class="title">深拷贝和浅拷贝工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-14T07:10:35.000Z" itemprop="datePublished">2022-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-多级共享缓存解决方案" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      多级共享缓存解决方案
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="article-date">
+	  <time datetime="2021-12-13T06:10:32.000Z" itemprop="datePublished">2021-12-13</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：<strong>多级</strong>缓存、<strong>共享</strong>缓存。附缓存框架调研：<a href="https://www.cnblogs.com/imyjy/p/15695160.html">https://www.cnblogs.com/imyjy/p/15695160.html</a></p>
+<span id="more"></span>
+<h2 id="预热缓存"><a class="markdownIt-Anchor" href="#预热缓存"></a> 预热缓存</h2>
+<p>由于是多级共享缓存，预热缓存分为两块：</p>
+<ol>
+<li>redis缓存的预热。首次使用缓存的时候，需要预热redis中的数据，避免启用缓存时，大量请求打到DB。</li>
+<li>consumer本地缓存的预热。由于机器重启时本地缓存会失效，所以机器启动时，需要执行加载本地缓存的操作，将高频的缓存load到机器本地。</li>
+</ol>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1vj8mki86j20z20miq4r.jpg" alt="image-20220503191518263" style="zoom:40%;">
+<h2 id="更新缓存"><a class="markdownIt-Anchor" href="#更新缓存"></a> 更新缓存</h2>
+<p>当数据库发生修改时，会通过MQ的方式将修改的信息随机发送给一个provider，provider收到更新的消息后，会执行响应的缓存更新操作，更新<strong>redis缓存</strong>。当provider更新完redis缓存后，会再发送一条MQ消息，将更新信息广播给每一个consumer，consumer收到消息后更新<strong>本地缓存</strong>。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1vevqyox4j218i0jgdi2.jpg" alt="image-20220503185217739"></p>
+<h2 id="查询缓存"><a class="markdownIt-Anchor" href="#查询缓存"></a> 查询缓存</h2>
+<p>缓存分为两级：本地缓存L1和redis缓L2。</p>
+<p>从查询的角度看，实现的流程大致为：</p>
+<blockquote>
+<ol>
+<li>consumer发起查询时，先查本地缓存，如果查到，直接返回</li>
+<li>如果consumer的本地缓存中不存在，查询redis缓存，查到直接返回，并更新consumer本地缓存</li>
+<li>如果redis没有查到，会发起dubbo调用provider</li>
+<li>provider会先查自己的本地缓存，查到就返回给consumer，consumer收到回复后更新本地缓存</li>
+<li>如果provider的本地缓存没有查到，会查redis缓存，查到就返回，并更新provider和consumer的本地缓存</li>
+<li>如果provider查redis没有查到，会查DB（加了分布式锁），然后返回，并更新provider和consumer的本地缓存及redis缓存</li>
+</ol>
+</blockquote>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1vdkcdmzoj21c80hydi0.jpg" alt="image-20220503180644762"></p>
+<p>这个流程有两个疑问点：</p>
+<ol>
+<li>不论是consumer还是provider查缓存，都会先查本地缓存，然后查redis缓存，最后才查DB，这样是否有重复？</li>
+</ol>
+<blockquote>
+<p>其实这样查询是有必要的，在并发的场景下，如果两个consumer在本地都没有查到缓存，然后请求到了provider，如果不先再走一遍consumer查缓存的流程，那么两个缓存都会打到DB，然而这是没有必要的。</p>
+<p>举个例子：consumerA和consumerB将请求同时打到了provider，由于加了分布式锁，每次只有一个请求会打到DB。我们假设consumerA的请求打到了DB，查到数据，并且更新到了provider的本地缓存和redis缓存，那么consumerB的请求只需要查询provider的本地缓存或redis缓存就行了（之所以consumerB会查到redis缓存，是因为在集群模式下，两个请求不一定打到同一台机器上，）。</p>
+</blockquote>
+<ol start="2">
+<li>如果发生缓存击穿，会有大量的请求打到DB，怎么处理？</li>
+</ol>
+<blockquote>
+<p>我们对查数据库的操作加了分布式锁。在查数据库之前，要先获取锁，获取锁之后，会再查询一遍本地缓存和redis缓存，最后才会查DB。</p>
+<p>并且从DB查到数据后，会更新本地缓存和redis缓存。</p>
+</blockquote>
+<h2 id="拓展点"><a class="markdownIt-Anchor" href="#拓展点"></a> 拓展点</h2>
+<p><strong>1. 缓存击穿</strong></p>
+<p>缓存击穿是指：客户端查询不存在的数据，请求打到了存储层。</p>
+<p>解决方案：</p>
+<blockquote>
+<ol>
+<li>当需要从存储层查数据时，对请求加分布式锁，使得相同的请求在同一时刻只有一个能够打到存储层，同时从存储层查询到数据后将数据缓存起来；</li>
+<li>设置缓存永不过期，当数据更新时动态的更新缓存；</li>
+<li>采用多级缓存，如本项目再增加一级sql缓存</li>
+<li>设置不同的缓存过期策略，本地缓存高频的热点数据（LFU），redis缓存短有效期的热点数据（LRU），redis缓存较长时间的全量数据。</li>
+</ol>
+</blockquote>
+<p><strong>2. 缓存穿透</strong></p>
+<p>缓存穿透是指：客户端查询不存在查询的数据，使得请求直达存储层，导致服务器压力过大，甚至宕机。</p>
+<p>解决方案：</p>
+<blockquote>
+<ol>
+<li>查询存储层不存在的数据时，在缓存中插入空的值，当客户端再查询时，直接返回缓存中的空值；</li>
+<li>使用布隆过滤器，将数据存入布隆过滤器，访问缓存之前先通过过滤器拦截，如果数据不存在直接返回空值。</li>
+</ol>
+</blockquote>
+<p><strong>3. 缓存雪崩</strong></p>
+<p>缓存雪崩是指：缓存中大量的数据同时过期，导致在某一时刻大量的请求直接打到存储层。</p>
+<p>解决方案：</p>
+<blockquote>
+<ol>
+<li>在缓存的过期时间后面加一个随机值，使不会有大量缓存在同一时刻过期；</li>
+<li>采用降级或熔断措施，在发生雪崩时，直接返回预定义的值；</li>
+<li>部署高可用的缓存集群，redis采用哨兵+集群的模式，部署多个实例，个别节点不可用时，依然保证服务整体可用。</li>
+</ol>
+</blockquote>
+<p><strong>4. 布隆过滤器的缺点</strong></p>
+<p>布隆过滤器的原理：布隆过滤器使用一个bitMap来保存过滤器的状态。插入数据的时候先根据缓存数据的hash函数计算出一个或多个hash值，然后将这些hash值与bitMap的长度取余，计算出hash值对应的位置，将这些位置的数据置为1。过滤的时候，需要这些位置都为1才可以通过过滤。</p>
+<p>注意点：同一个数据可以有<strong>多个</strong>hash函数，目的是为了降低误报的概率。</p>
+<p>知道了原理，分析缺点就比较容易了：</p>
+<blockquote>
+<ol>
+<li>增加了系统的复杂度（插入和查询都需要经过布隆过滤器），这是必然的</li>
+<li>由于多了一个布隆过滤器的操作，因此性能也会有一定的影响，不过几乎可以忽略</li>
+<li>当发生hash冲突的时候，会导致误报，这是比较严重的，需要考虑好解决方案</li>
+</ol>
+</blockquote>
+<p>*经典语录：*布隆过滤器中不存在的一定不存在，布隆过滤器中存在的不一定存在。</p>
+<p>解释一下：前提：key1和key2发生了hash冲突，hash函数计算出的hash值都是hash1。插入数据key1，布隆过滤器会把hash1对应的bitMap改成1；查询key2，通过hash函数计算得到hash1，发现bitMap里面为1，布隆过滤器认为这个数据是存在的，但是实际不存在。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="多级共享缓存解决方案" target="_blank" rel="external">https://eoccc.gitee.io/2021/12/13/多级共享缓存解决方案/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://gitee.com/eoccc" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://gitee.com/eoccc" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/03/20/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="redis学习1-底层数据结构"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/" title="IO模型"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
