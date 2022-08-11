@@ -17,24 +17,22 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>redis学习4-RDB持久化 | Eoccc的博客</title>
-  <meta name="description" content="Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。">
+  <title>kafka副本管理 | Eoccc的博客</title>
+  <meta name="description" content="leader副本选举，副本同步">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis学习4-RDB持久化">
-<meta property="og:url" content="https://eoccc.gitee.io/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/index.html">
+<meta property="og:title" content="kafka副本管理">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
-<meta property="og:description" content="Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。">
+<meta property="og:description" content="leader副本选举，副本同步">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1k3gae5t9j20qm03yaab.jpg">
-<meta property="article:published_time" content="2022-03-25T03:32:23.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.277Z">
+<meta property="article:published_time" content="2022-04-25T14:52:41.000Z">
+<meta property="article:modified_time" content="2022-08-11T15:17:02.855Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
-<meta property="article:tag" content="redis">
+<meta property="article:tag" content="kafka">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1k3gae5t9j20qm03yaab.jpg">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -290,21 +288,21 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#rdb%E6%96%87%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90%E5%92%8C%E8%BD%BD%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text"> RDB文件的生成和载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis%E8%87%AA%E5%8A%A8%E4%BF%9D%E5%AD%98"><span class="toc-number">2.</span> <span class="toc-text"> Redis自动保存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text"> RDB文件结构</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BC%98%E5%85%88%E5%89%AF%E6%9C%AC"><span class="toc-number">1.</span> <span class="toc-text"> 优先副本</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E9%87%8D%E5%88%86%E9%85%8D"><span class="toc-number">2.</span> <span class="toc-text"> 分区重分配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%89%AF%E6%9C%AC%E5%9B%A0%E5%AD%90"><span class="toc-number">3.</span> <span class="toc-text"> 修改副本因子</span></a></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-redis学习4-RDB持久化" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-kafka副本管理" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      redis学习4-RDB持久化
+      kafka副本管理
     </h1>
   
 
@@ -312,59 +310,41 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/" class="article-date">
-	  <time datetime="2022-03-25T03:32:23.000Z" itemprop="datePublished">2022-03-25</time>
+	<a href="/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/" class="article-date">
+	  <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
 	</a>
 </span>
         
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/#comments" class="article-comment-link">Comments</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
+        <p>Kafka分区使用多副本机制来提升可靠性，只有leader副本能对外提供读写服务，follower副本只负责在内部进行消息同步，当leader副本不可用时，从follower副本中选择一个成为新的leader副本。</p>
 <span id="more"></span>
-<h2 id="rdb文件的生成和载入"><a class="markdownIt-Anchor" href="#rdb文件的生成和载入"></a> RDB文件的生成和载入</h2>
-<p>Redis可以通过两个命令生成RDB文件：<code>SAVE</code> <code>BGSAVE</code></p>
-<ul>
-<li>
-<p><code>SAVE</code>命令是阻塞式的。当执行<code>SAVE</code>命令时，所有的客户端请求都会被拒绝</p>
-</li>
-<li>
-<p><code>BGSAVE</code>是并行的，redis会fork一个子进程来执行命令。另外需要注意：</p>
-<p>在执行<code>BGSAVE</code>期间，redis会拒绝执行<code>SAVE</code>命令</p>
-<p>在执行<code>BGSAVE</code>期间，redis会拒绝执行<code>BGSAVE</code>命令</p>
-<p>在执行<code>BGSAVE</code>期间，客户端发送的<code>BGREWRITEAOF</code>命令会等到<code>BGSAVE</code>命令执行完后再执行</p>
-<p>在执行<code>BGREWRITEAOF</code>期间，客户端发送的<code>BGSAVE</code>命令会被拒绝</p>
-</li>
-<li>
-<p>RDB文件载入期间，redis服务器会一直处于阻塞状态</p>
-</li>
-</ul>
-<h2 id="redis自动保存"><a class="markdownIt-Anchor" href="#redis自动保存"></a> Redis自动保存</h2>
-<p>Redis允许用户配置save选项，让redis根据配置的规则自动执行<code>BGSAVE</code>持久化。redis每隔100毫秒就会检查一遍save条件是否满足，只要任一条件满足，就会进行持久化。</p>
-<p>save规则可以配置多条：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">save 900 1     //数据库在900秒内进行了1次修改</span><br><span class="line">save 300 10    //数据库在300秒内进行了10次修改</span><br><span class="line">save 60 100    //数据库在60秒内进行了100次修改</span><br></pre></td></tr></table></figure>
-<h3 id="rdb文件结构"><a class="markdownIt-Anchor" href="#rdb文件结构"></a> RDB文件结构</h3>
-<p>RDB文件结构图：</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1k3gae5t9j20qm03yaab.jpg" alt="RDB文件结构" style="zoom:50%;">
-<ul>
-<li>REDIS部分为一个固定值，保存老人&quot;REDIS&quot;的二进制码</li>
-<li>db_version为一个长为4字节的整数，记录了RDB的版本号</li>
-<li>database部分保存了0个或多个数据库，以及各个数据库中的键值对</li>
-<li>EOF为一个长度为1字节的常量，标识RDB正文的结束位置</li>
-<li>check_sum为一个8字节的无符号整数，由REDIS、db_version、database、EOF四个部分的内容计算得出，用于校验RDB文件的完整性</li>
-</ul>
+<h1 id="优先副本"><a class="markdownIt-Anchor" href="#优先副本"></a> 优先副本</h1>
+<p>在创建主题的时候，kafka会尽可能均匀地将分区和副本分布到各个broker节点上，leader副本的分布也比较均匀。</p>
+<p>对于leader副本的选择，kafka会优先选择AR集合中的第一个副本。比如，分区0的AR集合为[1,2,0]，则kafka会优先将副本1作为这个分区的leader副本。</p>
+<p>kafka提供了分区自动平衡的功能，通过参数<code>auto.leader.rebalance.enable</code>控制，默认为true。通过一个定时任务轮询所有的broker节点，计算每个broker的不平衡率（非优先副本的leader个数/分区总数），如果不平衡率超过<code>leader.imbalance.per.broker.percentage</code>配置的比例，就会触发优先副本的选举。执行的周期通过<code>leader.imbalance.check.interval.seconds </code>配置，默认为300秒。</p>
+<p>需要注意的是，优先副本的选举会造成kafka不可用，生产环境不建议打开自动平衡副本。可以通过<code>kafka-perferr创刊plica毛lection.sh</code>脚本手动执行平衡动作。</p>
+<h1 id="分区重分配"><a class="markdownIt-Anchor" href="#分区重分配"></a> 分区重分配</h1>
+<p>当集群新增broker节点时，只有新创建的主题分区才会分配到这个节点上。因此集群扩容、或节点失效的时候，需要手动进行分区重分配，以保证分区的平衡。</p>
+<p>Kafka 提供了 <a href="http://kafka-reassign-partitions.sh">kafka-reassign-partitions.sh</a> 脚本来执行分区重分配的工作。</p>
+<p>分区重分配的本质在于数据复制，先增加新的副本，然后进行数据同步，最后删除旧的副本。复制会占用大量资源，如果分配的量太大，会影响性能，可以减小重分配的粒度，以小批次进行重分配。但是如果集群中某个主题或分区的流量特别大，仅靠减小粒度是不足够的，这时可以通过限流来实现。</p>
+<p>副本间的复制限流有两种实现方式: <a href="http://kafka-config.sh">kafka-config.sh</a> 脚本和 <a href="http://kafka-reassign-partitions.sh">kafka-reassign-partitions.sh</a> 脚本。</p>
+<h1 id="修改副本因子"><a class="markdownIt-Anchor" href="#修改副本因子"></a> 修改副本因子</h1>
+<p>创建主题之后，如果我们想修改分区的个数，或者修改副本的个数，可以通过重分配的脚本 <a href="http://kafka-reassign-partition.sh">kafka-reassign-partition.sh</a> 来实现。</p>
+<p>适当的增加分区数，会提高并发度，从而提高吞吐量，但是并不是分区数越多，吞吐量就会一直增长。</p>
 
       
     </div>
@@ -374,7 +354,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/" title="redis学习4-RDB持久化" target="_blank" rel="external">https://eoccc.gitee.io/2022/03/25/redis学习4-RDB持久化/</a>
+      <a href="https://eoccc.gitee.io/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/" title="kafka副本管理" target="_blank" rel="external">https://eoccc.gitee.io/2022/04/25/kafka副本管理/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -421,12 +401,12 @@
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2022/03/25/redis%E5%AD%A6%E4%B9%A05-AOF%E6%8C%81%E4%B9%85%E5%8C%96/" title="redis学习5-AOF持久化"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+      <a href="/2022/04/25/kafka-leader%E9%80%89%E4%B8%BE/" title="kafka leader选举"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
     </li>
     
     
     <li class="next">
-      <a href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/" title="redis学习3-过期键清除策略"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/04/23/%E5%8F%8D%E5%B0%84%E5%BC%82%E5%B8%B8%EF%BC%9F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E7%9A%84%E9%94%85/" title="反射异常？类型转换的锅"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
