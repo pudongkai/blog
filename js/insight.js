@@ -58,14 +58,6 @@
                 });
             }
         });
-        // var entries = json.pages.concat(json.posts);
-        // entries.forEach(function (entry) {
-        //     if (entry[key]) {
-        //         entry[key].forEach(function (value) {
-        //             values[value.name] = value;
-        //         });
-        //     }
-        // });
         var result = [];
         for (var name in values) {
             result.push(values[name]);
@@ -96,9 +88,7 @@
                 if (obj[field].toUpperCase().indexOf(keyword) > -1)
                     return true;
             });
-            if (containFields.length > 0)
-                return true;
-            return false;
+            return containFields.length > 0;
         });
         return containKeywords.length === keywordArray.length;
     }
@@ -199,7 +189,6 @@
         $items.forEach(function (item, index) {
             if ($(item).hasClass('active')) {
                 prevPosition = index;
-                return;
             }
         });
         var nextPosition = ($items.length + prevPosition + value) % $items.length;
