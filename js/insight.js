@@ -33,8 +33,12 @@
             case 'PAGES':
                 $searchItems = array.map(function (item) {
                     // Use config.root instead of permalink to fix url issue
+                    var text = "";
+                    if (item.text) {
+                        text = item.text.slice(0, 150);
+                    }
                     // return searchItem('file', item.title, null, item.text.slice(0, 150), CONFIG.ROOT_URL + item.path);
-                    return searchItem('file', item.title, null, "", CONFIG.ROOT_URL + item.path);
+                    return searchItem('file', item.title, null, text, CONFIG.ROOT_URL + item.path);
                 });
                 break;
             case 'CATEGORIES':
