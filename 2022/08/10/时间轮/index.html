@@ -17,24 +17,24 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>redis学习4-RDB持久化 | Eoccc的博客</title>
-  <meta name="description" content="Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。">
+  <title>时间轮 | Eoccc的博客</title>
+  <meta name="description" content="定时任务、延时操作的定时器实现。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis学习4-RDB持久化">
-<meta property="og:url" content="https://eoccc.gitee.io/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/index.html">
+<meta property="og:title" content="时间轮">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
-<meta property="og:description" content="Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。">
+<meta property="og:description" content="定时任务、延时操作的定时器实现。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1k3gae5t9j20qm03yaab.jpg">
-<meta property="article:published_time" content="2022-03-25T03:32:23.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.277Z">
+<meta property="og:image" content="https://eoccc.gitee.io/.io//image-20220820161912938.png">
+<meta property="og:image" content="https://eoccc.gitee.io/.io//image-20220820171558184.png">
+<meta property="article:published_time" content="2022-08-10T14:52:41.000Z">
+<meta property="article:modified_time" content="2022-08-20T09:40:59.283Z">
 <meta property="article:author" content="Eoccc">
-<meta property="article:tag" content="中间件">
-<meta property="article:tag" content="redis">
+<meta property="article:tag" content="技术笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1k3gae5t9j20qm03yaab.jpg">
+<meta name="twitter:image" content="https://eoccc.gitee.io/.io//image-20220820161912938.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -281,21 +281,21 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#rdb%E6%96%87%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90%E5%92%8C%E8%BD%BD%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text"> RDB文件的生成和载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis%E8%87%AA%E5%8A%A8%E4%BF%9D%E5%AD%98"><span class="toc-number">2.</span> <span class="toc-text"> Redis自动保存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text"> RDB文件结构</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%95%E5%B1%82%E6%97%B6%E9%97%B4%E8%BD%AE"><span class="toc-number">1.</span> <span class="toc-text"> 单层时间轮</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E8%BD%AE%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text"> 时间轮的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.2.</span> <span class="toc-text"> 插入任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.3.</span> <span class="toc-text"> 执行任务</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E6%97%B6%E9%97%B4%E8%BD%AE"><span class="toc-number">2.</span> <span class="toc-text"> 多层时间轮</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E4%BB%BB%E5%8A%A1-2"><span class="toc-number">2.1.</span> <span class="toc-text"> 插入任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1-2"><span class="toc-number">2.2.</span> <span class="toc-text"> 执行任务</span></a></li></ol></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-redis学习4-RDB持久化" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-时间轮" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      redis学习4-RDB持久化
+      时间轮
     </h1>
   
 
@@ -303,59 +303,66 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/" class="article-date">
-	  <time datetime="2022-03-25T03:32:23.000Z" itemprop="datePublished">2022-03-25</time>
+	<a href="/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/" class="article-date">
+	  <time datetime="2022-08-10T14:52:41.000Z" itemprop="datePublished">2022-08-10</time>
 	</a>
 </span>
         
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/#comments" class="article-comment-link">Comments</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
+        <p>JDK 中 Timer 和 DelayQueue 可以实现定时任务和延时操作的功能，但是O(nlogn)的时间复杂度在高并发的时候存在性能瓶颈，因此Kafka、Netty、ZooKeeper、Quartz等组件都使用了时间轮作为定时器。</p>
 <span id="more"></span>
-<h2 id="rdb文件的生成和载入"><a class="markdownIt-Anchor" href="#rdb文件的生成和载入"></a> RDB文件的生成和载入</h2>
-<p>Redis可以通过两个命令生成RDB文件：<code>SAVE</code> <code>BGSAVE</code></p>
-<ul>
-<li>
-<p><code>SAVE</code>命令是阻塞式的。当执行<code>SAVE</code>命令时，所有的客户端请求都会被拒绝</p>
-</li>
-<li>
-<p><code>BGSAVE</code>是并行的，redis会fork一个子进程来执行命令。另外需要注意：</p>
-<p>在执行<code>BGSAVE</code>期间，redis会拒绝执行<code>SAVE</code>命令</p>
-<p>在执行<code>BGSAVE</code>期间，redis会拒绝执行<code>BGSAVE</code>命令</p>
-<p>在执行<code>BGSAVE</code>期间，客户端发送的<code>BGREWRITEAOF</code>命令会等到<code>BGSAVE</code>命令执行完后再执行</p>
-<p>在执行<code>BGREWRITEAOF</code>期间，客户端发送的<code>BGSAVE</code>命令会被拒绝</p>
-</li>
-<li>
-<p>RDB文件载入期间，redis服务器会一直处于阻塞状态</p>
-</li>
-</ul>
-<h2 id="redis自动保存"><a class="markdownIt-Anchor" href="#redis自动保存"></a> Redis自动保存</h2>
-<p>Redis允许用户配置save选项，让redis根据配置的规则自动执行<code>BGSAVE</code>持久化。redis每隔100毫秒就会检查一遍save条件是否满足，只要任一条件满足，就会进行持久化。</p>
-<p>save规则可以配置多条：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">save 900 1     //数据库在900秒内进行了1次修改</span><br><span class="line">save 300 10    //数据库在300秒内进行了10次修改</span><br><span class="line">save 60 100    //数据库在60秒内进行了100次修改</span><br></pre></td></tr></table></figure>
-<h3 id="rdb文件结构"><a class="markdownIt-Anchor" href="#rdb文件结构"></a> RDB文件结构</h3>
-<p>RDB文件结构图：</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1k3gae5t9j20qm03yaab.jpg" alt="RDB文件结构" style="zoom:50%;">
-<ul>
-<li>REDIS部分为一个固定值，保存老人&quot;REDIS&quot;的二进制码</li>
-<li>db_version为一个长为4字节的整数，记录了RDB的版本号</li>
-<li>database部分保存了0个或多个数据库，以及各个数据库中的键值对</li>
-<li>EOF为一个长度为1字节的常量，标识RDB正文的结束位置</li>
-<li>check_sum为一个8字节的无符号整数，由REDIS、db_version、database、EOF四个部分的内容计算得出，用于校验RDB文件的完整性</li>
-</ul>
+<h1 id="单层时间轮"><a class="markdownIt-Anchor" href="#单层时间轮"></a> 单层时间轮</h1>
+<h2 id="时间轮的概念"><a class="markdownIt-Anchor" href="#时间轮的概念"></a> 时间轮的概念</h2>
+<p>时间轮( TimingWheel) 是一个存储定时任务的环形队列，底层采用数组实现，数组中的每个元素可以存放一个定时任务列表( TimerTaskList)。 TimerTaskList 是一个环形的双向链表，链表中的元素即为定时任务( TimerTaskEntry)，其中封装了真正的定时任务 (TimerTask) 。</p>
+<img src="/.io//image-20220820161912938.png" alt="image-20220820161912938" style="zoom:50%;">
+<p>时间轮的特征：</p>
+<blockquote>
+<ol>
+<li>时间轮由多个时间格组成，时间格的个数固定为wheelSize</li>
+<li>每个时间格的时间跨度为tickMs</li>
+<li>总的时间跨度interval即为 tickMs * wheelSize</li>
+<li>时间轮当前所处的时间为currentTime，currentTime是tickMs的整数倍</li>
+</ol>
+</blockquote>
+<h2 id="插入任务"><a class="markdownIt-Anchor" href="#插入任务"></a> 插入任务</h2>
+<p>当前时间为currentTime，要插入一个延时时间为delayTime的任务时，会将这个任务插入到当前时间格+(delayTime/tickMs)格中。</p>
+<p>假设时间轮的tickMs为1ms，wheelSize为20。初始时currentTime指向时间格0，此时要插入一个定时为2ms，则会将这个任务插入到时间格2中。</p>
+<p>当时间过了2ms后，currentTime指向了时间格2，需要将时间格2对应的TimTaskList中的任务执行。</p>
+<p>此时又有一个定时为8的任务需要插入，则会插入到时间格10。</p>
+<p>如果此时又要插入一个定时为19ms的任务，则会插入到时间格1。</p>
+<p>但是需要注意，这个<strong>时间轮的interval时间为20ms，即插入的任务的定时不能超过20ms。</strong></p>
+<h2 id="执行任务"><a class="markdownIt-Anchor" href="#执行任务"></a> 执行任务</h2>
+<p>currentTime 可以将整个时间轮划分 为到期部分和未到期部分， currentTime 当前指向的时间格也属于到期部分，表示刚好到期，需 要处理此时间格所对应的 TimerTaskList 中的所有任务。</p>
+<h1 id="多层时间轮"><a class="markdownIt-Anchor" href="#多层时间轮"></a> 多层时间轮</h1>
+<p>当一层时间轮的interval时间不够用时，我们就需要升级到多层时间轮。多层时间轮之间的wheelSize是相同的，下一层时间轮的tickMs是上一层时间轮的interval：</p>
+<blockquote>
+<p>假设第一层的时间轮为：tickMs=1ms、wheelSize=20、inteval=20ms</p>
+<p>则第二层的时间轮为：tickMs=20ms、wheelSize=20、inteval=400ms</p>
+</blockquote>
+<img src="/.io//image-20220820171558184.png" alt="image-20220820171558184" style="zoom:50%;">
+<h2 id="插入任务-2"><a class="markdownIt-Anchor" href="#插入任务-2"></a> 插入任务</h2>
+<p>当一层时间轮的interval不足以容纳一个任务的定时时，就会升级到下一层时间轮。</p>
+<p>在前面的时间轮中，如果我们要插入一个定时为350ms的任务时，第一层时间轮不足以容纳，就会升级到第二层时间轮，最终放到时间格17中（350/40=17）。</p>
+<p>由于最低层的时间轮的tickMs=1，则这个时间轮的精度为1ms。</p>
+<h2 id="执行任务-2"><a class="markdownIt-Anchor" href="#执行任务-2"></a> 执行任务</h2>
+<p>随着时间的流逝，第二层的的currentTiume指向了第17格，即时间走了340ms，对于之前插入的定时为350ms的任务，还剩余10ms，这时还不能执行这个任务。</p>
+<p>此时，会将这个任务从第二层时间轮中取出，然后重新插入一个定时为10ms的任务，最终插入到第一层的时间格10，当currentTime指向第一层的时间格时，才会真正执行这个任务，并将这个任务从时间轮中删除。</p>
+<p>但是如果我们在currentTime=0时，插入了一个定时为200ms的任务，最终插入到了第二层的时间格5，currentTime指向这个时间格的时候，这个任务剩余的时间为0，所以会直接执行，不需要重新插入时间轮。</p>
+<p>另外，在判断一个任务能不能执行的时候，还需要判断时间轮的精度，如果剩余的时间小于时间轮的精度，则会直接执行，否则需要重新插入到时间轮。</p>
 
       
     </div>
@@ -365,7 +372,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/" title="redis学习4-RDB持久化" target="_blank" rel="external">https://eoccc.gitee.io/2022/03/25/redis学习4-RDB持久化/</a>
+      <a href="https://eoccc.gitee.io/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/" title="时间轮" target="_blank" rel="external">https://eoccc.gitee.io/2022/08/10/时间轮/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -411,13 +418,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2022/03/25/redis%E5%AD%A6%E4%B9%A05-AOF%E6%8C%81%E4%B9%85%E5%8C%96/" title="redis学习5-AOF持久化"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/" title="redis学习3-过期键清除策略"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/08/10/protobuf%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="protobuf序列化和反序列化"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
