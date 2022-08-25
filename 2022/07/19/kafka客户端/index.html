@@ -17,22 +17,22 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>软引用和弱的使用场景 | Eoccc的博客</title>
-  <meta name="description" content="我们日常开发中一般不会使用到软引用，因此对这块可能比较陌生，看过一些使用场景，但是过一段时间可能就忘记了，这篇博客就整理一下软引用的使用场景。">
+  <title>kafka客户端 | Eoccc的博客</title>
+  <meta name="description" content="kafka客户端的一些细节。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="软引用和弱的使用场景">
-<meta property="og:url" content="https://eoccc.gitee.io/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/index.html">
+<meta property="og:title" content="kafka客户端">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
-<meta property="og:description" content="我们日常开发中一般不会使用到软引用，因此对这块可能比较陌生，看过一些使用场景，但是过一段时间可能就忘记了，这篇博客就整理一下软引用的使用场景。">
+<meta property="og:description" content="kafka客户端的一些细节。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-07-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.278Z">
+<meta property="article:published_time" content="2022-07-19T14:52:41.000Z">
+<meta property="article:modified_time" content="2022-08-23T02:18:29.082Z">
 <meta property="article:author" content="Eoccc">
-<meta property="article:tag" content="随笔">
-<meta property="article:tag" content="技术笔记">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="kafka">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -275,16 +275,25 @@
 
   
   
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-number">1.</span> <span class="toc-text"> 分区分配策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B9%82%E7%AD%89"><span class="toc-number">2.</span> <span class="toc-text"> 幂等</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">3.</span> <span class="toc-text"> 事务</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
 <main class="main" role="main">
   <div class="content">
-  <article id="post-软引用和弱的使用场景" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-kafka客户端" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      软引用和弱的使用场景
+      kafka客户端
     </h1>
   
 
@@ -292,44 +301,109 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="article-date">
-	  <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
+	<a href="/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/" class="article-date">
+	  <time datetime="2022-07-19T14:52:41.000Z" itemprop="datePublished">2022-07-19</time>
 	</a>
 </span>
         
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/#comments" class="article-comment-link">Comments</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>我们日常开发中一般不会使用到软引用，因此对这块可能比较陌生，看过一些使用场景，但是过一段时间可能就忘记了，这篇博客就整理一下软引用的使用场景。</p>
+        <p>总结kafka客户端的分区策略、幂等性和事物。</p>
 <span id="more"></span>
-<h1 id="软引用"><a class="markdownIt-Anchor" href="#软引用"></a> 软引用</h1>
-<p>软引用的特点：当系统的内存不足时，进行回收，否则不会回收。</p>
-<p>应用场景：</p>
+<h1 id="分区分配策略"><a class="markdownIt-Anchor" href="#分区分配策略"></a> 分区分配策略</h1>
+<p>消费者消费消息之前，首先得进行分区分配，kafka提供了三种分区分配策略。</p>
+<ol>
+<li>
+<p>RangeAssignor</p>
+<p>kafka会先按照分区总数和消费者总数进行整除，获得一个跨度，然后按照分区跨度进行平均分配，确保分区尽可能平均的分配给所有的消费者。对于剩余的分区（分区总数 % 消费者总数），则前面的消费者（消费者名称按字典序排序）会多分配一个分区。</p>
+<p>假设 n=分区数/消费者数量， m=分区数%消费者数量，那么前 m 个消费者每个分配 n+1 个 分区，后面的(消费者数量～m)个消费者每个分配 n个分区。</p>
+<p>这种分配方式存在一个问题，如果存在多个topic的分区不是消费者总数的整数倍，那么排在前面的消费者会被多分配多个分区。</p>
+<blockquote>
+<p>假设有两个topic，每个topic有4个分区，分配结果为：</p>
+<p>Consumer0:  t0p0,tp1, t1p0,t1p1</p>
+<p>Consumer1:  t0p2,t0p3, t1p2,t1p3</p>
+<p>但是如果有两个topic，且个topic有3个分区，分配结果为：</p>
+<p>Consumer0:  t0p0,tp1, t1p0,t1p1</p>
+<p>Consumer1:  t0p2,t1p2</p>
+</blockquote>
+</li>
+<li>
+<p>RoundRobinAssignor</p>
+<p>将消费组内所有的消费者及消费者订阅的所有topic的分区按照字典序排序，然后通过轮询的方式将分区依此分配给每个消费者。</p>
+<p>这种分配方式如果消费组内所有的消费者订阅的topic都是相同的，那么分区会被很均匀的分配给每个消费者，但是如果消费者订阅的topic不同，就会导致分配不均匀。</p>
+<blockquote>
+<p>假设消费者C0订阅了主题t0；假设消费者C1订阅了主题t0和t1；假设消费者C2订阅了主题t0，t1和t2。t0、t1、t2的分区数分别为1、2、3。此时分配结果为：</p>
+<p>C0: t0p0</p>
+<p>C1: t1p0</p>
+<p>C2: t1p1, t2p0,t2p1,t2p2</p>
+<p>这种分配方式不完美，因为可以将 t1p1分配给C1。</p>
+</blockquote>
+</li>
+<li>
+<p>StickyAssignor</p>
+<p>这是目前最优秀的分区分配策略。Kafka从0.11x开始引入这种分配策略，尽可能保证：分区分配均匀，分区分配尽可能与上一次分配相同</p>
+<p>再分配的时候，会将需要分配的分区平均的分配给消费者。</p>
+<blockquote>
+<p>假设当前的分区分配为：</p>
+<p>C0: t0p0, t1p1, t3p0</p>
+<p>C1: t0p1, t201, t3p1</p>
+<p>C2: t1p0, t2p1</p>
+<p>消费者C1脱离了消费组，则分配结果为：</p>
+<p>C0: t0p0, t1p1, t3p0, <strong>t201</strong></p>
+<p>C2: t1p0, t2p1, <strong>t0p1, t3p1</strong></p>
+<p>RoundRobinAssignor中提到的例子，使用StickyAssignor的分配结果为：</p>
+<p>C0: t0p0</p>
+<p>C1: t1p0, <strong>t1p1</strong></p>
+<p>C2: t2p0,t2p1,t2p2</p>
+</blockquote>
+</li>
+<li>
+<p>自定义分区分配策略</p>
+<p>实现PartitionAssignor接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PartitionAssignor</span> &#123;</span><br><span class="line">  <span class="comment">//提供订阅的消息</span></span><br><span class="line">  Subscription <span class="title function_">subscription</span><span class="params">(Set&lt;String&gt; topics)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//实现具体的分配逻辑</span></span><br><span class="line">  Map&lt;String, Assignment&gt; <span class="title function_">assign</span><span class="params">(Cluster metadata, Map&lt;String, Subscription&gt; subscriptions)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//执行分配的时候会调用这个方法</span></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">onAssignment</span><span class="params">(Assignment assignment)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">default</span> <span class="keyword">void</span> <span class="title function_">onAssignment</span><span class="params">(Assignment assignment, <span class="type">int</span> generation)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.onAssignment(assignment);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//这个分配策略的名字</span></span><br><span class="line">  String <span class="title function_">name</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="幂等"><a class="markdownIt-Anchor" href="#幂等"></a> 幂等</h1>
+<p>kafka开启幂等性功能：</p>
 <blockquote>
 <ol>
-<li>保存网页资源，如图片等</li>
-<li>Spring 缓存配置属性缓存–SoftReferenceConfigurationPropertyCache</li>
+<li>将生产者的<code>enable.idempotence</code>配置为true，默认为false</li>
+<li>生产者客户端的retries必须大于0</li>
+<li><code>max.in.flight.requests.per.connection</code>不能大于5</li>
+<li>acks设置为-1</li>
 </ol>
 </blockquote>
-<h1 id="弱引用"><a class="markdownIt-Anchor" href="#弱引用"></a> 弱引用</h1>
-<p>软引用的特点：下一次GC的时候会回收</p>
-<p>应用场景：</p>
+<p>为了实现幂等性，kafka引入了producer id（PID）和sequence number的概念。kafka会为每个producer分配一个id，每个生产者发送到每个分区的每条消息都有一个序列号，每发送一条消息，&lt;PID，分区&gt;对应的序列号就会加1。</p>
+<p>broker端会为每个&lt;PID，分区&gt;维护一个序列号：</p>
+<blockquote>
+<p>当收到消息时，只有序列号（SN_new）比旧的序列号（SN_old）大1时，即SN_new=SN_old+1，才会接受它</p>
+<p>如果新的序列号小于旧的序列号，则说明这是重复消息，会被丢弃</p>
+<p>如果SN_new&gt;SN_old+1，则说明中间有消息没有写入，出现乱序，即有消息丢失，会抛出OutOfOrderSequenceException异常</p>
+</blockquote>
+<h1 id="事务"><a class="markdownIt-Anchor" href="#事务"></a> 事务</h1>
+<p>要开启事务功能，首先必须开启生产者的幂等性功能。</p>
+<p>通过事务，可以保证跨生产者会话的消息幂等发送和事务恢复。</p>
+<p>需要手动的指定transactionalId，transactionalld与PID一一对应，同时通过一个单调递增的producer epoch保证transactionalld的唯一性。</p>
+<p>Kafka 并不能保证己提交的事务中的所有消息都能够被消费 :</p>
 <blockquote>
 <ol>
-<li>ThreaLocal中的map实现，此map继承了弱引用WeakReference，防止map中的key引用的对象无法被回收（线程一直处于活跃状态，导致ThreaLocal不会被回收）；</li>
-<li>一些高速缓存场景，缓存仅在GC之间生效。</li>
+<li>对采用日志压缩策略的主题而言，事务中的某些消息有可能被清理(相同 key 的消息， 后写入的消息会覆盖前面写入的消息)。</li>
+<li>事务中消息可能分布在同一个分区的多个日志分段(LogSegment)中，当老的日志分 段被删除时，对应的消息可能会丢失。</li>
+<li>消费者可以通过 seek()方法访问任意offset的消息，从而可能遗漏事务中的部分消息。</li>
+<li>消费者在消费时可能没有分配到事务内的所有分区，因此它也就不能读取事务中的所有消息。</li>
 </ol>
 </blockquote>
 
@@ -341,7 +415,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" title="软引用和弱的使用场景" target="_blank" rel="external">https://eoccc.gitee.io/2022/07/10/软引用和弱的使用场景/</a>
+      <a href="https://eoccc.gitee.io/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/" title="kafka客户端" target="_blank" rel="external">https://eoccc.gitee.io/2022/07/19/kafka客户端/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -388,14 +462,22 @@
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/" title="kafka客户端"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+      <a href="/2022/08/07/%E5%BC%80%E5%8F%91%E5%8E%9F%E5%88%99/" title="开发原则，经验总结"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
     </li>
     
     
     <li class="next">
-      <a href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/" title="kafka消费者"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" title="软引用和弱的使用场景"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
     
   </ul>
   
