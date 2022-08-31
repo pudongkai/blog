@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1plqu90vfj20u00domxx.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1plua19imj218e09u0to.jpg">
 <meta property="article:published_time" content="2022-03-27T03:20:29.000Z">
-<meta property="article:modified_time" content="2022-08-31T01:29:17.955Z">
+<meta property="article:modified_time" content="2022-08-31T02:25:25.934Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -287,7 +287,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.</span> <span class="toc-text"> 客户端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisclient"><span class="toc-number">2.</span> <span class="toc-text"> redisClient</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientfd"><span class="toc-number">2.1.</span> <span class="toc-text"> redisClient.fd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientname"><span class="toc-number">2.2.</span> <span class="toc-text"> redisClient.name</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisclientflags"><span class="toc-number">3.</span> <span class="toc-text"> redisClient.flags</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientquerybuf"><span class="toc-number">3.1.</span> <span class="toc-text"> redisClient.querybuf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E4%B8%8E%E5%8F%82%E6%95%B0"><span class="toc-number">3.2.</span> <span class="toc-text"> 命令与参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">3.3.</span> <span class="toc-text"> 执行命令的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">3.4.</span> <span class="toc-text"> 输出缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">3.5.</span> <span class="toc-text"> 身份验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4"><span class="toc-number">3.6.</span> <span class="toc-text"> 时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text"> 服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%AF%B7%E6%B1%82%E6%89%A7%E8%A1%8C%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">4.1.</span> <span class="toc-text"> 命令请求执行的过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E5%89%8D%E7%9A%84%E6%A0%A1%E9%AA%8C"><span class="toc-number">4.2.</span> <span class="toc-text"> 执行命令前的校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">4.3.</span> <span class="toc-text"> 执行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E7%9A%84%E5%90%8E%E7%BB%AD%E6%93%8D%E4%BD%9C"><span class="toc-number">4.4.</span> <span class="toc-text"> 执行命令的后续操作</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.</span> <span class="toc-text"> 客户端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisclient"><span class="toc-number">2.</span> <span class="toc-text"> redisClient</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientfd"><span class="toc-number">2.1.</span> <span class="toc-text"> redisClient.fd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientname"><span class="toc-number">2.2.</span> <span class="toc-text"> redisClient.name</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisclientflags"><span class="toc-number">3.</span> <span class="toc-text"> redisClient.flags</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientquerybuf"><span class="toc-number">3.1.</span> <span class="toc-text"> redisClient.querybuf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E4%B8%8E%E5%8F%82%E6%95%B0"><span class="toc-number">3.2.</span> <span class="toc-text"> 命令与参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">3.3.</span> <span class="toc-text"> 执行命令的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">3.4.</span> <span class="toc-text"> 输出缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">3.5.</span> <span class="toc-text"> 身份验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4"><span class="toc-number">3.6.</span> <span class="toc-text"> 时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">4.</span> <span class="toc-text"> 关闭客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E6%99%AE%E9%80%9A%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">4.1.</span> <span class="toc-text"> 关闭普通客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E4%BC%AA%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">4.2.</span> <span class="toc-text"> 关闭伪客户端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">5.</span> <span class="toc-text"> 服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%AF%B7%E6%B1%82%E6%89%A7%E8%A1%8C%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">5.1.</span> <span class="toc-text"> 命令请求执行的过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E5%89%8D%E7%9A%84%E6%A0%A1%E9%AA%8C"><span class="toc-number">5.2.</span> <span class="toc-text"> 执行命令前的校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">5.3.</span> <span class="toc-text"> 执行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E7%9A%84%E5%90%8E%E7%BB%AD%E6%93%8D%E4%BD%9C"><span class="toc-number">5.4.</span> <span class="toc-text"> 执行命令的后续操作</span></a></li></ol></li></ol>
     </nav>
   </div>
 </aside>
@@ -460,6 +460,30 @@
 </blockquote>
 <p><strong>硬性限制：</strong> 客户端的输出缓冲区超过硬性限制之后，服务器会立即关闭这个客户端。</p>
 <p><strong>软性限制：</strong> 如果客户端输出缓冲区达到了软性限制的大小，但还没达到硬性限制的大小，redis会记录一下这个时间。之后服务器会监视这个客户端，如果这个客户端的输出缓冲区一直超过软性限制，并且时间达到指定的时长，服务器就会关闭这个客户端；如果这期间输出缓冲区小于软性限制，则会将时间清零。</p>
+<h2 id="关闭客户端"><a class="markdownIt-Anchor" href="#关闭客户端"></a> 关闭客户端</h2>
+<h3 id="关闭普通客户端"><a class="markdownIt-Anchor" href="#关闭普通客户端"></a> 关闭普通客户端</h3>
+<p>普通客户端关闭原因：</p>
+<blockquote>
+<ol>
+<li>客户端进程退出或被杀死，客户端与服务器之间的网络连接将被关闭，造成客户端被关闭</li>
+<li>客户端向服务器发送带有不符合协议格式的命令请求，客户端也会被服务器关闭</li>
+<li>客户端是CLIENT KILL命令的目标，将会被关闭</li>
+<li>用户为服务器设置了timeout配置选项，客户端的空转时间超过timeout设置的值，客户端将被关闭</li>
+<li>客户端发送命令请求超过输入缓冲区的限制大小（默认1GB），客户端就会被服务器关闭</li>
+<li>发送客户端的命令回复的大小超过了输出缓冲区的限制大小，客户端会被关闭</li>
+</ol>
+</blockquote>
+<h3 id="关闭伪客户端"><a class="markdownIt-Anchor" href="#关闭伪客户端"></a> 关闭伪客户端</h3>
+<ol>
+<li>
+<p>执行lua脚本的客户端</p>
+<p>服务器在初始化时创建负责执行lua脚本中redis命令的伪客户端，并将伪客户端关联的服务器记录在redisServer结构中的lua_client属性中，在服务器运行时一直存在，在服务器关闭的时候这个伪客户端才会关闭</p>
+</li>
+<li>
+<p>载入AOF文件的客户端</p>
+<p>服务器在载入AOF文件时，会创建一个伪客户端用于执行AOF文件包含的redis命令，载入完成后关闭伪客户端</p>
+</li>
+</ol>
 <h2 id="服务器"><a class="markdownIt-Anchor" href="#服务器"></a> 服务器</h2>
 <p>服务器与多个客户端建立连接，接收并处理客户端发来的请求，给客户端返回命令的执行结果，并在数据库中保存执行命令产生的数据。</p>
 <h3 id="命令请求执行的过程"><a class="markdownIt-Anchor" href="#命令请求执行的过程"></a> 命令请求执行的过程</h3>
