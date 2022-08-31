@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1qhfk4p4zj20wq0gumyq.jpg">
 <meta property="article:published_time" content="2022-03-28T04:10:32.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.278Z">
+<meta property="article:modified_time" content="2022-08-31T02:07:01.874Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -345,10 +345,10 @@
 </blockquote>
 <h2 id="更新服务器内存峰值记录"><a class="markdownIt-Anchor" href="#更新服务器内存峰值记录"></a> 更新服务器内存峰值记录</h2>
 <p>Redis的<code>stat_peak_memory</code>属性记录了服务器使用内存的峰值。serverCron每次执行都会查看当前服务器使用的内存数量，如果大于当前的<code>stat_peak_memory</code>，就会更新其值。</p>
-<p>通过一下命令的<code>used_memory_peak</code>和<code>used_memory_peak_human</code>可以查看内存使用的峰值：</p>
+<p>通过以下命令返回的<code>used_memory_peak</code>和<code>used_memory_peak_human</code>可以查看内存使用的峰值：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO memory</span><br></pre></td></tr></table></figure>
 <h2 id="处理sigterm信号"><a class="markdownIt-Anchor" href="#处理sigterm信号"></a> 处理SIGTERM信号</h2>
-<p>Redis收到SIGTERM信号时，不会立即执行，而是通过<code>sigtermHandler</code>信号处理器，打开服务器的 <code>shutdown_asap</code>标识。serverCron每次执行都会检查这个标识，决定是否关闭服务器。如果这个标识打开，服务器会先进行RDB持久化，然后再关闭服务器。</p>
+<p>Redis收到SIGTERM信号（终止信号）时，不会立即执行，而是通过<code>sigtermHandler</code>信号处理器，打开服务器的 <code>shutdown_asap</code>标识。serverCron每次执行都会检查这个标识，决定是否关闭服务器。如果这个标识打开，服务器会先进行RDB持久化，然后再关闭服务器。</p>
 <h2 id="管理客户端资源"><a class="markdownIt-Anchor" href="#管理客户端资源"></a> 管理客户端资源</h2>
 <p>serverCron每次执行都会对一定数量的客户端进行检查：</p>
 <blockquote>
@@ -358,7 +358,7 @@
 </ol>
 </blockquote>
 <h2 id="管理数据库资源"><a class="markdownIt-Anchor" href="#管理数据库资源"></a> 管理数据库资源</h2>
-<p>serverCron每次执行都会数据库中的键进行抽样检查，删除过期的键，并在需要的时候对字典进行缩容。</p>
+<p>serverCron每次执行都会触发内存的定期清除策略，对数据库中的key进行抽样检查，删除过期的key，并在需要的时候对字典进行缩容。</p>
 <p>具体见<a href="https://eoccc.gitee.io/blog/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">过期键的清除策略</a></p>
 <h2 id="执行被延迟的bgrewriteaof"><a class="markdownIt-Anchor" href="#执行被延迟的bgrewriteaof"></a> 执行被延迟的BGREWRITEAOF</h2>
 <p>Redis在执行<code>BGSAVE</code>命令期间，如果收到<code>BGREWRITEAOF</code>的请求，会等到<code>BGSAVE</code>结束后再执行，并把等待标识<code>aof_rewrite_scheduled</code>置为1。</p>

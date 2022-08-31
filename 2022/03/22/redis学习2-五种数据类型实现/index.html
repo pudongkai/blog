@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hrd9ya3tj20w806c3z5.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hrl1x5vsj211g0m2mzt.jpg">
 <meta property="article:published_time" content="2022-03-22T10:25:19.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.277Z">
+<meta property="article:modified_time" content="2022-08-28T14:41:18.897Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -290,7 +290,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-reisobject"><span class="toc-number">1.</span> <span class="toc-text"> 1. reisObject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-string"><span class="toc-number">2.</span> <span class="toc-text"> 2. String</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%97%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text"> 3. 列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%93%88%E5%B8%8C%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.</span> <span class="toc-text"> 4. 哈希对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.</span> <span class="toc-text"> 5. 集合对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="toc-number">6.</span> <span class="toc-text"> 6. 有序集合</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-reisobject"><span class="toc-number">1.</span> <span class="toc-text"> 1. reisObject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-string"><span class="toc-number">2.</span> <span class="toc-text"> 2. String</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%97%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text"> 3. 列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%93%88%E5%B8%8C%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.</span> <span class="toc-text"> 4. 哈希对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-set%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.</span> <span class="toc-text"> 5. Set集合对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-zset%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="toc-number">6.</span> <span class="toc-text"> 6. ZSet有序集合</span></a></li></ol>
     </nav>
   </div>
 </aside>
@@ -358,7 +358,7 @@
 <li>如果一个字符串的长度大于32字节，那么编码方式为raw</li>
 </ul>
 </blockquote>
-<p><strong>embstr和raw的区别：<strong>两种编码方式都使用redisObject和sdshdr来存储，但是raw会调用两次内存分配，分别创建redisObject和sdshdr对象，而embstr编码只调用一次内存分配，申请一个</strong>连续的内存空间</strong>创建两个对象。</p>
+<p><strong>embstr和raw的区别：</strong> 两种编码方式都使用redisObject和sdshdr来存储，但是raw会调用两次内存分配，分别创建redisObject和sdshdr对象，而embstr编码只调用一次内存分配，申请一个<strong>连续的内存空间</strong>创建两个对象。</p>
 <p>embstr的优点：</p>
 <blockquote>
 <ol>
@@ -367,8 +367,8 @@
 <li>embstr使用连续的内存空间，能够更好的利用缓存带来的优势</li>
 </ol>
 </blockquote>
-<p>*浮点数的存储：*浮点数在redis中也是以字符串的形式存储，但是在有需要的时候，redis会将字符串转换为浮点数。</p>
-<p>*编码转换：*redis对字符串的操作可能会导致编码类型的转换，如执行<code>append</code>命令后，字符串的长度由小于32变成大于32字节，编码会由embstr变为raw。</p>
+<p><em>浮点数的存储：</em> 浮点数在redis中也是以字符串的形式存储，但是在有需要的时候，redis会将字符串转换为浮点数。</p>
+<p><em>编码转换：</em> redis对字符串的操作可能会导致编码类型的转换，如执行<code>append</code>命令后，字符串的长度由小于32变成大于32字节，编码会由embstr变为raw。</p>
 <h2 id="3-列表"><a class="markdownIt-Anchor" href="#3-列表"></a> 3. 列表</h2>
 <p>列表的编码可以是压缩列表(ziplist)或链表(linkedlist)。</p>
 <blockquote>
@@ -380,7 +380,7 @@
 </blockquote>
 <p><strong>基于ziplist实现列表：</strong></p>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hovpcwnjj20wy08uwf0.jpg" alt="基于ziplist实现列表" style="zoom:67%;">
-<p>**基于linkedlist实现列表：**每个node都是一个StringObject。</p>
+<p><strong>基于linkedlist实现列表：</strong> 每个node都是一个StringObject。</p>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hox6q668j20zk084dgn.jpg" alt="image-20220421220135950" style="zoom:67%;">
 <h2 id="4-哈希对象"><a class="markdownIt-Anchor" href="#4-哈希对象"></a> 4. 哈希对象</h2>
 <p>哈希编码可以是压缩列表(ziplist)和字典(hashtable)。</p>
@@ -392,11 +392,11 @@
 <li>以上阈值可以配置：<code>hash-max-ziplist-value</code>，<code>hash-max-ziplist-entries</code></li>
 </ol>
 </blockquote>
-<p>当通过ziplist实现哈希对象时，redis会将键和值对象以此压入压缩列表：</p>
+<p>当通过ziplist实现哈希对象时，redis会将键和值对象依此压入压缩列表：</p>
 <p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hq8l34lvj20zw05iq3f.jpg" alt="ziplist实现哈希对象"></p>
 <p>当使用hashtable实现哈希对象时，键和值都是StringObject，保存在字典中：</p>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hqb1xtwbj20sw0iyta4.jpg" alt="hashtable实现哈希对象" style="zoom: 50%;">
-<h2 id="5-集合对象"><a class="markdownIt-Anchor" href="#5-集合对象"></a> 5. 集合对象</h2>
+<h2 id="5-set集合对象"><a class="markdownIt-Anchor" href="#5-set集合对象"></a> 5. Set集合对象</h2>
 <p>集合对象通过intset或hashtable实现。</p>
 <blockquote>
 <ol>
@@ -408,9 +408,9 @@
 </blockquote>
 <p><strong>使用intset实现集合对象的数据结构：</strong></p>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr4icccoj20su08y3z6.jpg" alt="image-20220421231759017" style="zoom:50%;">
-<p>**使用hashtable实现集合对象的数据结构：**每个元素都保存在字典的key中，value为null。</p>
+<p><strong>使用hashtable实现集合对象的数据结构：</strong> 每个元素都保存在字典的key中，value为null。</p>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr5mfdfrj20t20ce75f.jpg" alt="image-20220421231902111" style="zoom:50%;">
-<h2 id="6-有序集合"><a class="markdownIt-Anchor" href="#6-有序集合"></a> 6. 有序集合</h2>
+<h2 id="6-zset有序集合"><a class="markdownIt-Anchor" href="#6-zset有序集合"></a> 6. ZSet有序集合</h2>
 <p>有序集合对象通过ziplist或skiplist实现。</p>
 <blockquote>
 <ol>

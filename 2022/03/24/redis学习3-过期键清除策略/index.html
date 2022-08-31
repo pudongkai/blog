@@ -27,7 +27,7 @@
 <meta property="og:description" content="Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-03-24T06:21:43.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.277Z">
+<meta property="article:modified_time" content="2022-08-30T01:11:09.523Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -326,12 +326,16 @@
 <span id="more"></span>
 <h2 id="设置过期时间"><a class="markdownIt-Anchor" href="#设置过期时间"></a> 设置过期时间</h2>
 <p>Redis可以通过以下四个命令对任意key设置过期时间：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">EXPIRE key seconds          // key将在seconds秒后过期</span><br><span class="line">PEXPIRE key millionSeconds  // key将在millionSeconds毫秒后过期</span><br><span class="line">EXPIREAT key timestamp      // key将在timestamp时过期，单位为秒</span><br><span class="line">PEXPIRE key timestamp       // key将在timestamp时过期，单位为毫秒</span><br></pre></td></tr></table></figure>
-<p>Redis的底层会将<code>EXPIRE</code> <code>PEXPIRE</code> <code>EXPIREAt</code>三个过期命令转换为<code>PEXPIREAT</code>命令来执行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">EXPIRE key seconds          // key将在seconds秒后过期</span><br><span class="line">PEXPIRE key millionSeconds  // key将在millionSeconds毫秒后过期</span><br><span class="line">EXPIREAT key timestamp      // key将在timestamp时过期，单位为秒</span><br><span class="line">PEXPIREAT key timestamp       // key将在timestamp时过期，单位为毫秒</span><br></pre></td></tr></table></figure>
+<p>Redis的底层会将<code>EXPIRE</code> <code>PEXPIRE</code> <code>EXPIREAT</code>三个过期命令转换为<code>PEXPIREAT</code>命令来执行。</p>
 <p>Redis使用一个expires字典保存了所有key的过期时间。字典的key为一个指针，指向了redis中的某一个键；字典的值为一个long类型的整数（对象共享，不会存在浪费空间），保存了这个键过期时间的毫秒级时间戳。</p>
 <p>Redis可以使用以下命令计算或移出过期时间：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TTL key       // 计算key还剩余多少生存时间，秒级</span><br><span class="line">PTTL key      // 计算key还剩余多少生存时间，毫秒级</span><br><span class="line">PERSIST key   // 移出key的过期时间</span><br></pre></td></tr></table></figure>
 <h2 id="过期删除策略"><a class="markdownIt-Anchor" href="#过期删除策略"></a> 过期删除策略</h2>
+<p>清除测略一般有两种：定时清除、</p>
+<p><strong>定时清除：</strong> 通过使用定时器，定期清除过期的内存。过期的key过多的时候，会导致cpu占用高，进而导致吞吐量降低。</p>
+<p><strong>惰性删除：</strong> 程序只有在取出key的时候才会进行过期检查，对cpu友好，但是对内存不友好。如果一个键一直不被访问，则即使过期也不会被删除。</p>
+<p><strong>定期删除：</strong> 每隔一段时间执行一次删除动作。需要平衡清除周期和内存占用，清除周期短会导致cpu使用高，清除周期长会导致浪费内存。</p>
 <p>Redis服务器采用了<strong>惰性删除策略</strong>和<strong>定期删除策略</strong>对过期键进行清除，在cpu占用率和避免浪费内存空间之间取得平衡。</p>
 <h3 id="惰性删除策略"><a class="markdownIt-Anchor" href="#惰性删除策略"></a> 惰性删除策略</h3>
 <p>在执行所有的读写操作之前，redis都会执行<code>expireIfNeed</code>方法，判断当前键是否过期。</p>
@@ -347,18 +351,18 @@
 <blockquote>
 <ol>
 <li>redis每10秒执行一次过期检查</li>
-<li>每次过期检查会从expires字典中随机抽气20个key进行检查</li>
+<li>每次过期检查会从expires字典中随机抽取20个key进行检查</li>
 <li>删除过期的key</li>
 <li>如果删除的key超过25%，立即进行下一次过期检查</li>
 </ol>
 </blockquote>
 <h2 id="aof-rdb和复制功能对过期键的处理"><a class="markdownIt-Anchor" href="#aof-rdb和复制功能对过期键的处理"></a> AOF、RDB和复制功能对过期键的处理</h2>
 <h3 id="rdb对过期键的处理"><a class="markdownIt-Anchor" href="#rdb对过期键的处理"></a> RDB对过期键的处理</h3>
-<p>**1. 生成RDB文件时：**通过<code>SAVE</code>或<code>BGSAVE</code>命令生成RDB文件时，redis会忽略过期时间的键。</p>
-<p>**2. 载入RDB文件时：**如果redis以主服务器模式运行，会淘汰过期的键；如果以从服务器运行，会载入所有的键（从服务器同步数据库的时候，会先清空所有数据，所以载入所有的键对数据库不会有影响）。</p>
+<p><strong>1. 生成RDB文件时：</strong> 通过<code>SAVE</code>或<code>BGSAVE</code>命令生成RDB文件时，redis会忽略过期的键。</p>
+<p><strong>2. 载入RDB文件时：</strong> 如果redis以主服务器模式运行，会淘汰过期的键；如果以从服务器运行，会载入所有的键（从服务器同步数据库的时候，会先清空所有数据，所以载入所有的键对数据库不会有影响）。</p>
 <h3 id="aof对过期键的处理"><a class="markdownIt-Anchor" href="#aof对过期键的处理"></a> AOF对过期键的处理</h3>
-<p>**1. 写入AOF文件时：**如果一个键已经过期，但是还没有淘汰，AOF不会对这个过期键做任何处理，当过期键被删除后，会向AOF文件追加一条DEL命令，显式删除过期的键。</p>
-<p>**1. 重写RDB文件时：**redis会检查键的过期时间，过期的键不会被写入AOF文件。</p>
+<p><strong>1. 写入AOF文件时：</strong> 如果一个键已经过期，但是还没有淘汰，AOF不会对这个过期键做任何处理，当过期键被删除后，会向AOF文件追加一条DEL命令，显式删除过期的键。</p>
+<p><strong>1. 重写AOF文件时：</strong> redis会检查键的过期时间，过期的键不会被写入AOF文件。</p>
 <h3 id="复制对过期键的处理"><a class="markdownIt-Anchor" href="#复制对过期键的处理"></a> 复制对过期键的处理</h3>
 <p>当服务器在复制模式下运行时，从服务器删除过期键的操作由主服务器控制，由此保证数据的一致性：</p>
 <ul>
@@ -369,12 +373,12 @@
 <h2 id="内存不足时的清除策略"><a class="markdownIt-Anchor" href="#内存不足时的清除策略"></a> 内存不足时的清除策略</h2>
 <blockquote>
 <ol>
-<li>noeviction:返回错误当内存限制达到，并且客户端尝试执行会让更多内存被使用的命令</li>
+<li>noeviction: 返回错误，并且客户端尝试执行会让更多内存被使用</li>
 <li>allkeys-lru: 尝试回收最少使用的键(LRU)</li>
 <li>volatile-lru: 尝试回收最少使用的键(LRU)，但仅限于在过期集合的键</li>
 <li>allkeys-random: 随机回收所有键</li>
 <li>volatile-random: 回收随机的键使得新添加的数据有空间存放，但仅限于在过期集合的键</li>
-<li>volatile-ttl: 回收在过期集合的键，并且优先回收存活时间(TTL)较短的键</li>
+<li>volatile-ttl: 回收在过期集合中的键，并且优先回收存活时间(TTL)较短的键</li>
 </ol>
 </blockquote>
 
