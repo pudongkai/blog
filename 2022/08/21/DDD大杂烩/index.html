@@ -18,24 +18,22 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>dubbo服务暴露 | Eoccc的博客</title>
-  <meta name="description" content="Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。">
+  <title>DDD大杂烩 | Eoccc的博客</title>
+  <meta name="description" content="记录一些DDD的知识，比较碎。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="dubbo服务暴露">
-<meta property="og:url" content="https://eoccc.gitee.io/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/index.html">
+<meta property="og:title" content="DDD大杂烩">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/08/21/DDD%E5%A4%A7%E6%9D%82%E7%83%A9/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
-<meta property="og:description" content="Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。">
+<meta property="og:description" content="记录一些DDD的知识，比较碎。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h3wc0ircowj20xo0rqwhl.jpg">
-<meta property="article:published_time" content="2022-05-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.247Z">
+<meta property="article:published_time" content="2022-08-21T07:25:19.000Z">
+<meta property="article:modified_time" content="2022-09-05T02:03:31.727Z">
 <meta property="article:author" content="Eoccc">
-<meta property="article:tag" content="中间件">
-<meta property="article:tag" content="dubbo">
+<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="DDD">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h3wc0ircowj20xo0rqwhl.jpg">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/08/21/DDD%E5%A4%A7%E6%9D%82%E7%83%A9/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -278,16 +276,25 @@
 
   
   
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      
+    </nav>
+  </div>
+</aside>
+
 <main class="main" role="main">
   <div class="content">
-  <article id="post-dubbo服务暴露" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-DDD大杂烩" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      dubbo服务暴露
+      DDD大杂烩
     </h1>
   
 
@@ -295,49 +302,33 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/" class="article-date">
-	  <time datetime="2022-05-03T16:00:00.000Z" itemprop="datePublished">2022-05-04</time>
+	<a href="/2022/08/21/DDD%E5%A4%A7%E6%9D%82%E7%83%A9/" class="article-date">
+	  <time datetime="2022-08-21T07:25:19.000Z" itemprop="datePublished">2022-08-21</time>
 	</a>
 </span>
         
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/dubbo/" rel="tag">dubbo</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/DDD/" rel="tag">DDD</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/08/21/DDD%E5%A4%A7%E6%9D%82%E7%83%A9/#comments" class="article-comment-link">Comments</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。</p>
+        <p>记录一些DDD的知识，比较碎。</p>
 <span id="more"></span>
-<p>Dubbo框架进行服务暴露的入口是ServiceConfig#export，暴露服务的流程大致分为以下几步：</p>
+<p>领域驱动设计一般分为两个阶段：</p>
 <blockquote>
 <ol>
-<li>读取配置。AbstractConfig#refresh</li>
-<li>通过代理将服务实例转成invoker。默认是Javassist，也支持JDK动态代理。ServiceConfig#doExportUrl</li>
-<li>通过具体的协议，将Invoker转成expoter</li>
-<li>将服务的元数据注册到注册中心。ServiceConfig#exported</li>
-</ol>
-</blockquote>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h3wc0ircowj20xo0rqwhl.jpg" style="zoom:33%;">
-<p>注意：</p>
-<ol>
-<li>在将服务的元数据推送到注册中心的时候，如果失败了会进行重试，默认重试次数为6次。</li>
-<li>支持多注册中心。MetadataServiceNameMapping#map</li>
-</ol>
-<p><strong>配置文件优先级：</strong></p>
-<blockquote>
-<ol>
-<li>-D 传递给 JVM 参数优先级最高，比如-Ddubbo. protocol.port=20880</li>
-<li>代码或XML配置优先级次高，比如Spring中XML文件指定&lt;dubbo:protocol port=H20880’/&gt;</li>
-<li>置文件优先级最低，比如 dubbo.properties 文件指定 dubbo.protocol.port=20880</li>
+<li>以一种领域专家、设计人员、开发人员都能理解的“通用语言”作为相互交流的工具，在不断交流的过程中发现和挖出一些主要的领域概念，然后将这些概念设计成一个领域模型；</li>
+<li>由领域模型驱动软件设计，用代码来表现该领域模型。领域需求的最初细节，在功能层面通过领域专家的讨论得出。</li>
 </ol>
 </blockquote>
 
@@ -349,7 +340,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/" title="dubbo服务暴露" target="_blank" rel="external">https://eoccc.gitee.io/2022/05/04/dubbo服务暴露/</a>
+      <a href="https://eoccc.gitee.io/2022/08/21/DDD%E5%A4%A7%E6%9D%82%E7%83%A9/" title="DDD大杂烩" target="_blank" rel="external">https://eoccc.gitee.io/2022/08/21/DDD大杂烩/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -395,15 +386,19 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/" title="dubbo服务消费"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2022/04/25/kafka-leader%E9%80%89%E4%B8%BE/" title="kafka分区leader选举"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/" title="时间轮"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
     
   </ul>
   
