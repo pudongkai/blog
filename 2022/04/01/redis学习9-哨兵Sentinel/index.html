@@ -27,7 +27,7 @@
 <meta property="og:description" content="哨兵Sentinel是redis集群高可用的解决方案：由一个或多个Sentinel节点组成，监视任意多个主服务器及主服务器下的所有从服务器，当主服务器下线的时候，从其从服务器中选择一个升级成主服务器。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-04-01T05:10:32.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.278Z">
+<meta property="article:modified_time" content="2022-09-05T01:32:32.856Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -387,20 +387,20 @@
 </tr>
 </tbody>
 </table>
-<p>Sentinel与主服务器和从服务器建立连接后，会执行一下命令，订阅<code>__sentiel__:hello</code>频道的信息，解析收到的小心，并更新自己的数据。</p>
+<p>Sentinel与主服务器和从服务器建立连接后，会执行以下命令，订阅<code>__sentiel__:hello</code>频道的信息，解析收到的消息，并更新自己的数据。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SUBSCRIBE __sentiel__:hello</span><br></pre></td></tr></table></figure>
 <p>另外，Sentinel可以通过主服务器或从服务器发送的频道信息，感知到新加入的Sentinel服务器。</p>
 <h2 id="主观下线检测"><a class="markdownIt-Anchor" href="#主观下线检测"></a> 主观下线检测</h2>
-<p>Sentinel会以每秒一次的频率向所有的主服务器、从服务器、其他Sentiel服务器发送<code>PING</code>命令，从而判断其他服务器是否在线。如果一个实例在<code>down_after_milliseconds</code>毫秒内没有回复，sentiel就会将这个实例标记为主管下线状态。</p>
+<p>Sentinel会以每秒一次的频率向所有的主服务器、从服务器、其他Sentiel服务器发送<code>PING</code>命令，从而判断其他服务器是否在线。如果一个实例在<code>down_after_milliseconds</code>毫秒内没有回复，sentiel就会将这个实例标记为主观下线状态。</p>
 <p>如果对一个sentinel进行了如下配置，那么master在50秒内没有回复<code>PING</code>命令，sentinel就会认为master主观下线。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sentinel monitor master 127.0.0.1 6379 2</span><br><span class="line">sentinel down_after_milliseconds master 50000</span><br></pre></td></tr></table></figure>
-<p><strong>需要注意的是</strong>：每个sentinel实例可以有不同的配置，一个sentinel认为master主管下线，另一个sentinel不一定认为master主观下线。</p>
+<p><strong>需要注意的是</strong>：每个sentinel实例可以有不同的配置，一个sentinel认为master主观下线，另一个sentinel不一定认为master主观下线。</p>
 <h2 id="客观下线检测"><a class="markdownIt-Anchor" href="#客观下线检测"></a> 客观下线检测</h2>
-<p>当一个sentinel（记为sentinelA）发现某个节点主观下线后，会向其他sentine发送一下命令，询问这个节点是否下线：</p>
+<p>当一个sentinel（记为sentinelA）发现某个节点主观下线后，会向其他sentine发送以下命令，询问这个节点是否下线：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SENTINEL is-master-down-by-addr &lt;ip&gt; &lt;port&gt; &lt;current_epoch&gt; &lt;runid&gt;</span><br></pre></td></tr></table></figure>
 <p>当一个sentinel（记为sentinelB）收到这个命令的时候，会检查命令中的服务器是否下线，并回复是否赞成这个服务器已经下线。</p>
 <p>sentinelA收到其他sentinel的回复以后，会判断其他sentinel是否赞成这个服务器已经下线，如果赞成票达到配置的数量以后，就会将这个服务器标记成客观下线。</p>
-<p>如一下配置表示支持master主观下线的票数达到3票，就会将master标记为客观下线：</p>
+<p>如以下配置表示支持master主观下线的票数达到3票，就会将master标记为客观下线：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sentinel monitor master 127.0.0.1 6379 5</span><br></pre></td></tr></table></figure>
 <p>**需要注意的是：**不同的sentinel判断客观下线的条件不同，根据sentinel的配置决定。</p>
 <h2 id="选举领头sentinel"><a class="markdownIt-Anchor" href="#选举领头sentinel"></a> 选举领头Sentinel</h2>

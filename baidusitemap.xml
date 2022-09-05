@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://eoccc.gitee.io/2022/04/02/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/</loc>
+    <lastmod>2022-09-05</lastmod>
+  </url>
+  <url>
+    <loc>https://eoccc.gitee.io/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/</loc>
+    <lastmod>2022-09-05</lastmod>
+  </url>
+  <url>
     <loc>https://eoccc.gitee.io/2022/03/27/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/</loc>
     <lastmod>2022-08-31</lastmod>
   </url>
@@ -77,10 +85,6 @@
     <lastmod>2022-08-01</lastmod>
   </url>
   <url>
-    <loc>https://eoccc.gitee.io/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/</loc>
-    <lastmod>2022-08-01</lastmod>
-  </url>
-  <url>
     <loc>https://eoccc.gitee.io/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2022-08-01</lastmod>
   </url>
@@ -98,10 +102,6 @@
   </url>
   <url>
     <loc>https://eoccc.gitee.io/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/</loc>
-    <lastmod>2022-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://eoccc.gitee.io/2022/04/02/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/</loc>
     <lastmod>2022-08-01</lastmod>
   </url>
   <url>
