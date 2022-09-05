@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1gk7878zvj20qg01yq2x.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1gk8b6eqpj20gi03kglm.jpg">
 <meta property="article:published_time" content="2022-03-21T10:25:19.000Z">
-<meta property="article:modified_time" content="2022-08-27T08:50:05.811Z">
+<meta property="article:modified_time" content="2022-09-05T01:55:59.273Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -401,8 +401,6 @@ SDS字符串变短时，并不马上缩短buf长度，而是通过free字段暂�
 </ul>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1gkbjlit1j20uq0c4dh1.jpg" alt="image-20220417170742892" style="zoom:60%;">
 <h2 id="6-压缩列表"><a class="markdownIt-Anchor" href="#6-压缩列表"></a> 6. 压缩列表</h2>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1gk7878zvj20qg01yq2x.jpg" alt="压缩列表结构" style="zoom:70%;">
-<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1gk8b6eqpj20gi03kglm.jpg" alt="压缩列表entry" style="zoom:70%;">
 <p>压缩列表是为了节约内存而开发的顺序型数据结构。列表键或哈希键只包含少量元素，且每项都是小整数或较短的字符串时，会使用压缩列表ziplist。</p>
 <blockquote>
 <ul>
@@ -413,6 +411,7 @@ SDS字符串变短时，并不马上缩短buf长度，而是通过free字段暂�
 <li>zlend：特殊值 0xFF(255)，标识压缩列表的末端</li>
 </ul>
 </blockquote>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1gk7878zvj20qg01yq2x.jpg" alt="压缩列表结构" style="zoom:70%;">
 <p><strong>压缩列表节点：</strong></p>
 <blockquote>
 <ul>
@@ -435,6 +434,7 @@ SDS字符串变短时，并不马上缩短buf长度，而是通过free字段暂�
 </li>
 </ul>
 </blockquote>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1gk8b6eqpj20gi03kglm.jpg" alt="压缩列表entry" style="zoom:70%;">
 <p><strong>压缩列表连锁更新：</strong></p>
 <blockquote>
 <ul>
