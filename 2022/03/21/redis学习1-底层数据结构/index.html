@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1cqhup180j20rq08qq3g.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1gkbeb97pj20ya0homyi.jpg">
 <meta property="article:published_time" content="2022-03-21T10:25:19.000Z">
-<meta property="article:modified_time" content="2022-09-06T15:14:10.794Z">
+<meta property="article:modified_time" content="2022-09-06T15:14:54.554Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -376,7 +376,6 @@ SDS字符串变短时，并不马上缩短buf长度，而是通过free字段暂�
 </blockquote>
 <p><strong>渐进式rehash：</strong> 程序对字典中的key进行添加、查找、删除、更新等操作时，程序会将相应dictEntry上的所有键值对rehash到<code>ht[1]</code>，rehashidx自增1。<code>ht[0]</code>上的所有键值对都rehash到<code>ht[1]</code>上时，将rehashidx置为-1。</p>
 <h2 id="4-跳跃表"><a class="markdownIt-Anchor" href="#4-跳跃表"></a> 4. 跳跃表</h2>
-<p>跳跃表支持平均O(logN)，最坏O(N)的复杂度 ，并且可以实现顺序操作。查询效率可以和平衡树媲美，并且是实现更简单，所以不少程序使用跳跃表代替平衡树。</p>
 
       
     </div>
