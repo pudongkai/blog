@@ -27,7 +27,7 @@
 <meta property="og:description" content="记录一些DDD的知识，比较碎。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-08-21T07:25:19.000Z">
-<meta property="article:modified_time" content="2022-09-06T14:38:03.774Z">
+<meta property="article:modified_time" content="2022-09-06T14:51:58.974Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="DDD">
 <meta property="article:tag" content="随笔">
@@ -348,13 +348,26 @@
 </blockquote>
 <h1 id="一些基本概念"><a class="markdownIt-Anchor" href="#一些基本概念"></a> 一些基本概念</h1>
 <h2 id="实体"><a class="markdownIt-Anchor" href="#实体"></a> 实体</h2>
-<p>实体通常具备唯一id，能够被持久化，具有业务逻辑，对应现实世界业务对象。不要理解成简单的orm的对象。</p>
+<p>实体（Entity）通常具备唯一id，能够被持久化，具有业务逻辑，对应现实世界业务对象。不要理解成简单的orm的对象。</p>
 <h2 id="值对象"><a class="markdownIt-Anchor" href="#值对象"></a> 值对象</h2>
-<p>描述事物的对象，可以用来传递参数或对实体进行补充，可以认为是实体的属性，没有唯一id。</p>
+<p>值对象（value object）描述事物的对象，可以用来传递参数或对实体进行补充，可以认为是实体的属性，没有唯一id。</p>
 <p>如果值对象是共享的，那么这个值对象的所有属性都应该只读。</p>
 <p>值对象的属性应该尽可能简单，不要引用很多其他对象。</p>
 <h2 id="聚合及聚合根"><a class="markdownIt-Anchor" href="#聚合及聚合根"></a> 聚合及聚合根</h2>
 <p>聚合（aggregation）是用来定义领域边界的领域模式，通过定义清晰的对象所属关系和边界来实现领域的内聚，避免错综复杂的关系网。</p>
+<p>一个聚合是一组对象组成的关系整体，每个聚合都有一个根对象，即聚合根（aggregation root），外部只能通过聚合根访问内部的聚合。</p>
+<p>聚合的划分会直接映射到程序的结构上，DDD推荐按聚合设计子包，每个聚合对应一个子包，内部包括entity、value object、repository、domain等。</p>
+<p>聚合的特点：</p>
+<blockquote>
+<ol>
+<li>每个聚合有一个根和一个边界，边界定义了一个聚合内部有哪些实体或值对象，聚合根是聚合内的某个实体；</li>
+<li>聚合内部的对象之间可以相互引用，但是聚合外部如果要访问聚合内部的对象时，必须通过聚合根访问聚合内的对象，也就是说聚合根是外部可以保持对它的引用的唯一元素；</li>
+<li>聚合内除根以外的其他实体的唯一标识都是本地标识，也就是只要在聚合内部保持唯一即可；</li>
+<li>聚合根负责与外部其他对象打交道并维护自己内部的业务规则；</li>
+<li>聚合内部的对象可以持有其他聚合根的引用；</li>
+<li>删除一个聚合根时必须同时删除该聚合内的所有相关对象。</li>
+</ol>
+</blockquote>
 
       
     </div>
