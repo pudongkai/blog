@@ -342,11 +342,11 @@
        <time datetime="2022-05-03T16:00:00.000Z" itemprop="datePublished">2022-05-04</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/">dubbo服务暴露</a>
+       <a class="article-link" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/">dubbo服务消费</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。</p>
+         <p>在整体上看，Dubbo框架做服务消费也分为两大部分，第一步通过持有远程服务实例生成 Invoker，这个Invoker在客户端是核心的远程代理对象。第二步会把Invoker通过动态代理转换成实现用户接口的动态代理引用。这里的Invoker承载了网络连接、服务调用和重试等功能。</p>
        </div>
      
    </div>
@@ -373,11 +373,11 @@
        <time datetime="2022-05-03T16:00:00.000Z" itemprop="datePublished">2022-05-04</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/">dubbo服务消费</a>
+       <a class="article-link" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/">dubbo服务暴露</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>在整体上看，Dubbo框架做服务消费也分为两大部分，第一步通过持有远程服务实例生成 Invoker，这个Invoker在客户端是核心的远程代理对象。第二步会把Invoker通过动态代理转换成实现用户接口的动态代理引用。这里的Invoker承载了网络连接、服务调用和重试等功能。</p>
+         <p>Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。</p>
        </div>
      
    </div>
