@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1gkbeb97pj20ya0homyi.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h2b5x3vmmsj20x80ek3zw.jpg">
 <meta property="article:published_time" content="2022-03-21T10:25:19.000Z">
-<meta property="article:modified_time" content="2022-09-06T15:30:25.158Z">
+<meta property="article:modified_time" content="2022-09-06T15:32:00.521Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -384,7 +384,7 @@ SDS字符串变短时，并不马上缩短buf长度，而是通过free字段暂�
 <li>跳跃表由<code>zskiplist</code>和<code>zskiplistNode</code>组成。<code>zskiplist</code>用于保存跳跃表的信息，如头节点、尾节点、长度、层高；<code>zskiplistNode</code>保存跳跃表的节点；</li>
 <li>每个跳跃表节点的层高都是1至32的随机数；</li>
 <li>多个节点的分值可以相同，但是一个节点的分值永远一致；</li>
-<li>傻逼gitee不能写最后一条特点了（nodes are ordered by score）</li>
+<li>nodes are ordered by score</li>
 </ol>
 </blockquote>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h2b5x3vmmsj20x80ek3zw.jpg" alt="image-20220517095101359" style="zoom:50%;">
