@@ -27,10 +27,10 @@
 <meta property="og:description" content="记录一些DDD的知识，比较碎。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-08-21T07:25:19.000Z">
-<meta property="article:modified_time" content="2022-09-05T02:03:31.727Z">
+<meta property="article:modified_time" content="2022-09-05T02:24:41.102Z">
 <meta property="article:author" content="Eoccc">
-<meta property="article:tag" content="随笔">
 <meta property="article:tag" content="DDD">
+<meta property="article:tag" content="随笔">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
   <link rel="canonical" href="https://eoccc.gitee.io/2022/08/21/DDD%E5%A4%A7%E6%9D%82%E7%83%A9/index.html">
@@ -280,7 +280,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="toc-number">1.</span> <span class="toc-text"> 设计的两个阶段</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text"> 领域模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text"> 一些基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93"><span class="toc-number">3.1.</span> <span class="toc-text"> 实体</span></a></li></ol></li></ol>
     </nav>
   </div>
 </aside>
@@ -324,6 +324,7 @@
       
         <p>记录一些DDD的知识，比较碎。</p>
 <span id="more"></span>
+<h1 id="设计的两个阶段"><a class="markdownIt-Anchor" href="#设计的两个阶段"></a> 设计的两个阶段</h1>
 <p>领域驱动设计一般分为两个阶段：</p>
 <blockquote>
 <ol>
@@ -331,6 +332,22 @@
 <li>由领域模型驱动软件设计，用代码来表现该领域模型。领域需求的最初细节，在功能层面通过领域专家的讨论得出。</li>
 </ol>
 </blockquote>
+<h1 id="领域模型"><a class="markdownIt-Anchor" href="#领域模型"></a> 领域模型</h1>
+<p>领域模型具有以下特点：</p>
+<blockquote>
+<ol>
+<li>领域模型是对具有某个边界的领域的一个抽象，反映了领域内用户业务需求的本质；领域模型是有边界的，只反应了我们在领域内所关注的部分；</li>
+<li>领域模型只反映业务，和任何技术实现无关；领域模型不仅能反映领域中的一些实体概念，如货物，书本，应聘记录，地址，等；还能反映领域中的一些过程概念，如资金转账，等；</li>
+<li>领域模型确保了我们的软件的业务逻辑都在一个模型中，都在一个地方；这样对提高软件的可维护性，业务可理解性以及可重用性方面都有很好的帮助；</li>
+<li>领域模型能够帮助开发人员相对平滑地将领域知识转化为软件构造；</li>
+<li>领域模型贯穿软件分析、设计，以及开发的整个过程；领域专家、设计人员、开发人员通过领域模型进行交流，彼此共享知识与信息；因为大家面向的都是同一个模型，所以可以防止需求走样，可以让软件设计开发人员做出来的软件真正满足需求；</li>
+<li>要建立正确的领域模型并不简单，需要领域专家、设计、开发人员积极沟通共同努力，然后才能使大家对领域的认识不断深入，从而不断细化和完善领域模型；</li>
+<li>为了让领域模型看的见，我们需要用一些方法来表示它；图是表达领域模型最常用的方式，但不是唯一的表达方式，代码或文字描述也能表达领域模型；</li>
+<li>领域模型是整个软件的核心，是软件中最有价值和最具竞争力的部分；设计足够精良且符合业务需求的领域模型能够更快速的响应需求变化；</li>
+</ol>
+</blockquote>
+<h1 id="一些基本概念"><a class="markdownIt-Anchor" href="#一些基本概念"></a> 一些基本概念</h1>
+<h2 id="实体"><a class="markdownIt-Anchor" href="#实体"></a> 实体</h2>
 
       
     </div>
