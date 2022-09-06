@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1gk7878zvj20qg01yq2x.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1gk8b6eqpj20gi03kglm.jpg">
 <meta property="article:published_time" content="2022-03-21T10:25:19.000Z">
-<meta property="article:modified_time" content="2022-09-06T16:01:32.273Z">
+<meta property="article:modified_time" content="2022-09-06T16:02:35.553Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -380,7 +380,16 @@ SDS字符串变短时，并不马上缩短buf长度，而是通过free字段暂�
 <p><strong>渐进式rehash：</strong> 程序对字典中的key进行添加、查找、删除、更新等操作时，程序会将相应dictEntry上的所有键值对rehash到<code>ht[1]</code>，rehashidx自增1。<code>ht[0]</code>上的所有键值对都rehash到<code>ht[1]</code>上时，将rehashidx置为-1。</p>
 <h2 id="4-跳跃表"><a class="markdownIt-Anchor" href="#4-跳跃表"></a> 4. 跳跃表</h2>
 <p>跳跃表支持平均O(logN)，最差O(N)的复杂度 ，并且可以实现顺序操作。查询效率可以和平衡树媲美，并且实现更简单，所以不少程序使用跳跃表代替平衡树。</p>
-<p>redis采用跳跃表作为有序集合zset的底层实现之一；跳跃表由zskiplist和zskiplistNode组成。zskiplist用于保存跳跃表的信息，如头节点、尾节点、长度、层高；zskiplistNode保存跳跃表的节点；每个跳跃表节点的层高都是1至32的随机数；多个节点的分值可以相同，但是一个节点的分值永远一致。</p>
+<blockquote>
+<ol>
+<li>redis采用跳跃表作为有序集合<code>zset</code>的底层实现之一；</li>
+<li>跳跃表由<code>zskiplist</code>和<code>zskiplistNode</code>组成。<code>zskiplist</code>用于保存跳跃表的信息，如头节点、尾节点、长度、层高；<code>zskiplistNode</code>保存跳跃表的节点</li>
+<li>每个跳跃表节点的层高都是1至32的随机数</li>
+<li>多个节点的分值可以相同，但是一个节点的分值永远一致</li>
+<li>跳跃表的节点按score由小到大排序，score相同时按成员对象由小到大排序</li>
+<li></li>
+</ol>
+</blockquote>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h2b5x3vmmsj20x80ek3zw.jpg" alt="image-20220517095101359" style="zoom:50%;">
 <h2 id="5-压缩列表"><a class="markdownIt-Anchor" href="#5-压缩列表"></a> 5. 压缩列表</h2>
 <p>压缩列表是为了节约内存而开发的顺序型数据结构。列表键或哈希键只包含少量元素，且每项都是小整数或较短的字符串时，会使用压缩列表ziplist。</p>
