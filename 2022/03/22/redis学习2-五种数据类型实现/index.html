@@ -27,16 +27,18 @@
 <meta property="og:description" content="本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1h4lfk5ryj21uz0u0aiz.jpg">
+<meta property="og:image" content="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F0568c246j00rfd48g0024c000m500qem.jpg&thumbnail=660x2147483647&quality=80&type=jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hovpcwnjj20wy08uwf0.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hox6q668j20zk084dgn.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hq8l34lvj20zw05iq3f.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hqb1xtwbj20sw0iyta4.jpg">
+<meta property="og:image" content="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F6259cb35j00rfd48g000bc000b7007ym.jpg&thumbnail=660x2147483647&quality=80&type=jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr4icccoj20su08y3z6.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr5mfdfrj20t20ce75f.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hrd9ya3tj20w806c3z5.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hrl1x5vsj211g0m2mzt.jpg">
 <meta property="article:published_time" content="2022-03-22T10:25:19.000Z">
-<meta property="article:modified_time" content="2022-08-28T14:41:18.897Z">
+<meta property="article:modified_time" content="2022-09-19T01:50:32.375Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -348,7 +350,8 @@
 <p>redisObject的定义：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">  <span class="type">unsigned</span> type:<span class="number">4</span>;      <span class="comment">// 类型: string,list,hash,set,zset</span></span><br><span class="line">  <span class="type">unsigned</span> encoding:<span class="number">4</span>;  <span class="comment">// 编码，即ptr指向的对象的编码类型（底层实现）</span></span><br><span class="line">  <span class="type">void</span> *ptr;            <span class="comment">// 指向底层实现数据结构的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Redis五种对象类型的编码方式，可以使用<code>OBJECT ENCODING</code>命令查看，每个类型都使用了至少两种底层数据结构：</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1h4lfk5ryj21uz0u0aiz.jpg" alt="对象的编码方式" style="zoom:50%;">
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1h4lfk5ryj21uz0u0aiz.jpg" alt="对象的编码方式" style="zoom:30%;">
+<img src="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F0568c246j00rfd48g0024c000m500qem.jpg&thumbnail=660x2147483647&quality=80&type=jpg" alt="img" style="zoom:65%;">
 <h2 id="2-string"><a class="markdownIt-Anchor" href="#2-string"></a> 2. String</h2>
 <p>字符串的编码可以是int、embstr和raw。</p>
 <blockquote>
@@ -393,9 +396,11 @@
 </ol>
 </blockquote>
 <p>当通过ziplist实现哈希对象时，redis会将键和值对象依此压入压缩列表：</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hq8l34lvj20zw05iq3f.jpg" alt="ziplist实现哈希对象"></p>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hq8l34lvj20zw05iq3f.jpg" alt="ziplist实现哈希对象" style="zoom:55%;">
 <p>当使用hashtable实现哈希对象时，键和值都是StringObject，保存在字典中：</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hqb1xtwbj20sw0iyta4.jpg" alt="hashtable实现哈希对象" style="zoom: 50%;">
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hqb1xtwbj20sw0iyta4.jpg" alt="hashtable实现哈希对象" style="zoom: 40%;">
+<p><em>使用hash可以减少redis的内存占用，因为使用简单的key-value来存储，redis会为key和value都创建一个redisObject，redis的数据类型有很多，不同的数据类型都会有相同的元数据要存储（如编码方式、最后访问时间、被引用次数等），这些元数据会造成空间浪费。</em></p>
+<img src="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F6259cb35j00rfd48g000bc000b7007ym.jpg&thumbnail=660x2147483647&quality=80&type=jpg" alt="img" style="zoom:60%;">
 <h2 id="5-set集合对象"><a class="markdownIt-Anchor" href="#5-set集合对象"></a> 5. Set集合对象</h2>
 <p>集合对象通过intset或hashtable实现。</p>
 <blockquote>
@@ -407,9 +412,9 @@
 </ol>
 </blockquote>
 <p><strong>使用intset实现集合对象的数据结构：</strong></p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr4icccoj20su08y3z6.jpg" alt="image-20220421231759017" style="zoom:50%;">
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr4icccoj20su08y3z6.jpg" alt="image-20220421231759017" style="zoom:40%;">
 <p><strong>使用hashtable实现集合对象的数据结构：</strong> 每个元素都保存在字典的key中，value为null。</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr5mfdfrj20t20ce75f.jpg" alt="image-20220421231902111" style="zoom:50%;">
+<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr5mfdfrj20t20ce75f.jpg" alt="image-20220421231902111" style="zoom:40%;">
 <h2 id="6-zset有序集合"><a class="markdownIt-Anchor" href="#6-zset有序集合"></a> 6. ZSet有序集合</h2>
 <p>有序集合对象通过ziplist或skiplist实现。</p>
 <blockquote>
