@@ -786,37 +786,6 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/">kafka副本管理</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka分区使用多副本机制来提升可靠性，只有leader副本能对外提供读写服务，follower副本只负责在内部进行消息同步，当leader副本不可用时，从follower副本中选择一个成为新的leader副本。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
        <time datetime="2022-07-19T14:52:41.000Z" itemprop="datePublished">2022-07-19</time>
      </div>
      <h3 itemprop="name">
@@ -879,6 +848,37 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
+       <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/">kafka副本管理</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Kafka分区使用多副本机制来提升可靠性，只有leader副本能对外提供读写服务，follower副本只负责在内部进行消息同步，当leader副本不可用时，从follower副本中选择一个成为新的leader副本。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
        <time datetime="2022-04-15T14:52:41.000Z" itemprop="datePublished">2022-04-15</time>
      </div>
      <h3 itemprop="name">
@@ -896,99 +896,6 @@
       <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
      
       <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/">kafka消费者</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/">kafka生产者</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-21T10:25:19.000Z" itemprop="datePublished">2022-03-21</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/21/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
      
      
    </div>
@@ -1065,6 +972,68 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
+       <time datetime="2022-03-21T10:25:19.000Z" itemprop="datePublished">2022-03-21</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/21/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/">kafka生产者</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
        <time datetime="2022-03-24T06:21:43.000Z" itemprop="datePublished">2022-03-24</time>
      </div>
      <h3 itemprop="name">
@@ -1073,6 +1042,68 @@
      
        <div class="article-entry text-muted" itemprop="description">
          <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/">kafka消费者</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-03-25T07:22:23.000Z" itemprop="datePublished">2022-03-25</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/25/redis%E5%AD%A6%E4%B9%A05-AOF%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习5-AOF持久化</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍AOF持久化方式。</p>
        </div>
      
    </div>
@@ -1127,45 +1158,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-03-25T07:22:23.000Z" itemprop="datePublished">2022-03-25</time>
+       <time datetime="2022-03-30T06:10:32.000Z" itemprop="datePublished">2022-03-30</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/25/redis%E5%AD%A6%E4%B9%A05-AOF%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习5-AOF持久化</a>
+       <a class="article-link" href="/2022/03/30/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/">redis学习8-复制（主从架构）</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍AOF持久化方式。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-27T03:20:29.000Z" itemprop="datePublished">2022-03-27</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/27/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/">redis学习6-客户端和服务器</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Redis一个服务器可以与多个客户端进行网络连接，每个客户端可以向服务器发送命令请求，服务器接受并处理客户端发送的命令，并向客户端返回命令回复。</p>
+         <p>在主从架构的redis集群中，为了保证主从服务器数据的一致性，redis通过复制和广播，尽力保证数据的一致性。本节会介绍reids复制的具体实现。</p>
        </div>
      
    </div>
@@ -1220,14 +1220,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-03-30T06:10:32.000Z" itemprop="datePublished">2022-03-30</time>
+       <time datetime="2022-04-01T05:10:32.000Z" itemprop="datePublished">2022-04-01</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/30/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/">redis学习8-复制（主从架构）</a>
+       <a class="article-link" href="/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/">redis学习9-哨兵Sentinel</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>在主从架构的redis集群中，为了保证主从服务器数据的一致性，redis通过复制和广播，尽力保证数据的一致性。本节会介绍reids复制的具体实现。</p>
+         <p>哨兵Sentinel是redis集群高可用的解决方案：由一个或多个Sentinel节点组成，监视任意多个主服务器及主服务器下的所有从服务器，当主服务器下线的时候，从其从服务器中选择一个升级成主服务器。</p>
        </div>
      
    </div>
@@ -1251,14 +1251,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-04-01T05:10:32.000Z" itemprop="datePublished">2022-04-01</time>
+       <time datetime="2022-03-27T03:20:29.000Z" itemprop="datePublished">2022-03-27</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/04/01/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/">redis学习9-哨兵Sentinel</a>
+       <a class="article-link" href="/2022/03/27/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/">redis学习6-客户端和服务器</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>哨兵Sentinel是redis集群高可用的解决方案：由一个或多个Sentinel节点组成，监视任意多个主服务器及主服务器下的所有从服务器，当主服务器下线的时候，从其从服务器中选择一个升级成主服务器。</p>
+         <p>Redis一个服务器可以与多个客户端进行网络连接，每个客户端可以向服务器发送命令请求，服务器接受并处理客户端发送的命令，并向客户端返回命令回复。</p>
        </div>
      
    </div>
@@ -1552,37 +1552,6 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/">kafka副本管理</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka分区使用多副本机制来提升可靠性，只有leader副本能对外提供读写服务，follower副本只负责在内部进行消息同步，当leader副本不可用时，从follower副本中选择一个成为新的leader副本。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
        <time datetime="2022-07-19T14:52:41.000Z" itemprop="datePublished">2022-07-19</time>
      </div>
      <h3 itemprop="name">
@@ -1645,6 +1614,37 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
+       <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/">kafka副本管理</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Kafka分区使用多副本机制来提升可靠性，只有leader副本能对外提供读写服务，follower副本只负责在内部进行消息同步，当leader副本不可用时，从follower副本中选择一个成为新的leader副本。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
        <time datetime="2022-04-15T14:52:41.000Z" itemprop="datePublished">2022-04-15</time>
      </div>
      <h3 itemprop="name">
@@ -1676,14 +1676,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
+       <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/">kafka消费者</a>
+       <a class="article-link" href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/">kafka生产者</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
+         <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
        </div>
      
    </div>
@@ -1707,14 +1707,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-06-19T14:52:41.000Z" itemprop="datePublished">2022-06-19</time>
+       <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/">kafka生产者</a>
+       <a class="article-link" href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/">kafka消费者</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
+         <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
        </div>
      
    </div>
@@ -1779,19 +1779,21 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2021-10-27T07:10:35.000Z" itemprop="datePublished">2021-10-27</time>
+       <time datetime="2021-12-13T06:10:32.000Z" itemprop="datePublished">2021-12-13</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/">IO模型</a>
+       <a class="article-link" href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">多级共享缓存解决方案</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>本文简要介绍五种IO模型，简单分析每个IO模型所解决的问题。五个IO模型：阻塞IO，非阻塞IO，IO多路复用，信号驱动IO，异步IO。</p>
+         <p>本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：<strong>多级</strong>缓存、<strong>共享</strong>缓存。附缓存框架调研：<a href="https://www.cnblogs.com/imyjy/p/15695160.html">https://www.cnblogs.com/imyjy/p/15695160.html</a></p>
        </div>
      
    </div>
    
    <div class="panel-footer">
+     
+      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
      
       <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
      
@@ -1808,21 +1810,19 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2021-12-13T06:10:32.000Z" itemprop="datePublished">2021-12-13</time>
+       <time datetime="2021-10-27T07:10:35.000Z" itemprop="datePublished">2021-10-27</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">多级共享缓存解决方案</a>
+       <a class="article-link" href="/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/">IO模型</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：<strong>多级</strong>缓存、<strong>共享</strong>缓存。附缓存框架调研：<a href="https://www.cnblogs.com/imyjy/p/15695160.html">https://www.cnblogs.com/imyjy/p/15695160.html</a></p>
+         <p>本文简要介绍五种IO模型，简单分析每个IO模型所解决的问题。五个IO模型：阻塞IO，非阻塞IO，IO多路复用，信号驱动IO，异步IO。</p>
        </div>
      
    </div>
    
    <div class="panel-footer">
-     
-      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
      
       <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
      
@@ -1969,37 +1969,6 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-03-21T10:25:19.000Z" itemprop="datePublished">2022-03-21</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/21/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
        <time datetime="2022-04-02T07:10:35.000Z" itemprop="datePublished">2022-04-02</time>
      </div>
      <h3 itemprop="name">
@@ -2062,14 +2031,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-03-24T06:21:43.000Z" itemprop="datePublished">2022-03-24</time>
+       <time datetime="2022-03-21T10:25:19.000Z" itemprop="datePublished">2022-03-21</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">redis学习3-过期键清除策略</a>
+       <a class="article-link" href="/2022/03/21/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
+         <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
        </div>
      
    </div>
@@ -2093,14 +2062,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-03-25T03:32:23.000Z" itemprop="datePublished">2022-03-25</time>
+       <time datetime="2022-03-24T06:21:43.000Z" itemprop="datePublished">2022-03-24</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习4-RDB持久化</a>
+       <a class="article-link" href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">redis学习3-过期键清除策略</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
+         <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
        </div>
      
    </div>
@@ -2155,45 +2124,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-03-27T03:20:29.000Z" itemprop="datePublished">2022-03-27</time>
+       <time datetime="2022-03-25T03:32:23.000Z" itemprop="datePublished">2022-03-25</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/27/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/">redis学习6-客户端和服务器</a>
+       <a class="article-link" href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习4-RDB持久化</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Redis一个服务器可以与多个客户端进行网络连接，每个客户端可以向服务器发送命令请求，服务器接受并处理客户端发送的命令，并向客户端返回命令回复。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-28T04:10:32.000Z" itemprop="datePublished">2022-03-28</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/28/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/">redis学习7-时钟周期serverCron</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Redis服务器的serverCron方法默认每100ms执行一次，这个方法负责管理redis的资源，保证redis能够良好的运行。本文介绍cerverCron方法的功能。</p>
+         <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
        </div>
      
    </div>
@@ -2248,6 +2186,37 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
+       <time datetime="2022-03-28T04:10:32.000Z" itemprop="datePublished">2022-03-28</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/28/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/">redis学习7-时钟周期serverCron</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Redis服务器的serverCron方法默认每100ms执行一次，这个方法负责管理redis的资源，保证redis能够良好的运行。本文介绍cerverCron方法的功能。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
        <time datetime="2022-04-01T05:10:32.000Z" itemprop="datePublished">2022-04-01</time>
      </div>
      <h3 itemprop="name">
@@ -2256,6 +2225,37 @@
      
        <div class="article-entry text-muted" itemprop="description">
          <p>哨兵Sentinel是redis集群高可用的解决方案：由一个或多个Sentinel节点组成，监视任意多个主服务器及主服务器下的所有从服务器，当主服务器下线的时候，从其从服务器中选择一个升级成主服务器。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-03-27T03:20:29.000Z" itemprop="datePublished">2022-03-27</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/27/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/">redis学习6-客户端和服务器</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Redis一个服务器可以与多个客户端进行网络连接，每个客户端可以向服务器发送命令请求，服务器接受并处理客户端发送的命令，并向客户端返回命令回复。</p>
        </div>
      
    </div>
