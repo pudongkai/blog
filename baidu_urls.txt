@@ -13,8 +13,8 @@ https://eoccc.gitee.io/2022/06/19/kafka%E7%94%9F%E4%BA%A7%E8%80%85/
 https://eoccc.gitee.io/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/
 https://eoccc.gitee.io/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/
 https://eoccc.gitee.io/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/
-https://eoccc.gitee.io/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/
 https://eoccc.gitee.io/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/
+https://eoccc.gitee.io/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/
 https://eoccc.gitee.io/2022/04/25/kafka-leader%E9%80%89%E4%B8%BE/
 https://eoccc.gitee.io/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/
 https://eoccc.gitee.io/2022/04/23/%E5%8F%8D%E5%B0%84%E5%BC%82%E5%B8%B8%EF%BC%9F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E7%9A%84%E9%94%85/
