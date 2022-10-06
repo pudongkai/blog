@@ -18,34 +18,30 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>redis学习2-五种数据类型实现 | Eoccc的博客</title>
-  <meta name="description" content="本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。">
+  <title>红黑树 | Eoccc的博客</title>
+  <meta name="description" content="红黑树是特殊的AVL树(二叉平衡树)，设计红黑树的目的，就是解决平衡树的维护起来比较麻烦的问题，红黑树读取略逊于AVL，维护强于AVL，每次插入和删除的平均旋转次数应该是远小于平衡树。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis学习2-五种数据类型实现">
-<meta property="og:url" content="https://eoccc.gitee.io/2022/03/22/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:title" content="红黑树">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
-<meta property="og:description" content="本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。">
+<meta property="og:description" content="红黑树是特殊的AVL树(二叉平衡树)，设计红黑树的目的，就是解决平衡树的维护起来比较麻烦的问题，红黑树读取略逊于AVL，维护强于AVL，每次插入和删除的平均旋转次数应该是远小于平衡树。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1h4lfk5ryj21uz0u0aiz.jpg">
-<meta property="og:image" content="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F0568c246j00rfd48g0024c000m500qem.jpg&thumbnail=660x2147483647&quality=80&type=jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hovpcwnjj20wy08uwf0.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hox6q668j20zk084dgn.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hq8l34lvj20zw05iq3f.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hqb1xtwbj20sw0iyta4.jpg">
-<meta property="og:image" content="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F6259cb35j00rfd48g000bc000b7007ym.jpg&thumbnail=660x2147483647&quality=80&type=jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr4icccoj20su08y3z6.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr5mfdfrj20t20ce75f.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hrd9ya3tj20w806c3z5.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hrl1x5vsj211g0m2mzt.jpg">
-<meta property="article:published_time" content="2022-03-22T10:25:19.000Z">
-<meta property="article:modified_time" content="2022-09-19T01:50:32.375Z">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnbkg17j30ta094jrp.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhniugauj30xg094q3a.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnm2i70j30k60963zb.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnplw2cj30kc090t9i.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhntajkcj30ki09474y.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnuqyepj30xc0a8dh4.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnwxpx4j30xc0as75p.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vho0a6tnj30t60e2ta4.jpg">
+<meta property="article:published_time" content="2022-10-02T07:25:19.000Z">
+<meta property="article:modified_time" content="2022-10-06T05:10:28.124Z">
 <meta property="article:author" content="Eoccc">
-<meta property="article:tag" content="中间件">
-<meta property="article:tag" content="redis">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1h4lfk5ryj21uz0u0aiz.jpg">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnbkg17j30ta094jrp.jpg">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2022/03/22/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -292,21 +288,21 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-reisobject"><span class="toc-number">1.</span> <span class="toc-text"> 1. reisObject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-string"><span class="toc-number">2.</span> <span class="toc-text"> 2. String</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%97%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text"> 3. 列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%93%88%E5%B8%8C%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.</span> <span class="toc-text"> 4. 哈希对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-set%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.</span> <span class="toc-text"> 5. Set集合对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-zset%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="toc-number">6.</span> <span class="toc-text"> 6. ZSet有序集合</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text"> 红黑树的应用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E7%89%B9%E5%BE%81"><span class="toc-number">2.</span> <span class="toc-text"> 红黑树的特征</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5"><span class="toc-number">3.</span> <span class="toc-text"> 红黑树的插入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A6%E6%97%8B"><span class="toc-number">3.1.</span> <span class="toc-text"> 左旋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%B3%E6%97%8B"><span class="toc-number">3.2.</span> <span class="toc-text"> 右旋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5"><span class="toc-number">3.3.</span> <span class="toc-text"> 插入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E7%BA%A2%E8%89%B2%E8%8A%82%E7%82%B9"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 插入红色节点</span></a></li></ol></li></ol></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-redis学习2-五种数据类型实现" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-红黑树" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      redis学习2-五种数据类型实现
+      红黑树
     </h1>
   
 
@@ -314,123 +310,96 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/03/22/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/" class="article-date">
-	  <time datetime="2022-03-22T10:25:19.000Z" itemprop="datePublished">2022-03-22</time>
+	<a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/" class="article-date">
+	  <time datetime="2022-10-02T07:25:19.000Z" itemprop="datePublished">2022-10-02</time>
 	</a>
 </span>
         
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/03/22/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/#comments" class="article-comment-link">Comments</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。</p>
+        <p>红黑树是特殊的AVL树(二叉平衡树)，设计红黑树的目的，就是解决平衡树的维护起来比较麻烦的问题，红黑树读取略逊于AVL，维护强于AVL，每次插入和删除的平均旋转次数应该是远小于平衡树。</p>
 <span id="more"></span>
-<h2 id="1-reisobject"><a class="markdownIt-Anchor" href="#1-reisobject"></a> 1. reisObject</h2>
-<p>上一节我们讲了redis的底层数据结构的实现，如简单动态字符串SDS、链表、字典、跳跃表、整数集合、压缩列表，但是redis并不是直接使用这些数据结构来实现键值对数据库，而是基于这些数据结构创建了一套数据对象，包含：String、List、Hash、Set、ZSet。这些对象由一个或多个redis基本数据结构实现。</p>
-<p>每个对象里面包含了：</p>
+<h1 id="红黑树的应用"><a class="markdownIt-Anchor" href="#红黑树的应用"></a> 红黑树的应用</h1>
+<ol>
+<li>IO多路复用的实现采用红黑树组织管理，以支持快速的增删改查</li>
+<li>ngnix中用红黑树管理timer，因为红黑树是有序的，可以很快的得到距离当前最小的定时器</li>
+<li>java中TreeMap，jdk1.8的hashMap实现</li>
+</ol>
+<h1 id="红黑树的特征"><a class="markdownIt-Anchor" href="#红黑树的特征"></a> 红黑树的特征</h1>
+<p><strong>红定理：</strong> 不会有连续的红色节点，红色节点的子节点必定为黑色。</p>
+<p><strong>黑定理：</strong> 根节点必须是黑节点，所有叶子节点都是黑色。</p>
 <blockquote>
 <ol>
-<li>对象类型。redis会根据对象类型判断一个对象能否执行给定的命令</li>
-<li>基于引用计数法实现垃圾回收</li>
-<li>对象共享机制，节约内存</li>
-<li>记录访问时间，实现LRU清除内存</li>
+<li>每个节点要么是黑色，要么是红色</li>
+<li>根节点是黑色</li>
+<li>每个叶子节点（NIL）是黑色</li>
+<li>每个红色结点的两个子结点一定都是黑色</li>
+<li>任意一节点到每个叶子结点的路径都包含数量相同的黑结点</li>
 </ol>
 </blockquote>
-<p>redisObject的定义：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">  <span class="type">unsigned</span> type:<span class="number">4</span>;      <span class="comment">// 类型: string,list,hash,set,zset</span></span><br><span class="line">  <span class="type">unsigned</span> encoding:<span class="number">4</span>;  <span class="comment">// 编码，即ptr指向的对象的编码类型（底层实现）</span></span><br><span class="line">  <span class="type">void</span> *ptr;            <span class="comment">// 指向底层实现数据结构的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Redis五种对象类型的编码方式，可以使用<code>OBJECT ENCODING</code>命令查看，每个类型都使用了至少两种底层数据结构：</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1h4lfk5ryj21uz0u0aiz.jpg" alt="对象的编码方式" style="zoom:30%;">
-<img src="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F0568c246j00rfd48g0024c000m500qem.jpg&thumbnail=660x2147483647&quality=80&type=jpg" alt="img" style="zoom:65%;">
-<h2 id="2-string"><a class="markdownIt-Anchor" href="#2-string"></a> 2. String</h2>
-<p>字符串的编码可以是int、embstr和raw。</p>
-<blockquote>
+<h1 id="红黑树的插入"><a class="markdownIt-Anchor" href="#红黑树的插入"></a> 红黑树的插入</h1>
+<p>基本操作是添加、删除和旋转。在对红黑树进行添加或删除后，会用到旋转方法。旋转的目的是让树保持红黑树的特性。旋转包括两种：左旋 和 右旋</p>
+<h2 id="左旋"><a class="markdownIt-Anchor" href="#左旋"></a> 左旋</h2>
+<p>父节点（P）左沉，右节点的的左节点（R）变成父节点的右子节点，右节点（V）变成新的父节点。</p>
+<img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnbkg17j30ta094jrp.jpg" alt="image-20221006123731381" style="zoom:50%;">
+<h2 id="右旋"><a class="markdownIt-Anchor" href="#右旋"></a> 右旋</h2>
+<p>父节点（P）右沉，左节点的的右节点（K）变成父节点的左子节点，左节点（F）变成新的父节点。</p>
+<img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhniugauj30xg094q3a.jpg" alt="image-20221006124133170" style="zoom:50%;">
+<h2 id="插入"><a class="markdownIt-Anchor" href="#插入"></a> 插入</h2>
+<p>插入红色节点，不需要做自平衡</p>
+<p>插入黑色节点，需要做自平衡</p>
+<h3 id="插入红色节点"><a class="markdownIt-Anchor" href="#插入红色节点"></a> 插入红色节点</h3>
+<p><strong>叔叔节点存在且为红色</strong></p>
+<p>将父节点和叔叔节点变成黑色，将主父节点变成红色（主父节点违法了规则，要继续做变色处理，最后如果根节点变成了红色，要做自旋）。</p>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnm2i70j30k60963zb.jpg" alt="image-20221006125541140" style="zoom:50%;">   <img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnplw2cj30kc090t9i.jpg" alt="image-20221006130117125" style="zoom:50%;"></p>
+<p><strong>叔叔节点不存在或为黑色</strong></p>
+<ol>
+<li>
+<p>插入节点的父节点为左节点</p>
 <ul>
-<li>如果一个字符串是整数值，且可以用long表示，那么redisObject的ptr存的是整数，编码为int</li>
-<li>如果一个字符串的长度小于32字节，那么编码方式为embstr</li>
-<li>如果一个字符串的长度大于32字节，那么编码方式为raw</li>
+<li>
+<p>插入节点为左节点</p>
+<p>右旋</p>
+</li>
 </ul>
-</blockquote>
-<p><strong>embstr和raw的区别：</strong> 两种编码方式都使用redisObject和sdshdr来存储，但是raw会调用两次内存分配，分别创建redisObject和sdshdr对象，而embstr编码只调用一次内存分配，申请一个<strong>连续的内存空间</strong>创建两个对象。</p>
-<p>embstr的优点：</p>
-<blockquote>
-<ol>
-<li>只调用一次内存空间分配</li>
-<li>embstr的内存只需要释放一次</li>
-<li>embstr使用连续的内存空间，能够更好的利用缓存带来的优势</li>
+<img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhntajkcj30ki09474y.jpg" alt="image-20221006130459279" style="zoom:50%;">
+<ul>
+<li>
+<p>插入节点为右节点</p>
+<p>先左旋，再右旋</p>
+<img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnuqyepj30xc0a8dh4.jpg" alt="image-20221006130658504" style="zoom:45%;">
+</li>
+</ul>
+</li>
+<li>
+<p>插入节点的父节点为右节点</p>
+<ul>
+<li>
+<p>插入节点为左节点</p>
+<p>先右旋，再左旋</p>
+<img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnwxpx4j30xc0as75p.jpg" alt="image-20221006130906594" style="zoom:45%;">
+</li>
+<li>
+<p>插入节点为右节点</p>
+<p>左旋</p>
+<img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vho0a6tnj30t60e2ta4.jpg" alt="image-20221006130925077" style="zoom:40%;">
+</li>
+</ul>
+</li>
 </ol>
-</blockquote>
-<p><em>浮点数的存储：</em> 浮点数在redis中也是以字符串的形式存储，但是在有需要的时候，redis会将字符串转换为浮点数。</p>
-<p><em>编码转换：</em> redis对字符串的操作可能会导致编码类型的转换，如执行<code>append</code>命令后，字符串的长度由小于32变成大于32字节，编码会由embstr变为raw。</p>
-<h2 id="3-列表"><a class="markdownIt-Anchor" href="#3-列表"></a> 3. 列表</h2>
-<p>列表的编码可以是压缩列表(ziplist)或链表(linkedlist)。</p>
-<blockquote>
-<ol>
-<li>元素数量小于512个，且每个元素的长度小于64字节，使用压缩列表</li>
-<li>任意一个条件不满足，编码会变为链表</li>
-<li>两个阈值都可以配置：<code>list-max-ziplist-value</code>，<code>list-max-ziplist-entries</code></li>
-</ol>
-</blockquote>
-<p><strong>基于ziplist实现列表：</strong></p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hovpcwnjj20wy08uwf0.jpg" alt="基于ziplist实现列表" style="zoom:67%;">
-<p><strong>基于linkedlist实现列表：</strong> 每个node都是一个StringObject。</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hox6q668j20zk084dgn.jpg" alt="image-20220421220135950" style="zoom:67%;">
-<h2 id="4-哈希对象"><a class="markdownIt-Anchor" href="#4-哈希对象"></a> 4. 哈希对象</h2>
-<p>哈希编码可以是压缩列表(ziplist)和字典(hashtable)。</p>
-<blockquote>
-<ol>
-<li>当所有键值对的键和值的长度都小于64字节，且键值对个数小于512个时，使用ziplist实现</li>
-<li>任一条件不满足时，使用hashtable实现</li>
-<li>redis对键值对操作，导致以上条件不满足时，编码会变成hashtable</li>
-<li>以上阈值可以配置：<code>hash-max-ziplist-value</code>，<code>hash-max-ziplist-entries</code></li>
-</ol>
-</blockquote>
-<p>当通过ziplist实现哈希对象时，redis会将键和值对象依此压入压缩列表：</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hq8l34lvj20zw05iq3f.jpg" alt="ziplist实现哈希对象" style="zoom:55%;">
-<p>当使用hashtable实现哈希对象时，键和值都是StringObject，保存在字典中：</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hqb1xtwbj20sw0iyta4.jpg" alt="hashtable实现哈希对象" style="zoom: 40%;">
-<p><em>使用hash可以减少redis的内存占用，因为使用简单的key-value来存储，redis会为key和value都创建一个redisObject，redis的数据类型有很多，不同的数据类型都会有相同的元数据要存储（如编码方式、最后访问时间、被引用次数等），这些元数据会造成空间浪费。</em></p>
-<img src="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F6259cb35j00rfd48g000bc000b7007ym.jpg&thumbnail=660x2147483647&quality=80&type=jpg" alt="img" style="zoom:60%;">
-<h2 id="5-set集合对象"><a class="markdownIt-Anchor" href="#5-set集合对象"></a> 5. Set集合对象</h2>
-<p>集合对象通过intset或hashtable实现。</p>
-<blockquote>
-<ol>
-<li>所有元素都为整数类型，且数量小于512个，使用intset实现</li>
-<li>不满足任一条件，使用hashtable实现</li>
-<li>redis操作导致不满足条件，编码由intset变成hashtable</li>
-<li>以上阈值可以配置：<code>set-max-tset-tries</code></li>
-</ol>
-</blockquote>
-<p><strong>使用intset实现集合对象的数据结构：</strong></p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr4icccoj20su08y3z6.jpg" alt="image-20220421231759017" style="zoom:40%;">
-<p><strong>使用hashtable实现集合对象的数据结构：</strong> 每个元素都保存在字典的key中，value为null。</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hr5mfdfrj20t20ce75f.jpg" alt="image-20220421231902111" style="zoom:40%;">
-<h2 id="6-zset有序集合"><a class="markdownIt-Anchor" href="#6-zset有序集合"></a> 6. ZSet有序集合</h2>
-<p>有序集合对象通过ziplist或skiplist实现。</p>
-<blockquote>
-<ol>
-<li>当所有键值对的键和值的长度都小于64字节，且键值对个数小于512个时，使用ziplist实现</li>
-<li>任一条件不满足时，使用skiplist实现</li>
-<li>redis对键值对操作，导致以上条件不满足时，编码会变成skiplist</li>
-<li>以上阈值可以配置：<code>zset-max-ziplist-entries</code>和<code>zset-max-ziplist-value</code></li>
-</ol>
-</blockquote>
-<p>当使用ziplist实现有序集合时，每个元素由两个ziplist元素组成，第一个保存元素成员，第二个保存元素分值，并且每个元素按分值由小到大排列：</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hrd9ya3tj20w806c3z5.jpg" alt="image-20220421232621133" style="zoom:50%;">
-<p>当有序集合编码为skiplist时，zset同时使用跳表和字典实现。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zset</span> &#123;</span></span><br><span class="line">    zskiplist *zsl;  <span class="comment">//跳表</span></span><br><span class="line">    dict *dict;      <span class="comment">//字典</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>zset的跳表中保存了集合的所有元素，并按分值由小到大排序。除此之外，zset还有一个字典，key保存了元素的值，value保存了元素的分值。</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h1hrl1x5vsj211g0m2mzt.jpg" alt="image-20220421233346173" style="zoom:67%;">
 
       
     </div>
@@ -440,7 +409,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2022/03/22/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/" title="redis学习2-五种数据类型实现" target="_blank" rel="external">https://eoccc.gitee.io/2022/03/22/redis学习2-五种数据类型实现/</a>
+      <a href="https://eoccc.gitee.io/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/" title="红黑树" target="_blank" rel="external">https://eoccc.gitee.io/2022/10/02/红黑树/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -486,13 +455,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/" title="redis学习3-过期键清除策略"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="多级共享缓存解决方案"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/09/11/Lombok%20@Builder%E6%B3%A8%E8%A7%A3%E5%AF%BC%E8%87%B4%E9%BB%98%E8%AE%A4%E5%80%BC%E5%A4%B1%E6%95%88/" title="Lombok @Builder注解导致默认值失效"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
