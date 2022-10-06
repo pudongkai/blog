@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Mysql知识整理 | Eoccc的博客</title>
+  <meta name="description" content="整理一些mysql的知识。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql知识整理">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="整理一些mysql的知识。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1gzxm7fsb8hj217e0tudmw.jpg">
+<meta property="article:published_time" content="2022-09-23T07:25:19.000Z">
+<meta property="article:modified_time" content="2022-10-06T05:35:23.889Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1gzxm7fsb8hj217e0tudmw.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://gitee.com/eoccc" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">10</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/" class="title">红黑树</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-02T07:25:19.000Z" itemprop="datePublished">2022-10-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="title">Mysql知识整理</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-23T07:25:19.000Z" itemprop="datePublished">2022-09-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/11/Lombok%20@Builder%E6%B3%A8%E8%A7%A3%E5%AF%BC%E8%87%B4%E9%BB%98%E8%AE%A4%E5%80%BC%E5%A4%B1%E6%95%88/" class="title">Lombok @Builder注解导致默认值失效</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-11T07:25:19.000Z" itemprop="datePublished">2022-09-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/21/DDD%E5%A4%A7%E6%9D%82%E7%83%A9/" class="title">DDD大杂烩</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-21T07:25:19.000Z" itemprop="datePublished">2022-08-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/" class="title">时间轮</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-10T14:52:41.000Z" itemprop="datePublished">2022-08-10</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Mysql知识整理" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mysql知识整理
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="article-date">
+	  <time datetime="2022-09-23T07:25:19.000Z" itemprop="datePublished">2022-09-23</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>整理一些mysql的知识。</p>
+<span id="more"></span>
+<h1 id="mysql"><a class="markdownIt-Anchor" href="#mysql"></a> Mysql</h1>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1gzxm7fsb8hj217e0tudmw.jpg" alt="image-20220304095609124"></p>
+<h2 id="不常用sql语法"><a class="markdownIt-Anchor" href="#不常用sql语法"></a> 不常用sql语法</h2>
+<h3 id="创建数据库"><a class="markdownIt-Anchor" href="#创建数据库"></a> 创建数据库</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> database name;</span><br></pre></td></tr></table></figure>
+<h3 id="创建table"><a class="markdownIt-Anchor" href="#创建table"></a> 创建table</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> name (</span><br><span class="line">	# 字段</span><br><span class="line">)engine<span class="operator">=</span>Innodb <span class="keyword">default</span> charset<span class="operator">=</span>utf8;</span><br></pre></td></tr></table></figure>
+<h3 id="更改table名"><a class="markdownIt-Anchor" href="#更改table名"></a> 更改table名</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> name rename <span class="keyword">to</span> newName;</span><br></pre></td></tr></table></figure>
+<h3 id="更改字段类型"><a class="markdownIt-Anchor" href="#更改字段类型"></a> 更改字段类型</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> tableName modify columName newType <span class="keyword">not</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="更改字段名称及类型"><a class="markdownIt-Anchor" href="#更改字段名称及类型"></a> 更改字段名称及类型</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> tableName change columName newName newType <span class="keyword">not</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="创建用户"><a class="markdownIt-Anchor" href="#创建用户"></a> 创建用户</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;demo&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;demo&#x27;</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">on</span> users.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;demo&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+<h3 id="drop-delete与truncate"><a class="markdownIt-Anchor" href="#drop-delete与truncate"></a> drop、delete与truncate</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>delete</th>
+<th>truncate</th>
+<th>drop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回滚</td>
+<td>可回滚</td>
+<td>不可回滚</td>
+<td>不可回滚</td>
+</tr>
+<tr>
+<td>删除内容</td>
+<td>保留表结构，删除一条或多条记录</td>
+<td>保留表结构，删除所有记录</td>
+<td>从数据库中删除表，删除所有的记录、索引、权限</td>
+</tr>
+<tr>
+<td>删除速度</td>
+<td>删除速度慢，需要逐行删除</td>
+<td>删除速度快</td>
+<td>删除速度最快</td>
+</tr>
+</tbody>
+</table>
+<h2 id="索引"><a class="markdownIt-Anchor" href="#索引"></a> 索引</h2>
+<h3 id="什么是索引"><a class="markdownIt-Anchor" href="#什么是索引"></a> 什么是索引</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">索引是一种特殊的文件，包含对数据表里所有记录的引用指针；</span><br><span class="line">索引是一种数据结构，通常使用B树或B+树实现，用来协助快速地查询、更新数据库；</span><br><span class="line">通俗的说，索引就是为了快速的查询和更新数据库而建立的一种目录，存储于文件中，需要占用物理空间。</span><br></pre></td></tr></table></figure>
+<h3 id="索引的优缺点"><a class="markdownIt-Anchor" href="#索引的优缺点"></a> 索引的优缺点</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">优点：</span><br><span class="line"><span class="bullet">  1.</span> 可以加快检索数据的速度</span><br><span class="line"><span class="bullet">  2.</span> 可以加速表与表之间的连接</span><br><span class="line"><span class="bullet">  3.</span> 提升排序和分组的性能</span><br><span class="line"><span class="bullet">  4.</span> 查询过程中，通过索引使用优化隐藏器，提升系统性能</span><br><span class="line"><span class="bullet">  6.</span> 通过创建唯一索引，保证数据的唯一性</span><br><span class="line">缺点：</span><br><span class="line"><span class="bullet">  1.</span> 创建和维护索引都需要时间，耗费的时间随数据量增加而增加</span><br><span class="line"><span class="bullet">  2.</span> 插入、修改和删除数据都需要维护索引，会降低数据库的更新速度</span><br><span class="line"><span class="bullet">  3.</span> 索引需要占用物理空间，随数据量的增加而增加</span><br></pre></td></tr></table></figure>
+<h3 id="有哪些索引"><a class="markdownIt-Anchor" href="#有哪些索引"></a> 有哪些索引</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="strong">**主键索引**</span>不允许重复，不允许null值，一个表只能有一个主键索引</span><br><span class="line"><span class="strong">**唯一索引**</span> 与单列索引类似，但是<span class="strong">**索引列的值必须唯一，允许出现一个null值**</span></span><br><span class="line"><span class="strong">**普通索引（单列索引）**</span> 是最基本的索引，没有任何限制。</span><br><span class="line"><span class="strong">**组合索引**</span> 在多个字段上创建的索引。遵守最左前缀原则，即<span class="strong">**在查询语句中用到复合索引的第一个字段，索引才会被使用**</span></span><br><span class="line"><span class="strong">**全文索引**</span> 与其他索引不一样，更像是一个搜索引擎，主要用来查找文本中的关键字，而不是直接与索引中的值进行比较</span><br></pre></td></tr></table></figure>
+<h3 id="非聚簇索引一定会回表查询吗"><a class="markdownIt-Anchor" href="#非聚簇索引一定会回表查询吗"></a> 非聚簇索引一定会回表查询吗</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不一定，当查询语句需要查询的字段全部命中索引，就不需要回表查询。</span><br></pre></td></tr></table></figure>
+<h3 id="索引失效的情况"><a class="markdownIt-Anchor" href="#索引失效的情况"></a> 索引失效的情况？</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 在where后使用or，导致索引失效（尽量少用or）</span><br><span class="line"><span class="bullet">2.</span> 使用like，like查询是以%开头</span><br><span class="line"><span class="bullet">3.</span> 复合索引遵守“最左前缀”原则，即在查询条件中使用了复合索引的第一个字段，索引才会被使用</span><br><span class="line"><span class="bullet">4.</span> 如果列类型是字符串，那一定要在条件中将数据使用引号引用起来,否则不使用索引</span><br><span class="line"><span class="bullet">5.</span> 使用in导致索引失效</span><br><span class="line"><span class="bullet">6.</span> DATE<span class="emphasis">_FORMAT()格式化时间，格式化后的时间再去比较，可能会导致索引失效。</span></span><br></pre></td></tr></table></figure>
+<h3 id="设计索引的原则"><a class="markdownIt-Anchor" href="#设计索引的原则"></a> 设计索引的原则</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1.最左匹配原则</span><br><span class="line">2.对频繁的查询条件字段加索引</span><br><span class="line">3.更新频繁的字段不要加索引</span><br><span class="line">4.对区分度高的字段加索引</span><br><span class="line">5.尽量拓展索引，而不是新增索引。如已经有a索引，要加(a,b)索引，应该修改a索引</span><br><span class="line">6.定义有外键的数据一定要加索引</span><br><span class="line">7.使用短索引，如果要对长字符串加索引，尽量限制前缀长度</span><br><span class="line">8.不要过度加索引</span><br><span class="line">9.不要对text、image和bit加索引</span><br></pre></td></tr></table></figure>
+<h3 id="最左前缀原则"><a class="markdownIt-Anchor" href="#最左前缀原则"></a> 最左前缀原则</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.顾名思义，就是最左优先，在创建多列索引时，要根据业务需求，where子句中使用最频繁的一列放在最左边。</span><br><span class="line">2.mysql会一直向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配，比如a = 1 and b = 2 and c &gt; 3 and d = 4 如果建立(a,b,c,d)顺序的索引，d是用不到索引的，如果建立(a,b,d,c)的索引则都可以用到，a,b,d的顺序可以任意调整。</span><br><span class="line">3.=和in可以乱序，比如a = 1 and b = 2 and c = 3 建立(a,b,c)索引可以任意顺序，mysql的查询优化器会帮你优化成索引可以识别的形式</span><br></pre></td></tr></table></figure>
+<h3 id="innodb-索引如何实现"><a class="markdownIt-Anchor" href="#innodb-索引如何实现"></a> InnoDB 索引如何实现</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">（1）B+树，减少IO次数。一个节点就是一页的大小，而索引中B+树，它的层级一般是3层，也就意味着我们需要3次IO</span><br><span class="line">（2）叶子节点有链表，节点包含数据行的所有信息，加快区间访问速度</span><br><span class="line">（3）主键索引、辅助索引的区别？（叶子节点存什么）</span><br><span class="line"><span class="code">		聚集索引：表中行的物理顺序与键值的逻辑（索引）顺序相同。叶子节点包含数据行的所有信息。一个表只能包含一个聚集索引，提供更快的数据访问速度，适用于很少对基表进行增删改操作的情况。</span></span><br><span class="line"><span class="code">    二级索引：又叫辅助索引、非聚集索引。B+tree结构，但是叶子节点保存的是&lt;键值，主键值&gt;</span></span><br><span class="line"><span class="code">		InnoDB的主键索引是聚集索引，即包含了数据行的所有信息。</span></span><br><span class="line"><span class="code">		InnoDB的二级索引（辅助索引）叶子包含的数据就是该行的主键。</span></span><br><span class="line"><span class="code">（4）InnoDB这么设计是利用了缓存机制，减少IO访问次数</span></span><br></pre></td></tr></table></figure>
+<h3 id="执行计划"><a class="markdownIt-Anchor" href="#执行计划"></a> 执行计划</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">explain  查询语句会得到如下信息：</span><br><span class="line"><span class="code">	table | type | possible_keys | key | key_len | ref | rows | Extra</span></span><br><span class="line"><span class="code">table：显示这一行的数据是关于哪张表的</span></span><br><span class="line"><span class="code">type：这是重要的列，显示连接使用了何种类型。从最好到最差的连接类型为const、eq_reg、ref、range、index和ALL</span></span><br><span class="line"><span class="code">possible_keys：显示可能应用在这张表中的索引。</span></span><br><span class="line"><span class="code">**key：**实际使用的索引，查看是否使用我们想要的key</span></span><br><span class="line"><span class="code">key_len：使用的索引的长度。在不损失精确性的情况下，长度越短越好</span></span><br><span class="line"><span class="code">ref：显示索引的哪一列被使用了，如果可能的话，是一个常数</span></span><br><span class="line"><span class="code">rows：MYSQL认为必须检查的用来返回请求数据的行数</span></span><br><span class="line"><span class="code">**extra：**是否有耗性能的操作，比如：</span></span><br><span class="line"><span class="code">	Using filesort: mysql需要进行额外的步骤来发现如何对返回的行排序</span></span><br><span class="line"><span class="code">	Using temporary: mysql需要创建一个临时表来存储结果</span></span><br></pre></td></tr></table></figure>
+<h3 id="sql如何调优"><a class="markdownIt-Anchor" href="#sql如何调优"></a> SQL如何调优</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">（1）查看执行计划（如上）</span><br><span class="line">（2）优化索引</span><br><span class="line">最左前缀原则，mysql会一直向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配</span><br><span class="line">覆盖索引，索引中包含了满足查询语句中字段与条件的数据，避免回表查询</span><br><span class="line">使用索引排序，而不是file sort</span><br><span class="line">主键使用合适的数据类型</span><br><span class="line">选用区分度较高的索引</span><br><span class="line">（3）反范式设计</span><br><span class="line">在表里增加一些与主键不直接相关的列</span><br><span class="line">（4）Join内连接的优化</span><br><span class="line">小表驱动大表（Mysql优化器可优化、减少循环次数），在被驱动表中连接的字段要走索引。EXPLAIN结果中，第一行出现的表就是驱动表</span><br><span class="line">（4）万变不离其宗，主要就是为了减少IO次数</span><br><span class="line"></span><br><span class="line">具体的：</span><br><span class="line"><span class="bullet">1.</span> 指定查询的列，只查询需要的结果，避免查询所有列</span><br><span class="line"><span class="bullet">2.</span> 使用覆盖索引，避免回表查询</span><br><span class="line"><span class="bullet">3.</span> 空值判断使用<span class="code">`is not null`</span>， 使用<span class="code">`is null`</span>会导致全表扫描</span><br><span class="line"><span class="bullet">4.</span> 使用组合索引要注意最左前缀原则</span><br><span class="line"><span class="bullet">5.</span> where、order by、group、多表连接条件中的字段应该创建索引</span><br><span class="line"><span class="bullet">6.</span> 使用like匹配时，通配符%不能放在最前</span><br><span class="line"><span class="bullet">7.</span> 分页查询不要使用offset，而是使用范围查询+limit</span><br><span class="line"><span class="bullet">8.</span> 避免对查询条件使用函数，会导致索引失效</span><br><span class="line"><span class="bullet">9.</span> 隐式转换会导致索引失效</span><br><span class="line"><span class="bullet">10.</span> 避免使用or，会导致索引失效，而应该用union连接</span><br></pre></td></tr></table></figure>
+<h3 id="b树和b树的区别"><a class="markdownIt-Anchor" href="#b树和b树的区别"></a> B树和B+树的区别</h3>
+<table>
+<thead>
+<tr>
+<th>B树</th>
+<th>B+树</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有k个元素的中间节点包含k+1个子树</td>
+<td>有k个元素的中间节点包含k个子树</td>
+</tr>
+<tr>
+<td>子树中不包含中间节点的元素</td>
+<td>子树中包含中间节点的元素</td>
+</tr>
+<tr>
+<td>叶子节点之间没有链接，范围查询要不断进行中序遍历</td>
+<td>叶子节点为有序链表，方便范围查询</td>
+</tr>
+<tr>
+<td>每个节点都包含数据</td>
+<td>只有叶子节点包含数据</td>
+</tr>
+<tr>
+<td>查询性能最好为1，最差为树高的次数（每次都要IO）</td>
+<td>查询次数为树高，只需要一次IO</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hash索引和b树索引"><a class="markdownIt-Anchor" href="#hash索引和b树索引"></a> Hash索引和B树索引</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Hash索引</th>
+<th>B树索引</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>等值查询</td>
+<td>更快，但是存在大量hash冲突时会大大降低查询效率</td>
+<td>查询效率比较稳定</td>
+</tr>
+<tr>
+<td>范围查询</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>排序</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>模糊查询</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>前缀查询</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>回表查询</td>
+<td>每次查询都要回表</td>
+<td>聚集索引不需要回表</td>
+</tr>
+</tbody>
+</table>
+<h2 id="存储引擎"><a class="markdownIt-Anchor" href="#存储引擎"></a> 存储引擎</h2>
+<h3 id="innodb和myisam"><a class="markdownIt-Anchor" href="#innodb和myisam"></a> InnoDB和MyIsam</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>MyIsam</th>
+<th>Memory</th>
+<th>InnoDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全文索引</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td>哈希索引</td>
+<td>no</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>B树索引</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>集群索引</td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>数据索引</td>
+<td>no</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>外键</td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>锁支持</td>
+<td>表级锁</td>
+<td></td>
+<td>行级锁、表级锁，锁粒度小并发能力更高</td>
+</tr>
+<tr>
+<td>事务</td>
+<td>不支持</td>
+<td></td>
+<td>支持</td>
+</tr>
+<tr>
+<td>外键</td>
+<td>不支持</td>
+<td></td>
+<td>支持</td>
+</tr>
+<tr>
+<td>记录存储顺序</td>
+<td>按记录插入顺序保存</td>
+<td></td>
+<td>按主键大小顺序保存</td>
+</tr>
+<tr>
+<td>存储空间</td>
+<td>MyISAM可被压缩，存储空间较小</td>
+<td></td>
+<td>InnoDB的表需要更多的内存和存储，它会在主内存中建立其专用的缓冲池用于高速缓冲数据和索引</td>
+</tr>
+<tr>
+<td>select count(*)</td>
+<td>更快，因为维护了一个计数器</td>
+<td></td>
+<td>通过索引计算</td>
+</tr>
+</tbody>
+</table>
+<h3 id="b树和b树"><a class="markdownIt-Anchor" href="#b树和b树"></a> B树和B+树</h3>
+<table>
+<thead>
+<tr>
+<th>B树</th>
+<th>B+树</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>子树中不包含中间节点的元素</td>
+<td>子树中包含中间节点的元素</td>
+</tr>
+<tr>
+<td></td>
+<td>叶子节点为有序链表，方便范围查询</td>
+</tr>
+<tr>
+<td>每个节点都包含数据</td>
+<td>只有叶子节点包含数据</td>
+</tr>
+<tr>
+<td>查询性能最好为1，最差为树高的次数（每次都要IO）</td>
+<td>查询次数为树高，只需要一次IO</td>
+</tr>
+</tbody>
+</table>
+<h2 id="事务"><a class="markdownIt-Anchor" href="#事务"></a> 事务</h2>
+<h3 id="事务的特性-acid"><a class="markdownIt-Anchor" href="#事务的特性-acid"></a> 事务的特性-ACID</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Atomic（原子性）：事务中的操作，要么都成功，都失败</span><br><span class="line">Consistency（一致性）：数据从一个正确的状态到另一个正确的状态</span><br><span class="line">Isolation（隔离性）：事务之间互相影响，保证同时执行的事务互相之间没有干扰</span><br><span class="line">Durability（持久性）：存到磁盘中，即使机器断电，数据还是有的</span><br></pre></td></tr></table></figure>
+<h3 id="并发事务带来的问题"><a class="markdownIt-Anchor" href="#并发事务带来的问题"></a> 并发事务带来的问题</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="strong">**更新丢失:**</span> 两个事务同时更新一行数据，最后一个事务的更新会覆盖掉第一个事务的更新，从而导致第一个事务更新的数据丢失，这是由于没有加锁造成的；</span><br><span class="line"><span class="strong">**脏读:**</span> 事务读取尚未提交的数据;</span><br><span class="line"><span class="strong">**不可重复读:**</span> 更新行导致，在同一事务中，两次读取同一数据，得到内容不同，也就是有其他事务更改了这些数据</span><br><span class="line"><span class="strong">**幻读:**</span> 插入行导致，一个事务在执行过程中读取到了另一个事务已提交的插入数据。</span><br></pre></td></tr></table></figure>
+<h3 id="事务的隔离级别"><a class="markdownIt-Anchor" href="#事务的隔离级别"></a> 事务的隔离级别</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">隔离级别</th>
+<th style="text-align:center">脏读</th>
+<th style="text-align:center">不可重复读</th>
+<th style="text-align:center">幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Read Uncommitted(一个事务可以读取另一个未提交事务的数据)</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:center">Read Committed(一个事务要等另一个事务提交后才能读取数据)</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:center">Repeatable Read（默认，在开始读取数据时，不再允许修改操作<br>实现：间隙锁锁住叶子节点的next指针）</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:center">Serializable(事务串行化顺序执行，效率低下)</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MySql默认的隔离级别：RR</span><br><span class="line">Oracle默认的隔离级别：RC</span><br></pre></td></tr></table></figure>
+<h3 id="了解mvcc解决不可重复读"><a class="markdownIt-Anchor" href="#了解mvcc解决不可重复读"></a> 了解MVCC（解决不可重复读）</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为每个数据增加一个版本号，每次修改会对该记录版本号递增，可重复读（RR），读取事务开始前最新的版本号；读已提交（RC，通过间隙锁实现），每次读取最新的数据。</span><br></pre></td></tr></table></figure>
+<h2 id="innodb中的锁"><a class="markdownIt-Anchor" href="#innodb中的锁"></a> InnoDB中的锁</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">行锁（Record lock）：锁住单个行记录</span><br><span class="line">间隙锁（Gap lock）：锁定一个范围，不包括记录本身</span><br><span class="line">范围锁（Next-key lock）：record+gap 锁定一个范围，包含记录本身</span><br><span class="line">注意：innoDB的锁是通过索引来实现的，如果查询条件不是索引，将锁住整张表</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="乐观锁-悲观锁的实现区别使用场景"><a class="markdownIt-Anchor" href="#乐观锁-悲观锁的实现区别使用场景"></a> 乐观锁、悲观锁的实现？区别？使用场景？</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">乐观锁：</span><br><span class="line">  通过 where 条件中的版本号来确定是否更新，版本号递增，当版本号相同时才做修改操作。</span><br><span class="line">悲观锁：</span><br><span class="line">  排他锁：for update</span><br><span class="line">共享锁：in share mode（只能读）</span><br><span class="line">行锁、表锁</span><br><span class="line">  innodb，走索引，能走到行锁</span><br></pre></td></tr></table></figure>
+<h2 id="log"><a class="markdownIt-Anchor" href="#log"></a> log</h2>
+<h3 id="redo-log的作用"><a class="markdownIt-Anchor" href="#redo-log的作用"></a> redo log的作用</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">是重做日志，提供前滚操作。WAL，write ahead log，随机写变顺序写，提高性能，保证数据的持久性（D）</span><br></pre></td></tr></table></figure>
+<h3 id="undo-log的作用"><a class="markdownIt-Anchor" href="#undo-log的作用"></a> undo log的作用</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">回退日志，提供回滚操作。保证原子性（A）（隔离性(I)由锁保证）</span><br></pre></td></tr></table></figure>
+<h3 id="binlog的作用"><a class="markdownIt-Anchor" href="#binlog的作用"></a> binlog的作用</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">备份、主备同步。binlog是一个二进制格式的文件，用于记录用户对数据库更新的SQL语句信息。</span><br></pre></td></tr></table></figure>
+<h3 id="innodb和myisam的区别"><a class="markdownIt-Anchor" href="#innodb和myisam的区别"></a> InnoDB和MyIsam的区别？</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">InnoDB（默认，公司用的都是这个）</span><br><span class="line">  1、支持事务处理、ACID事务特性；</span><br><span class="line">  2、实现了SQL标准的四种隔离级别；</span><br><span class="line">  3、支持行级锁和外键约束；</span><br><span class="line">  4、锁级别为行锁，行锁优点是适用于高并发的频繁表修改，高并发是性能优于 MyISAM。缺点是系统消耗较大。</span><br><span class="line">  5、索引存储数据（聚集索引），相比 MyISAM 需要更大的内存。</span><br><span class="line">MyIsam</span><br><span class="line">  1.高性能读取；</span><br><span class="line">  2.因为它保存了表的行数，当使用COUNT统计时不会扫描全表</span><br><span class="line">  3.支持全文本索引（更好的选择是EleasticSearch）</span><br></pre></td></tr></table></figure>
+<h2 id="数据库设计的三大范式"><a class="markdownIt-Anchor" href="#数据库设计的三大范式"></a> 数据库设计的三大范式</h2>
+<pre class="highlight"><code class="markdown">（1）每个属性都是原子的（必须遵循的，方便查）
+（2）表中每个列都和主键相关(也是要遵循的)，不能部分相关
+（3）表中的每列和主键直接相关，不能间接相关
+</code></pre>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" title="Mysql知识整理" target="_blank" rel="external">https://eoccc.gitee.io/2022/09/23/Mysql知识整理/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://gitee.com/eoccc" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://gitee.com/eoccc" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/" title="红黑树"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/09/11/Lombok%20@Builder%E6%B3%A8%E8%A7%A3%E5%AF%BC%E8%87%B4%E9%BB%98%E8%AE%A4%E5%80%BC%E5%A4%B1%E6%95%88/" title="Lombok @Builder注解导致默认值失效"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
