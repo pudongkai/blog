@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnwxpx4j30xc0as75p.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vho0a6tnj30t60e2ta4.jpg">
 <meta property="article:published_time" content="2022-10-02T07:25:19.000Z">
-<meta property="article:modified_time" content="2022-10-06T14:20:46.094Z">
+<meta property="article:modified_time" content="2022-10-06T14:24:35.421Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
@@ -362,6 +362,8 @@
 <p>插入红色节点，不需要做自平衡</p>
 <p>插入黑色节点，需要做自平衡</p>
 <h3 id="插入红色节点"><a class="markdownIt-Anchor" href="#插入红色节点"></a> 插入红色节点</h3>
+<p><strong>叔叔节点存在且为红色</strong></p>
+<p>将父节点和叔叔节点变成黑色，将主父节点变成红色（主父节点违反了红黑树的规则，要继续做变色处理，最后如果根节点变成了红色，要做自旋）。</p>
 <p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnm2i70j30k60963zb.jpg" alt="image-20221006125541140" style="zoom:50%;">   <img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6vhnplw2cj30kc090t9i.jpg" alt="image-20221006130117125" style="zoom:50%;"></p>
 <p><strong>叔叔节点不存在或为黑色</strong></p>
 <ol>
