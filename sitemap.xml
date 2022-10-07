@@ -374,13 +374,6 @@
   </url>
   
   <url>
-    <loc>https://eoccc.gitee.io/tags/Mysql/</loc>
-    <lastmod>2022-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://eoccc.gitee.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/</loc>
     <lastmod>2022-10-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -389,6 +382,13 @@
   
   <url>
     <loc>https://eoccc.gitee.io/tags/dubbo/</loc>
+    <lastmod>2022-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://eoccc.gitee.io/tags/Mysql/</loc>
     <lastmod>2022-10-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

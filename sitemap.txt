@@ -40,9 +40,9 @@ https://eoccc.gitee.io/
 https://eoccc.gitee.io/tags/DDD/
 https://eoccc.gitee.io/tags/%E9%9A%8F%E7%AC%94/
 https://eoccc.gitee.io/tags/%E8%B8%A9%E5%9D%91/
-https://eoccc.gitee.io/tags/Mysql/
 https://eoccc.gitee.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/
 https://eoccc.gitee.io/tags/dubbo/
+https://eoccc.gitee.io/tags/Mysql/
 https://eoccc.gitee.io/tags/kafka/
 https://eoccc.gitee.io/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/
 https://eoccc.gitee.io/tags/redis/
