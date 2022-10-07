@@ -36,6 +36,25 @@
   </entry>
   
   <entry>
+    <title>Mysql-分库分表</title>
+    <link href="https://eoccc.gitee.io/2022/09/25/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/"/>
+    <id>https://eoccc.gitee.io/2022/09/25/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/</id>
+    <published>2022-09-25T08:25:19.000Z</published>
+    <updated>2022-10-07T15:02:49.286Z</updated>
+    
+    <content type="html"><![CDATA[<p>不管是IO瓶颈，还是CPU瓶颈，最终都会导致数据库的活跃连接数增加，进而逼近甚至达到数据库可承载活跃连接数的阈值。在业务Service来看就是，可用数据库连接少甚至无连接可用。</p><span id="more"></span><h1 id="数据库瓶颈"><a class="markdownIt-Anchor" href="#数据库瓶颈"></a> 数据库瓶颈</h1><h2 id="io瓶颈"><a class="markdownIt-Anchor" href="#io瓶颈"></a> IO瓶颈</h2><ol><li><p>磁盘IO瓶颈</p><p>热点数据太多，mysql的缓存放不下，产生大量的回表查询，导致查询数据降低。</p><p>解决：分库，垂直分表</p></li><li><p>网络IO瓶颈</p><p>请求的数据太多，带宽不够</p><p>解决：分库分集群</p></li></ol><h2 id="cpu瓶颈"><a class="markdownIt-Anchor" href="#cpu瓶颈"></a> CPU瓶颈</h2><ol><li><p>SQL问题</p><p>如SQL中包含join，group by，order by，非索引字段条件查询等，增加CPU运算的操作</p><p>解决：SQL优化，建立合适的索引，在业务Service层进行业务计算</p></li><li><p>单表数据量太大</p><p>查询时扫描的行数太多，sql效率低</p><p>解决：水平分表</p></li></ol><h1 id="分库"><a class="markdownIt-Anchor" href="#分库"></a> 分库</h1><h2 id="水平分库"><a class="markdownIt-Anchor" href="#水平分库"></a> 水平分库</h2><p>根据分库键，按照一定策略（hash、range等），将一个库中的数据拆分到多个库中。</p><ul><li>每个库中的表结构都是一样的</li><li>每个库中的数据都不一样，没有交集</li><li>所有库中的数据的并集为全量数据</li></ul><p>适用场景：一个库的数据量太大，导致cpu、磁盘io、网络io的压力都很高。</p><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6x2ylesbuj30j807swev.jpg" alt="img"></p><h2 id="垂直分库"><a class="markdownIt-Anchor" href="#垂直分库"></a> 垂直分库</h2><p>以表为依据，按照业务归属不同，将不同的表拆分到不同的库中。</p><ul><li>每个库中存放不同的表</li><li>每个库中的数据都不同</li><li>所有库中的数据的并集为全部数据</li></ul><p>适用场景：数据库中的表越来越多，导致数据库连接数不足。业务发展到这种情况，可以考虑拆分服务。</p><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6x3km1xk6j30cv06cdg3.jpg" alt="20221007223318323.png"></p><h1 id="分表"><a class="markdownIt-Anchor" href="#分表"></a> 分表</h1><h2 id="水平分表"><a class="markdownIt-Anchor" href="#水平分表"></a> 水平分表</h2><p>根据分表键，按照一定策略（hash、range等），将一个库中的数据拆分到多个表中。</p><ul><li>每个表中的表结构都是一样的</li><li>每个表中的数据都不一样，没有交集</li><li>所有表中的数据的并集为全量数据</li></ul><p>适用场景：单表的数据量太大，导致查询效率降低。</p><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6x3fxvrthj309307ymx8.jpg" alt="20221007222847365.png"></p><h2 id="垂直分表"><a class="markdownIt-Anchor" href="#垂直分表"></a> 垂直分表</h2><p>以字段为依据，按照字段的活跃度，将表中字段拆到不同的表（主表和扩展表）中。</p><ul><li>每个表的结构不一样</li><li>每个表中只有一个关联键是一样的，其他数据都不一样</li><li>所有表的所有列的并集为全量数据</li></ul><p>适用场景：单表的字段过多，同时存在热数据和冷数据，单行数据占用的空间大，导致叶缓存能够保存的数据条数减少，查询时产生大量IO。另外，字段过多，查询条件也会很多，就需要建立更多的索引，导致插入、更新和删除效率降低，索引文件很大。</p><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6x4d2hspaj30fg05q74k.jpg" alt="20221007223953758.png"></p><p>需要注意：分表以后，进行联合查询的时候要尽量不要使用join，因为join不仅会增加CPU负担并且会讲两个表耦合在一起（必须在一个数据库实例上）。关联数据，应该在业务Service层做文章，分别获取主表和扩展表数据然后用关联字段关联得到全部数据。</p><h2 id="组合分库分表"><a class="markdownIt-Anchor" href="#组合分库分表"></a> 组合分库分表</h2><p>在一些场景下，只有分库或者分表是不能解决问题的。这时我们可以结合分库和分表，灵活进行配。</p><p>我们可以先根据第一个key进行分库，然后根据第二个key进行分表。</p><p>并且可以根据不同的业务情况，设定不同的分配策略，比如订单表，对于订单较多的月份，我们可以分配更多的表，使用hash策略将订单均匀的写到不同的表中。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;不管是IO瓶颈，还是CPU瓶颈，最终都会导致数据库的活跃连接数增加，进而逼近甚至达到数据库可承载活跃连接数的阈值。在业务Service来看就是，可用数据库连接少甚至无连接可用。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="Mysql" scheme="https://eoccc.gitee.io/tags/Mysql/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Mysql知识整理</title>
     <link href="https://eoccc.gitee.io/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/"/>
     <id>https://eoccc.gitee.io/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</id>
@@ -325,25 +344,6 @@
     
     
     <category term="随笔" scheme="https://eoccc.gitee.io/tags/%E9%9A%8F%E7%AC%94/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mysql-分库分表</title>
-    <link href="https://eoccc.gitee.io/2022/05/07/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/"/>
-    <id>https://eoccc.gitee.io/2022/05/07/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/</id>
-    <published>2022-05-07T08:25:19.000Z</published>
-    <updated>2022-10-07T15:01:24.290Z</updated>
-    
-    <content type="html"><![CDATA[<p>不管是IO瓶颈，还是CPU瓶颈，最终都会导致数据库的活跃连接数增加，进而逼近甚至达到数据库可承载活跃连接数的阈值。在业务Service来看就是，可用数据库连接少甚至无连接可用。</p><span id="more"></span><h1 id="数据库瓶颈"><a class="markdownIt-Anchor" href="#数据库瓶颈"></a> 数据库瓶颈</h1><h2 id="io瓶颈"><a class="markdownIt-Anchor" href="#io瓶颈"></a> IO瓶颈</h2><ol><li><p>磁盘IO瓶颈</p><p>热点数据太多，mysql的缓存放不下，产生大量的回表查询，导致查询数据降低。</p><p>解决：分库，垂直分表</p></li><li><p>网络IO瓶颈</p><p>请求的数据太多，带宽不够</p><p>解决：分库分集群</p></li></ol><h2 id="cpu瓶颈"><a class="markdownIt-Anchor" href="#cpu瓶颈"></a> CPU瓶颈</h2><ol><li><p>SQL问题</p><p>如SQL中包含join，group by，order by，非索引字段条件查询等，增加CPU运算的操作</p><p>解决：SQL优化，建立合适的索引，在业务Service层进行业务计算</p></li><li><p>单表数据量太大</p><p>查询时扫描的行数太多，sql效率低</p><p>解决：水平分表</p></li></ol><h1 id="分库"><a class="markdownIt-Anchor" href="#分库"></a> 分库</h1><h2 id="水平分库"><a class="markdownIt-Anchor" href="#水平分库"></a> 水平分库</h2><p>根据分库键，按照一定策略（hash、range等），将一个库中的数据拆分到多个库中。</p><ul><li>每个库中的表结构都是一样的</li><li>每个库中的数据都不一样，没有交集</li><li>所有库中的数据的并集为全量数据</li></ul><p>适用场景：一个库的数据量太大，导致cpu、磁盘io、网络io的压力都很高。</p><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6x2ylesbuj30j807swev.jpg" alt="img"></p><h2 id="垂直分库"><a class="markdownIt-Anchor" href="#垂直分库"></a> 垂直分库</h2><p>以表为依据，按照业务归属不同，将不同的表拆分到不同的库中。</p><ul><li>每个库中存放不同的表</li><li>每个库中的数据都不同</li><li>所有库中的数据的并集为全部数据</li></ul><p>适用场景：数据库中的表越来越多，导致数据库连接数不足。业务发展到这种情况，可以考虑拆分服务。</p><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6x3km1xk6j30cv06cdg3.jpg" alt="20221007223318323.png"></p><h1 id="分表"><a class="markdownIt-Anchor" href="#分表"></a> 分表</h1><h2 id="水平分表"><a class="markdownIt-Anchor" href="#水平分表"></a> 水平分表</h2><p>根据分表键，按照一定策略（hash、range等），将一个库中的数据拆分到多个表中。</p><ul><li>每个表中的表结构都是一样的</li><li>每个表中的数据都不一样，没有交集</li><li>所有表中的数据的并集为全量数据</li></ul><p>适用场景：单表的数据量太大，导致查询效率降低。</p><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6x3fxvrthj309307ymx8.jpg" alt="20221007222847365.png"></p><h2 id="垂直分表"><a class="markdownIt-Anchor" href="#垂直分表"></a> 垂直分表</h2><p>以字段为依据，按照字段的活跃度，将表中字段拆到不同的表（主表和扩展表）中。</p><ul><li>每个表的结构不一样</li><li>每个表中只有一个关联键是一样的，其他数据都不一样</li><li>所有表的所有列的并集为全量数据</li></ul><p>适用场景：单表的字段过多，同时存在热数据和冷数据，单行数据占用的空间大，导致叶缓存能够保存的数据条数减少，查询时产生大量IO。另外，字段过多，查询条件也会很多，就需要建立更多的索引，导致插入、更新和删除效率降低，索引文件很大。</p><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6x4d2hspaj30fg05q74k.jpg" alt="20221007223953758.png"></p><p>需要注意：分表以后，进行联合查询的时候要尽量不要使用join，因为join不仅会增加CPU负担并且会讲两个表耦合在一起（必须在一个数据库实例上）。关联数据，应该在业务Service层做文章，分别获取主表和扩展表数据然后用关联字段关联得到全部数据。</p><h2 id="组合分库分表"><a class="markdownIt-Anchor" href="#组合分库分表"></a> 组合分库分表</h2><p>在一些场景下，只有分库或者分表是不能解决问题的。这时我们可以结合分库和分表，灵活进行配。</p><p>我们可以先根据第一个key进行分库，然后根据第二个key进行分表。</p><p>并且可以根据不同的业务情况，设定不同的分配策略，比如订单表，对于订单较多的月份，我们可以分配更多的表，使用hash策略将订单均匀的写到不同的表中。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;不管是IO瓶颈，还是CPU瓶颈，最终都会导致数据库的活跃连接数增加，进而逼近甚至达到数据库可承载活跃连接数的阈值。在业务Service来看就是，可用数据库连接少甚至无连接可用。&lt;/p&gt;</summary>
-    
-    
-    
-    
-    <category term="Mysql" scheme="https://eoccc.gitee.io/tags/Mysql/"/>
     
   </entry>
   
