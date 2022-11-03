@@ -22,19 +22,19 @@
   <meta name="description" content="整理一些mysql的知识。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql知识整理">
-<meta property="og:url" content="https://eoccc.gitee.io/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/index.html">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
 <meta property="og:description" content="整理一些mysql的知识。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1gzxm7fsb8hj217e0tudmw.jpg">
-<meta property="article:published_time" content="2022-09-23T07:25:19.000Z">
-<meta property="article:modified_time" content="2022-10-08T04:58:06.145Z">
+<meta property="article:published_time" content="2022-11-02T07:25:19.000Z">
+<meta property="article:modified_time" content="2022-11-03T07:53:39.289Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1gzxm7fsb8hj217e0tudmw.jpg">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -198,6 +198,21 @@
                 
               </p>
               <p class="item-title">
+                <a href="/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="title">Mysql知识整理</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-11-02T07:25:19.000Z" itemprop="datePublished">2022-11-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
                 <a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/" class="title">红黑树</a>
               </p>
               <p class="item-date">
@@ -232,21 +247,6 @@
               </p>
               <p class="item-date">
                 <time datetime="2022-09-26T08:25:19.000Z" itemprop="datePublished">2022-09-26</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="title">Mysql知识整理</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-09-23T07:25:19.000Z" itemprop="datePublished">2022-09-23</time>
               </p>
             </div>
           </li>
@@ -294,8 +294,8 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="article-date">
-	  <time datetime="2022-09-23T07:25:19.000Z" itemprop="datePublished">2022-09-23</time>
+	<a href="/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="article-date">
+	  <time datetime="2022-11-02T07:25:19.000Z" itemprop="datePublished">2022-11-02</time>
 	</a>
 </span>
         
@@ -308,7 +308,7 @@
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/#comments" class="article-comment-link">Comments</a></span>
         
       </div>
     </div>
@@ -615,17 +615,17 @@
 <h3 id="mvcc"><a class="markdownIt-Anchor" href="#mvcc"></a> MVCC</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">多版本并发控制（MVCC），解决不可重复读。</span><br><span class="line">为每个数据增加一个版本号，每次修改会对该记录版本号递增，可重复读（RR），读取事务开始前最新的版本号；读已提交（RC，通过间隙锁实现），每次读取最新的数据。</span><br></pre></td></tr></table></figure>
 <h3 id="分布式事务"><a class="markdownIt-Anchor" href="#分布式事务"></a> 分布式事务</h3>
+<p>写的很好的博客：<a href="https://www.cnblogs.com/yaochunhui/p/15594250.html">https://www.cnblogs.com/yaochunhui/p/15594250.html</a></p>
 <h4 id="xa协议"><a class="markdownIt-Anchor" href="#xa协议"></a> XA协议</h4>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">XA分布式事务协议，包含二阶段提交（2PC），三阶段提交（3PC）两种实现。</span><br><span class="line"><span class="strong">**二阶段提交**</span></span><br><span class="line"><span class="code">	1.准备阶段</span></span><br><span class="line"><span class="code">	  事务协调者，向所有事务参与者发送事务内容，询问是否可以提交事务，并等待参与者回复；</span></span><br><span class="line"><span class="code">	  事务参与者收到事务内容，开始执行事务操作，将 undo 和 redo 信息记入事务日志中（但此时并不提交事务）；</span></span><br><span class="line"><span class="code">	  如果参与者执行成功，给协调者回复yes,表示可以进行事务提交。如果执行失败，给协调者回复no,表示不可提交。</span></span><br><span class="line"><span class="code">	2.提交阶段</span></span><br><span class="line"><span class="code">	  如果协调者收到了参与者的失败信息或超时，直接给所有参与者发送回滚（rollback）信息进行事务回滚，否则，发送提交（commit）信息。</span></span><br><span class="line"><span class="code">	存在的问题：</span></span><br><span class="line"><span class="code">	  性能问题：所有参与者在事务提交阶段处于同步阻塞状态，占用系统资源，容易导致性能瓶颈。</span></span><br><span class="line"><span class="code">		可靠性问题：如果协调者存在单点故障问题，如果协调者出现故障，参与者将一直处于锁定状态。</span></span><br><span class="line"><span class="code">		数据一致性问题：在阶段2中，如果发生网络问题，一部分事务参与者收到了提交消息，另一部分事务参与者没收到提交消息，那么就导致了节点之间数据的不一致。</span></span><br><span class="line"><span class="code">**三阶段提交**</span></span><br><span class="line"><span class="code">  三阶段提交是在二阶段提交上的改进版本，主要是加入了超时机制。同时在协调者和参与者中都引入超时机制，在等待超时后协调者或参与者会中断事务，避免了协调者单点问题。</span></span><br><span class="line"><span class="code">  1. preCommit</span></span><br><span class="line"><span class="code">     协调者向所有参与者发出包含事务内容的 canCommit 请求，询问是否可以提交事务，并等待所有参与者答复。</span></span><br><span class="line"><span class="code">     参与者收到 canCommit 请求后，如果认为可以执行事务操作，则反馈 yes 并进入预备状态，否则反馈 no。</span></span><br><span class="line"><span class="code">  2. preCommit</span></span><br><span class="line"><span class="code">     阶段1所有参与者均反馈 yes</span></span><br><span class="line"><span class="code">        协调者向所有参与者发出 preCommit 请求，进入准备阶段</span></span><br><span class="line"><span class="code">        参与者收到 preCommit 请求后，执行事务操作，将 undo 和 redo 信息记入事务日志中（但不提交事务）</span></span><br><span class="line"><span class="code">        各参与者向协调者反馈 ack 响应或 no 响应，并等待最终指令</span></span><br><span class="line"><span class="code">     阶段1任何一个参与者反馈 no</span></span><br><span class="line"><span class="code">        协调者向所有参与者发出 abort 请求</span></span><br><span class="line"><span class="code">        无论收到协调者发出的 abort 请求，或者在等待协调者请求过程中出现超时，参与者均会中断事务。</span></span><br><span class="line"><span class="code">  3. do Commit</span></span><br><span class="line"><span class="code">     阶段2所有参与者均反馈 yes</span></span><br><span class="line"><span class="code">        如果协调者处于工作状态，则向所有参与者发出 do Commit 请求</span></span><br><span class="line"><span class="code">        参与者收到 do Commit 请求后，会正式执行事务提交，并释放整个事务期间占用的资源</span></span><br><span class="line"><span class="code">        各参与者向协调者反馈 ack 完成的消息</span></span><br><span class="line"><span class="code">        协调者收到所有参与者反馈的 ack 消息后，即完成事务提交</span></span><br><span class="line"><span class="code">     阶段2任何一个参与者反馈 no</span></span><br><span class="line"><span class="code">        如果协调者处于工作状态，向所有参与者发出 abort 请求</span></span><br><span class="line"><span class="code">        参与者使用阶段1中的 undo 信息执行回滚操作，并释放整个事务期间占用的资源</span></span><br><span class="line"><span class="code">        各参与者向协调者反馈 ack 完成的消息</span></span><br><span class="line"><span class="code">        协调者收到所有参与者反馈的 ack 消息后，即完成事务中断</span></span><br><span class="line"><span class="code">     注意：进入阶段3后，如果参与者超时了还没有收到协调者的信息，会提交事务。</span></span><br><span class="line"><span class="code">  存在的问题：数据不一致问题依然存在，当在参与者收到 preCommit 请求后等待 do commite 指令时，此时如果协调者请求中断事务，而协调者无法与参与者正常通信，会导致参与者继续提交事务，造成数据不一致。</span></span><br></pre></td></tr></table></figure>
 <h4 id="tcc事务"><a class="markdownIt-Anchor" href="#tcc事务"></a> TCC事务</h4>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TCC（Try-Confirm-Cancel）：实现最终一致性。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">TCC（Try-Confirm-Cancel）：实现最终一致性。</span><br><span class="line">TCC 是服务化的二阶段编程模型，其Try、Confirm、Cancel个方法均由业务编码实现（可以理解为SQL事务中的Lock、Commit、Rollback）：</span><br><span class="line"><span class="code">	Try 操作作为一阶段，负责资源的检查和预留。</span></span><br><span class="line"><span class="code">	Confirm 操作作为二阶段提交操作，执行真正的业务。</span></span><br><span class="line"><span class="code">	Cancel 是预留资源的取消。</span></span><br><span class="line"><span class="code">Try 阶段是一个初步的操作：</span></span><br><span class="line"><span class="code">	完成所有业务检查( 一致性 ) 。</span></span><br><span class="line"><span class="code">	预留必须业务资源( 准隔离性 ) 。</span></span><br><span class="line"><span class="code">	Try 尝试执行业务。</span></span><br><span class="line"><span class="code">Confirm 阶段：如果事务正常执行，进入Confirm阶段，执行事务提交。</span></span><br><span class="line"><span class="code">Cancel 阶段：如果事务执行异常，进入Cancel阶段，回滚事务，释放资源。</span></span><br></pre></td></tr></table></figure>
 <h4 id="saga事务"><a class="markdownIt-Anchor" href="#saga事务"></a> Saga事务</h4>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">```</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">## InnoDB中的锁</span></span><br><span class="line"><span class="code"></span></span><br></pre></td></tr></table></figure>
-<p>行锁（Record lock）：锁住单个行记录<br>
-间隙锁（Gap lock）：锁定一个范围，不包括记录本身<br>
-范围锁（Next-key lock）：record+gap 锁定一个范围，包含记录本身<br>
-注意：innoDB的锁是通过索引来实现的，如果查询条件不是索引，将锁住整张表</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 乐观锁、悲观锁的实现？区别？使用场景？</span><br><span class="line"></span><br><span class="line">```markdown</span><br><span class="line">乐观锁：</span><br><span class="line">  通过 where 条件中的版本号来确定是否更新，版本号递增，当版本号相同时才做修改操作。</span><br><span class="line">悲观锁：</span><br><span class="line">  排他锁：for update</span><br><span class="line">共享锁：in share mode（只能读）</span><br><span class="line">行锁、表锁</span><br><span class="line">  innodb，走索引，能走到行锁</span><br></pre></td></tr></table></figure>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Saga 事务也是保证最终一致性。</span><br><span class="line">Saga 事务核心思想是将长事务拆分为多个本地短事务，由 Saga 事务协调器协调，如果正常结束那就正常完成，如果某个步骤失败，则根据相反顺序一次调用补偿操作。</span><br><span class="line">Saga 事务基本协议如下：</span><br><span class="line"><span class="code">	每个 Saga 事务由一系列幂等的有序子事务(sub-transaction) Ti 组成。</span></span><br><span class="line"><span class="code">	每个 Ti 都有对应的幂等补偿动作 Ci，补偿动作用于撤销 Ti 造成的结果。</span></span><br></pre></td></tr></table></figure>
+<h2 id="innodb中的锁"><a class="markdownIt-Anchor" href="#innodb中的锁"></a> InnoDB中的锁</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">行锁（Record lock）：锁住单个行记录</span><br><span class="line">间隙锁（Gap lock）：锁定一个范围，不包括记录本身</span><br><span class="line">范围锁（Next-key lock）：record+gap 锁定一个范围，包含记录本身</span><br><span class="line">注意：innoDB的锁是通过索引来实现的，如果查询条件不是索引，将锁住整张表</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="乐观锁-悲观锁的实现区别使用场景"><a class="markdownIt-Anchor" href="#乐观锁-悲观锁的实现区别使用场景"></a> 乐观锁、悲观锁的实现？区别？使用场景？</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">乐观锁：</span><br><span class="line">  通过 where 条件中的版本号来确定是否更新，版本号递增，当版本号相同时才做修改操作。</span><br><span class="line">悲观锁：</span><br><span class="line">  排他锁：for update</span><br><span class="line">共享锁：in share mode（只能读）</span><br><span class="line">行锁、表锁</span><br><span class="line">  innodb，走索引，能走到行锁</span><br></pre></td></tr></table></figure>
 <h2 id="log"><a class="markdownIt-Anchor" href="#log"></a> log</h2>
 <h3 id="redo-log的作用"><a class="markdownIt-Anchor" href="#redo-log的作用"></a> redo log的作用</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">是重做日志，提供前滚操作。WAL，write ahead log，随机写变顺序写，提高性能，保证数据的持久性（D）</span><br></pre></td></tr></table></figure>
@@ -649,7 +649,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2022/09/23/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" title="Mysql知识整理" target="_blank" rel="external">https://eoccc.gitee.io/2022/09/23/Mysql知识整理/</a>
+      <a href="https://eoccc.gitee.io/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" title="Mysql知识整理" target="_blank" rel="external">https://eoccc.gitee.io/2022/11/02/Mysql知识整理/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -695,13 +695,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2022/09/26/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/" title="Mysql-分库分表"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2022/09/11/Lombok%20@Builder%E6%B3%A8%E8%A7%A3%E5%AF%BC%E8%87%B4%E9%BB%98%E8%AE%A4%E5%80%BC%E5%A4%B1%E6%95%88/" title="Lombok @Builder注解导致默认值失效"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/" title="红黑树"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
