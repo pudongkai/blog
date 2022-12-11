@@ -18,18 +18,24 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>友情链接 | Eoccc的博客</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="友情链接">
-<meta property="og:url" content="https://eoccc.gitee.io/links/index.html">
+  <title>JVM虚拟机-ZGC | Eoccc的博客</title>
+  <meta name="description" content="ZGC(Z Garbage Collector)是一款在JDK 11中新加入的具有实验性质的低延迟垃圾收集器。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM虚拟机-ZGC">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="ZGC(Z Garbage Collector)是一款在JDK 11中新加入的具有实验性质的低延迟垃圾收集器。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-08-01T04:58:42.279Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.279Z">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h901ybbbiqj314m0du0tz.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGgy1h9057yd4rnj314q0b6ab4.jpg">
+<meta property="article:published_time" content="2022-12-08T07:25:43.000Z">
+<meta property="article:modified_time" content="2022-12-11T14:44:35.011Z">
 <meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h901ybbbiqj314m0du0tz.jpg">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/links/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -46,7 +52,7 @@
 <meta name="generator" content="Hexo 6.1.0"></head>
 
 
-<body class="main-center no-sidebar" itemscope itemtype="http://schema.org/WebPage">
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
   <header class="header" itemscope itemtype="http://schema.org/WPHeader">
   <div class="slimContent">
     <div class="navbar-header">
@@ -271,41 +277,139 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="article article-links article-type-list" itemscope="">
-  <header class="article-header">
-    <h1 itemprop="title">友情链接</h1>
-    <p class="text-muted">
-      Welcome to the exchange link, you can leave a message on this page
-    </p>
-  </header>
-  <div class="article-body">
-    <div class="row">
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-JVM虚拟机-ZGC" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
       
         
-          <div class="col-sm-6 col-md-4">
-            <div class="panel panel-default hover-shadow hover-grow">
-              <figure class="media media-middle">
-                <div class="media-left pr-no">
-                  <a href="https://humingk.github.io" target="_blank" class="img-burn thumb-md media-middle">
-                    <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201704%2F03%2F20170403233544_Jc2jT.thumb.400_0.jpeg&amp;refer=http%3A%2F%2Fc-ssl.duitang.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1662967553&amp;t=516792491fc6cfbe4325f988050abfc0" class="w-full" alt="">
-                  </a>
-                </div>
-                <div class="media-body p-0x">
-                  <h4 class="media-heading"><a href="https://humingk.github.io" target="_blank"><span class="text-dark">小明的博客</span></a></h4>
-                  <div class="text-muted">
-                    小明同学不太行的博客
-                  </div>
-                </div>
-              </figure>
-            </div>
-          </div>
-          
-    </div>
-  </div>
-</article>
-
   
+    <h1 class="article-title" itemprop="name">
+      JVM虚拟机-ZGC
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/" class="article-date">
+	  <time datetime="2022-12-08T07:25:43.000Z" itemprop="datePublished">2022-12-08</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JVM/" rel="tag">JVM</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>ZGC(Z Garbage Collector)是一款在JDK 11中新加入的具有实验性质的低延迟垃圾收集器。</p>
+<span id="more"></span>
+<p>ZGC希望在尽可能对吞吐量影响不太大的前提下，实现在任意堆内存大小下都可以把垃圾收集的停顿时间限制在10ms以内的低延迟。</p>
+<p>ZGC基于Region内存布局，(暂时) 不设分代，使用了读屏障、染色指针和内存多重映射等技术来实现可并发的标记-整理算法。</p>
+<h1 id="内存布局"><a class="markdownIt-Anchor" href="#内存布局"></a> 内存布局</h1>
+<p>ZGC采用基于Region的堆内存布局，ZGC的Region具有动态性——动态创建和销毁，以及动态的区域容量大小。在x64硬件平台下，ZGC的Region可以具有如图3-19所示的大、中、小三类容量：</p>
+<ul>
+<li>小型Region：容量为2MB，用于放置小于256KB的小对象</li>
+<li>中型Region：容量为32MB，用于放置大于等于256KB，小于4MB的对象</li>
+<li>大型Region：容量不固定，可以动态变化，但必须为2MB的整数倍。用于放置大于4MB的大对象。大型Region不会被重分配。</li>
+</ul>
+<h1 id="染色指针"><a class="markdownIt-Anchor" href="#染色指针"></a> 染色指针</h1>
+<p>ZGC收集器有一个标志性的设计是它采用的染色指针技术(Colored Pointer)，直接将少量额外的信息存储在指针上。</p>
+<p>Linux下64位指针的高18位不能用来寻址，但剩余的46位指针所能支持的64T B内存在今天仍然能够充分满足大型服务器的需要。鉴于此，ZGC的染色指针技术继续盯上了这剩下的46位指针宽度，将其高4位提取出来存储四个标志信息。通过这些标志位，虚拟机可以直接从指针中看到其引用对 象的三色标记状态、是否进入了重分配集(即被移动过)、是否只能通过finaliz e()方法才能被访问 到，如图3-20所示。当然，由于这些标志位进一步压缩了原本就只有46位的地址空间，也直接导致ZGC能够管理的内存不可以超过4TB(2的42次幂)。</p>
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h901ybbbiqj314m0du0tz.jpg" alt="image-20221211183456746"></p>
+<p>虽然染色指针有4TB的内存限制，不能支持32位平台，不能支持压缩指针(-XX:+UseCompressedOops)等诸多约束，但它带来的收益也是非常可观的：</p>
+<ol>
+<li>一旦某个Region的存活对象被移走以后，这个region可以立即被释放掉，而不必等整个堆中所有指向该Region的引用都被修正后才能清理。（好处：ZGC只要有一个空闲的Region，就能够完成收集。）</li>
+<li>可以减少在垃圾收集过程中内存屏障的使用，提高性能。设置内存屏障，尤其是写屏障的目的通常是为了记录对象引用的变动情况，如果将这些信息直接维护在指针中，显然就可以省去一些 专门的记录操作。（实际上，到目前为止ZGC都并未使用任何写屏障，只使用了读屏障。）</li>
+<li>染色指针可以作为一种可扩展的存储结构用来记录更多与对象标记、重定位过程相关的数据，以便日后进一步提高性能。比如可以开发Linux下的64位指针中剩余的18位，用来记录一些其他信息。</li>
+</ol>
+<h1 id="垃圾回收"><a class="markdownIt-Anchor" href="#垃圾回收"></a> 垃圾回收</h1>
+<p>ZGC的垃圾回收过程大致可划分为四个大的阶段。全部四个阶段都是可以并发执行的，仅是两个阶段中间会存在短暂的停顿小阶段。</p>
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGgy1h9057yd4rnj314q0b6ab4.jpg" alt="image-20221211202804016"></p>
+<ol>
+<li>
+<p>并发标记</p>
+<p>遍历对象图做可达性分析，类似于G1，也会经过初始标记、最终标记的短暂STW，但是ZGC的标记是在指针上完成的，而不是在对象上。</p>
+</li>
+<li>
+<p>并发预备重分配</p>
+<p>根据特定的查询条件统计出本次收集过程要清理哪些region，这些region组成重分配集（Relocation Set），注意，ZGC每次回收都会扫描所有的region，用更大范围的扫描成本替换G1中的记忆集的维护成本。重分配集里面的对象会被复制到其他region中，里面的region会被释放。</p>
+</li>
+<li>
+<p>并发重分配</p>
+<p>把重分配集中的存活对象复制到新的region上，并为重分配集中的每个region维护一个转发表，记录从旧对象到新对象的转向关系。</p>
+<p>ZGC根据染色指针就能知道一个对象是否处于重分配集中，当访问这个对象的时候，会被读内存屏障捕获，然后根据转发表将访问转发到新的对象上，同时更新引用的值（ZGC将这一过程称为“自愈”，类似于redis的rehash过程）。</p>
+</li>
+<li>
+<p>并发重映射</p>
+<p>修正重分配集中存活对象的引用，但是这个阶段ZGC并没有主动去完成，而是放在了下一次GC的并发标记阶段，反正并发标记的时候要遍历堆的所有对象。</p>
+</li>
+</ol>
+<h1 id="zgc的缺点"><a class="markdownIt-Anchor" href="#zgc的缺点"></a> ZGC的缺点</h1>
+<ol>
+<li>
+<p>没有分代</p>
+<p>ZGC没有引入分代，每次回收都需要扫描整个堆的所有对象。</p>
+</li>
+<li>
+<p>浮动垃圾</p>
+<p>ZGC每次都会对整个堆进行回收，回收垃圾的整个过程耗时较长，并发标记的时候会产生浮动垃圾，如果系统持续高速的产生浮动垃圾的话，回收到的内存空间持续小于回收期间产生的浮动垃圾占用的空间，就会导致堆可用的空间越来越小，最终OOM。目前唯一的办法就是增加堆的容量，让ZGC获得更多的喘息空间。</p>
+<p>要根本解决这个问题，还是得引入分代，让新对象在一个专门的区域中创建，然后对这块区域进行频率更高、更快的收集。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/" title="JVM虚拟机-ZGC" target="_blank" rel="external">https://eoccc.gitee.io/2022/12/08/JVM虚拟机-ZGC/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://gitee.com/eoccc" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://gitee.com/eoccc" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
   <section id="comments">
   	
       <div id="vcomments"></div>
@@ -313,6 +417,32 @@
   </section>
 
 
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-jdk%E5%B7%A5%E5%85%B7/" title="JVM虚拟机-jdk工具"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
 
 
 </main>
@@ -367,6 +497,10 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+
+
+   
 
 
 
