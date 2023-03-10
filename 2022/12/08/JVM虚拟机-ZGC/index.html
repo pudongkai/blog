@@ -26,14 +26,14 @@
 <meta property="og:site_name" content="Eoccc的博客">
 <meta property="og:description" content="ZGC(Z Garbage Collector)是一款在JDK 11中新加入的具有实验性质的低延迟垃圾收集器。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h901ybbbiqj314m0du0tz.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGgy1h9057yd4rnj314q0b6ab4.jpg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20221211183456746.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20221211202804016.png">
 <meta property="article:published_time" content="2022-12-08T07:25:43.000Z">
-<meta property="article:modified_time" content="2022-12-11T14:53:17.416Z">
+<meta property="article:modified_time" content="2023-02-07T03:49:44.798Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h901ybbbiqj314m0du0tz.jpg">
+<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20221211183456746.png">
   <!-- Canonical links -->
   <link rel="canonical" href="https://eoccc.gitee.io/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/index.html">
   
@@ -180,7 +180,7 @@
   <div class="widget">
     <h3 class="widget-title">Tags</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">10</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">11</span></li></ul>
     </div>
   </div>
 
@@ -338,7 +338,7 @@
 <h1 id="染色指针"><a class="markdownIt-Anchor" href="#染色指针"></a> 染色指针</h1>
 <p>ZGC收集器有一个标志性的设计是它采用的染色指针技术(Colored Pointer)，直接将少量额外的信息存储在指针上。</p>
 <p>Linux下64位指针的高18位不能用来寻址，但剩余的46位指针所能支持的64T B内存在今天仍然能够充分满足大型服务器的需要。鉴于此，ZGC的染色指针技术继续盯上了这剩下的46位指针宽度，将其高4位提取出来存储四个标志信息。通过这些标志位，虚拟机可以直接从指针中看到其引用对 象的三色标记状态、是否进入了重分配集(即被移动过)、是否只能通过finaliz e()方法才能被访问 到，如图3-20所示。当然，由于这些标志位进一步压缩了原本就只有46位的地址空间，也直接导致ZGC能够管理的内存不可以超过4TB(2的42次幂)。</p>
-<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h901ybbbiqj314m0du0tz.jpg" alt="image-20221211183456746"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20221211183456746.png" alt="image-20221211183456746"></p>
 <p>虽然染色指针有4TB的内存限制，不能支持32位平台，不能支持压缩指针(-XX:+UseCompressedOops)等诸多约束，但它带来的收益也是非常可观的：</p>
 <ol>
 <li>一旦某个Region的存活对象被移走以后，这个region可以立即被释放掉，而不必等整个堆中所有指向该Region的引用都被修正后才能清理。（好处：ZGC只要有一个空闲的Region，就能够完成收集。）</li>
@@ -347,7 +347,7 @@
 </ol>
 <h1 id="垃圾回收"><a class="markdownIt-Anchor" href="#垃圾回收"></a> 垃圾回收</h1>
 <p>ZGC的垃圾回收过程大致可划分为四个大的阶段。全部四个阶段都是可以并发执行的，仅是两个阶段中间会存在短暂的停顿小阶段。</p>
-<p><img src="https://tva1.sinaimg.cn/large/008vxvgGgy1h9057yd4rnj314q0b6ab4.jpg" alt="image-20221211202804016"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20221211202804016.png" alt="image-20221211202804016"></p>
 <ol>
 <li>
 <p>并发标记</p>
