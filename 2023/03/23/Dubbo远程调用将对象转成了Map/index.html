@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Dubbo远程调用将对象转成了Map | Eoccc的博客</title>
+  <meta name="description" content="Dubbo远程调用返回结果后，反序列化的时候将对象反序列化成了Map，对象的属性作为key。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo远程调用将对象转成了Map">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="Dubbo远程调用返回结果后，反序列化的时候将对象反序列化成了Map，对象的属性作为key。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230324102621382.png">
+<meta property="article:published_time" content="2023-03-23T06:10:32.000Z">
+<meta property="article:modified_time" content="2023-03-24T07:10:38.456Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="踩坑">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230324102621382.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/" class="title">Dubbo远程调用将对象转成了Map</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-23T06:10:32.000Z" itemprop="datePublished">2023-03-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/14/Http%E3%80%81TCP%E5%92%8CUDP/" class="title">Http、TCP和UDP</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-14T07:25:43.000Z" itemprop="datePublished">2023-03-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/" class="title">JVM虚拟机-ZGC</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-12-08T07:25:43.000Z" itemprop="datePublished">2022-12-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-jdk%E5%B7%A5%E5%85%B7/" class="title">JVM虚拟机-jdk工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-12-04T07:25:43.000Z" itemprop="datePublished">2022-12-04</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="title">Mysql知识整理</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-11-02T07:25:19.000Z" itemprop="datePublished">2022-11-02</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Dubbo远程调用将对象转成了Map" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Dubbo远程调用将对象转成了Map
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/" class="article-date">
+	  <time datetime="2023-03-23T06:10:32.000Z" itemprop="datePublished">2023-03-23</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 976(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Dubbo远程调用返回结果后，反序列化的时候将对象反序列化成了Map，对象的属性作为key。</p>
+<span id="more"></span>
+<p>事情是这样的，在一个正常的dubbo接口升级过程中，我们升级了下游系统的jar包，然后调用下游接口的时候，拿到的返回结果中，有一个对象转成了HashMap。离了大谱。</p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230324102621382.png" alt="image-20230324102621382"></p>
+<p>对比了一番线上代码和本地代码，发下这个<strong>对象中多了一个字段，而且这个字段对应的类在本地代码中没有</strong>。</p>
+<p>然后又找下游系统沟通，发现这个类其实是在另一个jar包中！也就是说这个接口的返回值中的对象来自于两个jar包，但是这两个jar包在我们系统中是分别单独引用的，而又只升级了其中的一个，所以导致新节点的对象不存在。</p>
+<p>随后就简单了，升级另一个jar包，重新部署就解决问题了。</p>
+<p><strong>那么</strong></p>
+<p><font color="red"><strong>为什么少了类会导致对象反序列化成了HashMap？</strong></font></p>
+<p>Hassian反序列化的入口是<code>Hessian2Input#readObject()</code>。</p>
+<ol>
+<li><code>readObject</code>执行反序列化</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">readObject</span><span class="params">(List&lt;Class&lt;?&gt;&gt; expectedTypes)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">tag</span> <span class="operator">=</span> _offset &lt; _length ? (_buffer[_offset++] &amp; <span class="number">0xff</span>) : read();</span><br><span class="line">    <span class="keyword">switch</span> (tag) &#123;</span><br><span class="line">        ...</span><br><span class="line">      <span class="keyword">case</span> <span class="number">0x6f</span>: &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">ref</span> <span class="operator">=</span> tag - <span class="number">0x60</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (_classDefs == <span class="literal">null</span>)</span><br><span class="line">                <span class="keyword">throw</span> error(<span class="string">&quot;No classes defined at reference &#x27;&#123;0&#125;&#x27;&quot;</span> + tag);</span><br><span class="line"></span><br><span class="line">            <span class="type">ObjectDefinition</span> <span class="variable">def</span> <span class="operator">=</span> (ObjectDefinition) _classDefs.get(ref);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> readObjectInstance(<span class="literal">null</span>, def);</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>接着调用<code>Hessian2Input#readObjectInstance</code></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Object <span class="title function_">readObjectInstance</span><span class="params">(Class cl, ObjectDefinition def)</span></span><br><span class="line">        <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">type</span> <span class="operator">=</span> def.getType();</span><br><span class="line">    String[] fieldNames = def.getFieldNames();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cl != <span class="literal">null</span>) &#123;</span><br><span class="line">        Deserializer reader;</span><br><span class="line">        reader = findSerializerFactory().getObjectDeserializer(type, cl);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> reader.readObject(<span class="built_in">this</span>, fieldNames);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> findSerializerFactory().readObject(<span class="built_in">this</span>, type, fieldNames);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>核心代码：<code>findSerializerFactory().getObjectDeserializer(type, cl);</code></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Reads the object as a map.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> Deserializer <span class="title function_">getObjectDeserializer</span><span class="params">(String type, Class cl)</span></span><br><span class="line">        <span class="keyword">throws</span> HessianProtocolException &#123;</span><br><span class="line">    <span class="comment">// 获取反序列化具体实现</span></span><br><span class="line">    <span class="type">Deserializer</span> <span class="variable">reader</span> <span class="operator">=</span> getObjectDeserializer(type);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cl == <span class="literal">null</span></span><br><span class="line">            || cl.equals(reader.getType())</span><br><span class="line">            || cl.isAssignableFrom(reader.getType())</span><br><span class="line">            || reader.isCustom()</span><br><span class="line">            || HessianHandle.class.isAssignableFrom(reader.getType())) &#123;</span><br><span class="line">        <span class="keyword">return</span> reader;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (log.isLoggable(Level.FINE)) &#123;</span><br><span class="line">        log.fine(<span class="string">&quot;hessian: expected &#x27;&quot;</span> + cl.getName() + <span class="string">&quot;&#x27; at &#x27;&quot;</span> + type + <span class="string">&quot;&#x27; (&quot;</span></span><br><span class="line">                + reader.getType().getName() + <span class="string">&quot;)&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> getDeserializer(cl);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Reads the object as a map.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> Deserializer <span class="title function_">getObjectDeserializer</span><span class="params">(String type)</span></span><br><span class="line">        <span class="keyword">throws</span> HessianProtocolException &#123;</span><br><span class="line">    <span class="type">Deserializer</span> <span class="variable">deserializer</span> <span class="operator">=</span> getDeserializer(type);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 因为不存在类型，所以这里 deserializer 为null</span></span><br><span class="line">    <span class="keyword">if</span> (deserializer != <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">return</span> deserializer;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (_hashMapDeserializer != <span class="literal">null</span>)</span><br><span class="line">        <span class="comment">// 如果缓存中有 _hashMapDeserializer，直接返回</span></span><br><span class="line">        <span class="keyword">return</span> _hashMapDeserializer;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 否则创建一个MapDeserializer，保存在缓存中，然后返回</span></span><br><span class="line">        _hashMapDeserializer = <span class="keyword">new</span> <span class="title class_">MapDeserializer</span>(HashMap.class);</span><br><span class="line">        <span class="keyword">return</span> _hashMapDeserializer;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>获取反序列化器</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns a deserializer based on a string type.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> Deserializer <span class="title function_">getDeserializer</span><span class="params">(String type)</span></span><br><span class="line">        <span class="keyword">throws</span> HessianProtocolException &#123;</span><br><span class="line">    <span class="keyword">if</span> (type == <span class="literal">null</span> || type.equals(<span class="string">&quot;&quot;</span>) || _typeNotFoundDeserializerMap.containsKey(type))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    Deserializer deserializer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果之前已经获取过了，直接从缓存里面取出来返回</span></span><br><span class="line">    <span class="keyword">if</span> (_cachedTypeDeserializerMap != <span class="literal">null</span>) &#123;</span><br><span class="line">        deserializer = (Deserializer) _cachedTypeDeserializerMap.get(type);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (deserializer != <span class="literal">null</span>)</span><br><span class="line">            <span class="keyword">return</span> deserializer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 静态类型的反序列化器</span></span><br><span class="line">    deserializer = (Deserializer) _staticTypeMap.get(type);</span><br><span class="line">    <span class="keyword">if</span> (deserializer != <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">return</span> deserializer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 集合类型</span></span><br><span class="line">    <span class="keyword">if</span> (type.startsWith(<span class="string">&quot;[&quot;</span>)) &#123;</span><br><span class="line">        <span class="type">Deserializer</span> <span class="variable">subDeserializer</span> <span class="operator">=</span> getDeserializer(type.substring(<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (subDeserializer != <span class="literal">null</span>)</span><br><span class="line">            deserializer = <span class="keyword">new</span> <span class="title class_">ArrayDeserializer</span>(subDeserializer.getType());</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            deserializer = <span class="keyword">new</span> <span class="title class_">ArrayDeserializer</span>(Object.class);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (_unrecognizedTypeCache.get(type) == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 未识别出来的类型</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 因为class不存在，这里会抛异常</span></span><br><span class="line">            <span class="type">Class</span> <span class="variable">cl</span> <span class="operator">=</span> loadSerializedClass(type);</span><br><span class="line">            deserializer = getDeserializer(cl);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// 缓存到 _unrecognizedTypeCache 中，以免一直抛异常，影响性能</span></span><br><span class="line">            log.warning(<span class="string">&quot;Hessian/Burlap: &#x27;&quot;</span> + type + <span class="string">&quot;&#x27; is an unknown class in &quot;</span> + _loader + <span class="string">&quot;:\n&quot;</span> + e);</span><br><span class="line">            _typeNotFoundDeserializerMap.put(type, PRESENT);</span><br><span class="line">            log.log(Level.FINER, e.toString(), e);</span><br><span class="line">            _unrecognizedTypeCache.put(type, <span class="keyword">new</span> <span class="title class_">AtomicLong</span>(<span class="number">1L</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 记录次数，到了2000次后重置为1</span></span><br><span class="line">        <span class="comment">// 为什么要重置为1？到最大值后就不再累加不是更好？</span></span><br><span class="line">        ((AtomicLong) _unrecognizedTypeCache.get(type)).incrementAndGet();</span><br><span class="line">        <span class="keyword">if</span> (((AtomicLong) _unrecognizedTypeCache.get(type)).get() % <span class="number">2000L</span> == <span class="number">0L</span>)</span><br><span class="line">            ((AtomicLong) _unrecognizedTypeCache.get(type)).getAndSet(<span class="number">1L</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (deserializer != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (_cachedTypeDeserializerMap == <span class="literal">null</span>)</span><br><span class="line">            _cachedTypeDeserializerMap = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>(<span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">        _cachedTypeDeserializerMap.put(type, deserializer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 因为前面抛异常了，所以这里 deserializer 仍然为null</span></span><br><span class="line">    <span class="keyword">return</span> deserializer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>经过前面的一通操作，最后获取到了MapDeserializer序列化器，就是反序列化成HashMap。<code>MapDeserializer#readObject</code>：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">readObject</span><span class="params">(AbstractHessianInput in,</span></span><br><span class="line"><span class="params">                         String[] fieldNames)</span></span><br><span class="line">        <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">Map</span> <span class="variable">map</span> <span class="operator">=</span> createMap();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">ref</span> <span class="operator">=</span> in.addRef(map);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; fieldNames.length; i++) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> fieldNames[i];</span><br><span class="line"></span><br><span class="line">        map.put(name, in.readObject());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/" title="Dubbo远程调用将对象转成了Map" target="_blank" rel="external">https://eoccc.gitee.io/2023/03/23/Dubbo远程调用将对象转成了Map/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/03/14/Http%E3%80%81TCP%E5%92%8CUDP/" title="Http、TCP和UDP"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

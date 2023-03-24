@@ -18,22 +18,22 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>kafka客户端 | Eoccc的博客</title>
+  <title>kafka-3 客户端 | Eoccc的博客</title>
   <meta name="description" content="kafka客户端的一些细节。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kafka客户端">
-<meta property="og:url" content="https://eoccc.gitee.io/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/index.html">
+<meta property="og:title" content="kafka-3 客户端">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/07/19/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
 <meta property="og:description" content="kafka客户端的一些细节。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-19T14:52:41.000Z">
-<meta property="article:modified_time" content="2022-08-23T02:18:29.082Z">
+<meta property="article:modified_time" content="2023-03-20T02:16:45.607Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="kafka">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/07/19/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -197,6 +197,21 @@
                 
               </p>
               <p class="item-title">
+                <a href="/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/" class="title">Dubbo远程调用将对象转成了Map</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-23T06:10:32.000Z" itemprop="datePublished">2023-03-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
                 <a href="/2023/03/14/Http%E3%80%81TCP%E5%92%8CUDP/" class="title">Http、TCP和UDP</a>
               </p>
               <p class="item-date">
@@ -250,21 +265,6 @@
             </div>
           </li>
           
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/" class="title">红黑树</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-02T07:25:19.000Z" itemprop="datePublished">2022-10-02</time>
-              </p>
-            </div>
-          </li>
-          
       </ul>
     </div>
   </div>
@@ -287,14 +287,14 @@
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-kafka客户端" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-kafka-3 客户端" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      kafka客户端
+      kafka-3 客户端
     </h1>
   
 
@@ -302,7 +302,7 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/" class="article-date">
+	<a href="/2022/07/19/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/" class="article-date">
 	  <time datetime="2022-07-19T14:52:41.000Z" itemprop="datePublished">2022-07-19</time>
 	</a>
 </span>
@@ -316,7 +316,7 @@
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/19/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/#comments" class="article-comment-link">Comments</a></span>
         
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.3k(words)</span>
@@ -329,7 +329,7 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>总结kafka客户端的分区策略、幂等性和事物。</p>
+        <p>总结kafka客户端的分区策略、幂等性和事务。</p>
 <span id="more"></span>
 <h1 id="分区分配策略"><a class="markdownIt-Anchor" href="#分区分配策略"></a> 分区分配策略</h1>
 <p>消费者消费消息之前，首先得进行分区分配，kafka提供了三种分区分配策略。</p>
@@ -423,7 +423,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2022/07/19/kafka%E5%AE%A2%E6%88%B7%E7%AB%AF/" title="kafka客户端" target="_blank" rel="external">https://eoccc.gitee.io/2022/07/19/kafka客户端/</a>
+      <a href="https://eoccc.gitee.io/2022/07/19/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/" title="kafka-3 客户端" target="_blank" rel="external">https://eoccc.gitee.io/2022/07/19/kafka-3 客户端/</a>
     </li>
     
     <li class="post-copyright-license">
