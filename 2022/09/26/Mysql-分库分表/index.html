@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/VNwsPuzzM.jpeg">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/a_YCOhAzj.jpeg">
 <meta property="article:published_time" content="2022-09-26T08:25:19.000Z">
-<meta property="article:modified_time" content="2023-03-15T02:04:36.529Z">
+<meta property="article:modified_time" content="2023-03-28T02:21:13.537Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -201,6 +201,21 @@
                 
               </p>
               <p class="item-title">
+                <a href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/" class="title">kafka-1 生产者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-29T14:52:41.000Z" itemprop="datePublished">2023-03-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
                 <a href="/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/" class="title">Dubbo远程调用将对象转成了Map</a>
               </p>
               <p class="item-date">
@@ -250,21 +265,6 @@
               </p>
               <p class="item-date">
                 <time datetime="2022-12-04T07:25:43.000Z" itemprop="datePublished">2022-12-04</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="title">Mysql知识整理</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-11-02T07:25:19.000Z" itemprop="datePublished">2022-11-02</time>
               </p>
             </div>
           </li>
@@ -424,7 +424,7 @@
 </ul>
 <p>适用场景：单表的字段过多，同时存在热数据和冷数据，单行数据占用的空间大，导致叶缓存能够保存的数据条数减少，查询时产生大量IO。另外，字段过多，查询条件也会很多，就需要建立更多的索引，导致插入、更新和删除效率降低，索引文件很大。</p>
 <p><img src="https://gitee.com/eoccc/pic-shack/raw/master/a_YCOhAzj.jpeg" alt="a_YCOhAzj.jpeg"></p>
-<p>需要注意：分表以后，进行联合查询的时候要尽量不要使用join，因为join不仅会增加CPU负担并且会讲两个表耦合在一起（必须在一个数据库实例上）。关联数据，应该在业务Service层做文章，分别获取主表和扩展表数据然后用关联字段关联得到全部数据。</p>
+<p>需要注意：分表以后，进行联合查询的时候要<strong>尽量不要使用join</strong>，因为join不仅会增加CPU负担并且会将两个表耦合在一起（必须在一个数据库实例上）。关联数据应该在业务Service层做文章，分别获取主表和扩展表数据然后用关联字段关联得到全部数据。</p>
 <h2 id="组合分库分表"><a class="markdownIt-Anchor" href="#组合分库分表"></a> 组合分库分表</h2>
 <p>在一些场景下，只有分库或者分表是不能解决问题的。这时我们可以结合分库和分表，灵活进行配。</p>
 <p>我们可以先根据第一个key进行分库，然后根据第二个key进行分表。</p>
