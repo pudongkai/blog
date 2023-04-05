@@ -18,11 +18,11 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>kafka消费者 | Eoccc的博客</title>
+  <title>kafka-2 消费者 | Eoccc的博客</title>
   <meta name="description" content="Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的所有消费组，并由消费组中的一个消费者进行消费。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kafka消费者">
-<meta property="og:url" content="https://eoccc.gitee.io/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/index.html">
+<meta property="og:title" content="kafka-2 消费者">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/06/21/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
 <meta property="og:description" content="Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的所有消费组，并由消费组中的一个消费者进行消费。">
 <meta property="og:locale" content="en_US">
@@ -30,14 +30,14 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypbfi2vtj20my0f2dgw.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypavsxvoj20l80awaaj.jpg">
 <meta property="article:published_time" content="2022-06-21T14:52:41.000Z">
-<meta property="article:modified_time" content="2022-08-07T17:14:35.504Z">
+<meta property="article:modified_time" content="2023-04-03T15:22:48.986Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="kafka">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ypbl8zq6j20nc0eeab4.jpg">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/06/21/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -201,6 +201,21 @@
                 
               </p>
               <p class="item-title">
+                <a href="/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/" class="title">写出整洁代码的tips</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-04T14:52:41.000Z" itemprop="datePublished">2023-04-04</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
                 <a href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/" class="title">kafka-1 生产者</a>
               </p>
               <p class="item-date">
@@ -254,21 +269,6 @@
             </div>
           </li>
           
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-jdk%E5%B7%A5%E5%85%B7/" class="title">JVM虚拟机-jdk工具</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-12-04T07:25:43.000Z" itemprop="datePublished">2022-12-04</time>
-              </p>
-            </div>
-          </li>
-          
       </ul>
     </div>
   </div>
@@ -291,14 +291,14 @@
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-kafka消费者" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-kafka-2 消费者" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      kafka消费者
+      kafka-2 消费者
     </h1>
   
 
@@ -306,7 +306,7 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/" class="article-date">
+	<a href="/2022/06/21/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/" class="article-date">
 	  <time datetime="2022-06-21T14:52:41.000Z" itemprop="datePublished">2022-06-21</time>
 	</a>
 </span>
@@ -320,7 +320,7 @@
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/21/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/#comments" class="article-comment-link">Comments</a></span>
         
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.1k(words)</span>
@@ -437,7 +437,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2022/06/21/kafka%E6%B6%88%E8%B4%B9%E8%80%85/" title="kafka消费者" target="_blank" rel="external">https://eoccc.gitee.io/2022/06/21/kafka消费者/</a>
+      <a href="https://eoccc.gitee.io/2022/06/21/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/" title="kafka-2 消费者" target="_blank" rel="external">https://eoccc.gitee.io/2022/06/21/kafka-2 消费者/</a>
     </li>
     
     <li class="post-copyright-license">
