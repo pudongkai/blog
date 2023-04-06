@@ -206,6 +206,36 @@
                 
               </p>
               <p class="item-title">
+                <a href="/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/" class="title">kafka-3 客户端</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-03T14:52:41.000Z" itemprop="datePublished">2023-04-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/" class="title">kafka-2 消费者</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-30T14:52:41.000Z" itemprop="datePublished">2023-03-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
                 <a href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/" class="title">kafka-1 生产者</a>
               </p>
               <p class="item-date">
@@ -225,36 +255,6 @@
               </p>
               <p class="item-date">
                 <time datetime="2023-03-23T06:10:32.000Z" itemprop="datePublished">2023-03-23</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2023/03/14/Http%E3%80%81TCP%E5%92%8CUDP/" class="title">Http、TCP和UDP</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-03-14T07:25:43.000Z" itemprop="datePublished">2023-03-14</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/" class="title">JVM虚拟机-ZGC</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-12-08T07:25:43.000Z" itemprop="datePublished">2022-12-08</time>
               </p>
             </div>
           </li>
@@ -311,6 +311,92 @@
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 5(minutes)</span>
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/">kafka-3 客户端</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>总结kafka客户端的分区策略、幂等性和事务。</p>
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/" class="article-date">
+	  <time datetime="2023-04-03T14:52:41.000Z" itemprop="datePublished">Apr 3</time>
+	</a>
+</span>
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.3k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4(minutes)</span>
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/">kafka-2 消费者</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/" class="article-date">
+	  <time datetime="2023-03-30T14:52:41.000Z" itemprop="datePublished">Mar 30</time>
+	</a>
+</span>
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.1k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 8(minutes)</span>
 	
 
   </p>
@@ -612,92 +698,6 @@
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 2(minutes)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/09/27/Mysql-ShardingSphere%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-ShardingSphere分库分表</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p><a href="https://shardingsphere.apache.org/document/current/cn/overview/#shardingsphere-jdbc">Apache ShardingSphere</a>是一款开源的分布式数据库中间件组成的生态圈。它由Sharding-JDBC、Sharding-Proxy和Sharding-Sidecar（规划中）组成。提供标准化的数据分片、分布式事务和数据库治理功能，可适用于如Java同构、异构语言、容器、云原生等各种多样化的应用场景。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2022/09/27/Mysql-ShardingSphere%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/" class="article-date">
-	  <time datetime="2022-09-27T08:25:19.000Z" itemprop="datePublished">Sep 27</time>
-	</a>
-</span>
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/27/Mysql-ShardingSphere%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 140(words)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/09/26/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-分库分表</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>不管是IO瓶颈，还是CPU瓶颈，最终都会导致数据库的活跃连接数增加，进而逼近甚至达到数据库可承载活跃连接数的阈值。在业务Service来看就是，可用数据库连接少甚至无连接可用。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2022/09/26/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/" class="article-date">
-	  <time datetime="2022-09-26T08:25:19.000Z" itemprop="datePublished">Sep 26</time>
-	</a>
-</span>
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/26/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2k(words)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 6(minutes)</span>
 	
 
   </p>
