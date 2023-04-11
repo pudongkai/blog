@@ -280,13 +280,13 @@
         <ul>
           <li><a href="/tags">All</a></li>
           
+          <li><a href="/tags/技术笔记/">技术笔记</a></li>
+          
           <li><a href="/tags/DDD/">DDD</a></li>
           
           <li><a href="/tags/随笔/">随笔</a></li>
           
           <li><a href="/tags/踩坑/">踩坑</a></li>
-          
-          <li><a href="/tags/技术笔记/">技术笔记</a></li>
           
           <li><a href="/tags/JVM/">JVM</a></li>
           
@@ -307,6 +307,258 @@
     </header>
     <!-- /header -->
     <div class="article-body">
+      
+      <h3 class="panel-title mb-1x">
+        <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" title="#技术笔记"># 技术笔记</a>
+        <small class="text-muted">(Total 8 articles)</small>
+      </h3>
+      <div class="row">
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2023-03-14T07:25:43.000Z" itemprop="datePublished">2023-03-14</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2023/03/14/Http%E3%80%81TCP%E5%92%8CUDP/">Http、TCP和UDP</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>从 Http1.1 到 Http2，Http 协议一直都是使用 TCP 作为传输协议。然而在最新的 Http3把 TCP 抛弃了，而是基于 UDP 协议的基础上，在应用层实现了一个可靠的传输协议 —— QUIC。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-08-10T10:25:19.000Z" itemprop="datePublished">2022-08-10</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/08/10/protobuf%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">protobuf序列化和反序列化</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Protobuf是一个很优秀的序列化和反序列化工具，具有较高的效率，并且使用紧凑的二进制码，能够减小内存占用，但是有一些坑，需要我们能够正确的使用。这篇博客就来记录一些Protobuf的使用和一些踩过的坑。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
+     
+      <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2021-10-27T07:10:35.000Z" itemprop="datePublished">2021-10-27</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/">IO模型</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>本文简要介绍五种IO模型，简单分析每个IO模型所解决的问题。五个IO模型：阻塞IO，非阻塞IO，IO多路复用，信号驱动IO，异步IO。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-08-10T14:52:41.000Z" itemprop="datePublished">2022-08-10</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/">时间轮</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>JDK中Timer和DelayQueue可以实现定时任务和延时操作的功能，但是O(nlogn)的时间复杂度在高并发的时候存在性能瓶颈，因此Kafka、Netty、ZooKeeper、Quartz等组件都使用了时间轮作为定时器。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2021-12-13T06:10:32.000Z" itemprop="datePublished">2021-12-13</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">多级共享缓存解决方案</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：<strong>多级</strong>缓存、<strong>共享</strong>缓存。附缓存框架调研：<a href="https://www.cnblogs.com/imyjy/p/15695160.html">https://www.cnblogs.com/imyjy/p/15695160.html</a></p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-06-14T07:10:35.000Z" itemprop="datePublished">2022-06-14</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/">深拷贝和浅拷贝工具</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>前几天写代码的时候，需要拷贝对象，就使用了<code>org.apache.commons.beanutils.BeanUtils</code>的<code>BeanUtils.copyProperties(Object dest, Object orig)</code>拷贝对象，后面又修改了新对象的属性，就导致原对象也被修改了，仔细一研究才发现这个工具只是进行了浅拷贝。索性整理一下现在比较常用的一些深拷贝和浅拷贝工具。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+      <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/">软引用和弱的使用场景</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>我们日常开发中一般不会使用到软引用，因此对这块可能比较陌生，看过一些使用场景，但是过一段时间可能就忘记了，这篇博客就整理一下软引用的使用场景。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">缓存淘汰算法总结</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>以前看到过一些缓存淘汰的算法，觉得很是精妙，比如大名鼎鼎的LRU、LFU、FIFO，以及mysql版的LRU，redis的缓存淘汰策略，GuavaCache的缓存淘汰算法，等等。写篇博客总结一下～～</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+      </div>
       
       <h3 class="panel-title mb-1x">
         <a href="/tags/DDD/" title="#DDD"># DDD</a>
@@ -418,33 +670,6 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-09-11T07:25:19.000Z" itemprop="datePublished">2022-09-11</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/09/11/Lombok%20@Builder%E6%B3%A8%E8%A7%A3%E5%AF%BC%E8%87%B4%E9%BB%98%E8%AE%A4%E5%80%BC%E5%A4%B1%E6%95%88/">Lombok @Builder注解导致默认值失效</a>
-     </h3>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
-     
-      <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
        <time datetime="2021-08-10T07:25:43.000Z" itemprop="datePublished">2021-08-10</time>
      </div>
      <h3 itemprop="name">
@@ -474,15 +699,11 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-08-10T10:25:19.000Z" itemprop="datePublished">2022-08-10</time>
+       <time datetime="2022-09-11T07:25:19.000Z" itemprop="datePublished">2022-09-11</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/08/10/protobuf%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">protobuf序列化和反序列化</a>
+       <a class="article-link" href="/2022/09/11/Lombok%20@Builder%E6%B3%A8%E8%A7%A3%E5%AF%BC%E8%87%B4%E9%BB%98%E8%AE%A4%E5%80%BC%E5%A4%B1%E6%95%88/">Lombok @Builder注解导致默认值失效</a>
      </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Protobuf是一个很优秀的序列化和反序列化工具，具有较高的效率，并且使用紧凑的二进制码，能够减小内存占用，但是有一些坑，需要我们能够正确的使用。这篇博客就来记录一些Protobuf的使用和一些踩过的坑。</p>
-       </div>
      
    </div>
    
@@ -491,8 +712,6 @@
       <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
      
       <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
      
      
    </div>
@@ -507,22 +726,25 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2023-04-04T14:52:41.000Z" itemprop="datePublished">2023-04-04</time>
+       <time datetime="2022-08-10T10:25:19.000Z" itemprop="datePublished">2022-08-10</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/">写出整洁代码的tips</a>
+       <a class="article-link" href="/2022/08/10/protobuf%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">protobuf序列化和反序列化</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>一开始就要写整洁的代码，如果有不整洁的代码就要及时的整改，绝对不要有以后再改,以后再说的想法，因为：</p>
-<p><strong><font color="red">letter equals never!</font></strong></p>
+         <p>Protobuf是一个很优秀的序列化和反序列化工具，具有较高的效率，并且使用紧凑的二进制码，能够减小内存占用，但是有一些坑，需要我们能够正确的使用。这篇博客就来记录一些Protobuf的使用和一些踩过的坑。</p>
        </div>
      
    </div>
    
    <div class="panel-footer">
      
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
       <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
+     
+      <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
      
      
    </div>
@@ -568,14 +790,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2021-12-13T06:10:32.000Z" itemprop="datePublished">2021-12-13</time>
+       <time datetime="2022-08-07T14:52:41.000Z" itemprop="datePublished">2022-08-07</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">多级共享缓存解决方案</a>
+       <a class="article-link" href="/2022/08/07/%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD%E6%80%BB%E7%BB%93/">开发经验教训总结</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：<strong>多级</strong>缓存、<strong>共享</strong>缓存。附缓存框架调研：<a href="https://www.cnblogs.com/imyjy/p/15695160.html">https://www.cnblogs.com/imyjy/p/15695160.html</a></p>
+         <p>从一个个故障的血泪教训，以及代码的坏味道中，总结一些开发经验。</p>
        </div>
      
    </div>
@@ -583,8 +805,6 @@
    <div class="panel-footer">
      
       <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
      
      
    </div>
@@ -599,19 +819,113 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-08-07T14:52:41.000Z" itemprop="datePublished">2022-08-07</time>
+       <time datetime="2021-12-13T06:10:32.000Z" itemprop="datePublished">2021-12-13</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/08/07/%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD%E6%80%BB%E7%BB%93/">开发经验教训总结</a>
+       <a class="article-link" href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">多级共享缓存解决方案</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>从一个个故障的血泪教训，以及代码的坏味道中，总结一些开发经验。</p>
+         <p>本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：<strong>多级</strong>缓存、<strong>共享</strong>缓存。附缓存框架调研：<a href="https://www.cnblogs.com/imyjy/p/15695160.html">https://www.cnblogs.com/imyjy/p/15695160.html</a></p>
        </div>
      
    </div>
    
    <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2023-04-04T14:52:41.000Z" itemprop="datePublished">2023-04-04</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/">写出整洁代码的tips</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>一开始就要写整洁的代码，如果有不整洁的代码就要及时的整改，绝对不要有以后再改,以后再说的想法，因为：</p>
+<p><strong><font color="red">letter equals never!</font></strong></p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/">软引用和弱的使用场景</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>我们日常开发中一般不会使用到软引用，因此对这块可能比较陌生，看过一些使用场景，但是过一段时间可能就忘记了，这篇博客就整理一下软引用的使用场景。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">缓存淘汰算法总结</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>以前看到过一些缓存淘汰的算法，觉得很是精妙，比如大名鼎鼎的LRU、LFU、FIFO，以及mysql版的LRU，redis的缓存淘汰策略，GuavaCache的缓存淘汰算法，等等。写篇博客总结一下～～</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
      
       <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
      
@@ -643,68 +957,6 @@
    <div class="panel-footer">
      
       <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">缓存淘汰算法总结</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>以前看到过一些缓存淘汰的算法，觉得很是精妙，比如大名鼎鼎的LRU、LFU、FIFO，以及mysql版的LRU，redis的缓存淘汰策略，GuavaCache的缓存淘汰算法，等等。写篇博客总结一下～～</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/">软引用和弱的使用场景</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>我们日常开发中一般不会使用到软引用，因此对这块可能比较陌生，看过一些使用场景，但是过一段时间可能就忘记了，这篇博客就整理一下软引用的使用场景。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
      
      
    </div>
@@ -797,11 +1049,11 @@
    
    <div class="panel-footer">
      
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
       <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
      
       <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
      
      
    </div>
@@ -861,261 +1113,9 @@
    
    <div class="panel-footer">
      
-      <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
-     
       <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-      </div>
-      
-      <h3 class="panel-title mb-1x">
-        <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" title="#技术笔记"># 技术笔记</a>
-        <small class="text-muted">(Total 8 articles)</small>
-      </h3>
-      <div class="row">
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2023-03-14T07:25:43.000Z" itemprop="datePublished">2023-03-14</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2023/03/14/Http%E3%80%81TCP%E5%92%8CUDP/">Http、TCP和UDP</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>从 Http1.1 到 Http2，Http 协议一直都是使用 TCP 作为传输协议。然而在最新的 Http3把 TCP 抛弃了，而是基于 UDP 协议的基础上，在应用层实现了一个可靠的传输协议 —— QUIC。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-08-10T10:25:19.000Z" itemprop="datePublished">2022-08-10</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/08/10/protobuf%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">protobuf序列化和反序列化</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Protobuf是一个很优秀的序列化和反序列化工具，具有较高的效率，并且使用紧凑的二进制码，能够减小内存占用，但是有一些坑，需要我们能够正确的使用。这篇博客就来记录一些Protobuf的使用和一些踩过的坑。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
      
       <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2021-10-27T07:10:35.000Z" itemprop="datePublished">2021-10-27</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/">IO模型</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>本文简要介绍五种IO模型，简单分析每个IO模型所解决的问题。五个IO模型：阻塞IO，非阻塞IO，IO多路复用，信号驱动IO，异步IO。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2021-12-13T06:10:32.000Z" itemprop="datePublished">2021-12-13</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">多级共享缓存解决方案</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>本文记录一下我们项目中多级共享缓存的实现方案。这套缓存方案有两个特点：<strong>多级</strong>缓存、<strong>共享</strong>缓存。附缓存框架调研：<a href="https://www.cnblogs.com/imyjy/p/15695160.html">https://www.cnblogs.com/imyjy/p/15695160.html</a></p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-08-10T14:52:41.000Z" itemprop="datePublished">2022-08-10</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/">时间轮</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>JDK中Timer和DelayQueue可以实现定时任务和延时操作的功能，但是O(nlogn)的时间复杂度在高并发的时候存在性能瓶颈，因此Kafka、Netty、ZooKeeper、Quartz等组件都使用了时间轮作为定时器。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-06-14T07:10:35.000Z" itemprop="datePublished">2022-06-14</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/">深拷贝和浅拷贝工具</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>前几天写代码的时候，需要拷贝对象，就使用了<code>org.apache.commons.beanutils.BeanUtils</code>的<code>BeanUtils.copyProperties(Object dest, Object orig)</code>拷贝对象，后面又修改了新对象的属性，就导致原对象也被修改了，仔细一研究才发现这个工具只是进行了浅拷贝。索性整理一下现在比较常用的一些深拷贝和浅拷贝工具。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E8%B8%A9%E5%9D%91/" class="label label-default mb">踩坑</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-06-19T16:00:00.000Z" itemprop="datePublished">2022-06-20</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">缓存淘汰算法总结</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>以前看到过一些缓存淘汰的算法，觉得很是精妙，比如大名鼎鼎的LRU、LFU、FIFO，以及mysql版的LRU，redis的缓存淘汰策略，GuavaCache的缓存淘汰算法，等等。写篇博客总结一下～～</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-07-09T16:00:00.000Z" itemprop="datePublished">2022-07-10</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/">软引用和弱的使用场景</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>我们日常开发中一般不会使用到软引用，因此对这块可能比较陌生，看过一些使用场景，但是过一段时间可能就忘记了，这篇博客就整理一下软引用的使用场景。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E9%9A%8F%E7%AC%94/" class="label label-default mb">随笔</a>
-     
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
      
      
    </div>
@@ -1132,35 +1132,6 @@
         <small class="text-muted">(Total 2 articles)</small>
       </h3>
       <div class="row">
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-12-08T07:25:43.000Z" itemprop="datePublished">2022-12-08</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/">JVM虚拟机-ZGC</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>ZGC(Z Garbage Collector)是一款在JDK 11中新加入的具有实验性质的低延迟垃圾收集器。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/JVM/" class="label label-default mb">JVM</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
         
         <div class="col-md-6">
           
@@ -1191,6 +1162,35 @@
 
         </div>
         
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-12-08T07:25:43.000Z" itemprop="datePublished">2022-12-08</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/">JVM虚拟机-ZGC</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>ZGC(Z Garbage Collector)是一款在JDK 11中新加入的具有实验性质的低延迟垃圾收集器。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/JVM/" class="label label-default mb">JVM</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
       </div>
       
       <h3 class="panel-title mb-1x">
@@ -1204,14 +1204,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-09-27T08:25:19.000Z" itemprop="datePublished">2022-09-27</time>
+       <time datetime="2022-09-26T08:25:19.000Z" itemprop="datePublished">2022-09-26</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/09/27/Mysql-ShardingSphere%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-ShardingSphere分库分表</a>
+       <a class="article-link" href="/2022/09/26/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-分库分表</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p><a href="https://shardingsphere.apache.org/document/current/cn/overview/#shardingsphere-jdbc">Apache ShardingSphere</a>是一款开源的分布式数据库中间件组成的生态圈。它由Sharding-JDBC、Sharding-Proxy和Sharding-Sidecar（规划中）组成。提供标准化的数据分片、分布式事务和数据库治理功能，可适用于如Java同构、异构语言、容器、云原生等各种多样化的应用场景。</p>
+         <p>不管是IO瓶颈，还是CPU瓶颈，最终都会导致数据库的活跃连接数增加，进而逼近甚至达到数据库可承载活跃连接数的阈值。在业务Service来看就是，可用数据库连接少甚至无连接可用。</p>
        </div>
      
    </div>
@@ -1233,14 +1233,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-09-26T08:25:19.000Z" itemprop="datePublished">2022-09-26</time>
+       <time datetime="2022-09-27T08:25:19.000Z" itemprop="datePublished">2022-09-27</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/09/26/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-分库分表</a>
+       <a class="article-link" href="/2022/09/27/Mysql-ShardingSphere%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-ShardingSphere分库分表</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>不管是IO瓶颈，还是CPU瓶颈，最终都会导致数据库的活跃连接数增加，进而逼近甚至达到数据库可承载活跃连接数的阈值。在业务Service来看就是，可用数据库连接少甚至无连接可用。</p>
+         <p><a href="https://shardingsphere.apache.org/document/current/cn/overview/#shardingsphere-jdbc">Apache ShardingSphere</a>是一款开源的分布式数据库中间件组成的生态圈。它由Sharding-JDBC、Sharding-Proxy和Sharding-Sidecar（规划中）组成。提供标准化的数据分片、分布式事务和数据库治理功能，可适用于如Java同构、异构语言、容器、云原生等各种多样化的应用场景。</p>
        </div>
      
    </div>
@@ -1299,37 +1299,6 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-05-13T16:00:00.000Z" itemprop="datePublished">2022-05-14</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/dubbo/" class="label label-default mb">dubbo</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
        <time datetime="2022-05-03T16:00:00.000Z" itemprop="datePublished">2022-05-04</time>
      </div>
      <h3 itemprop="name">
@@ -1392,14 +1361,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2023-03-30T14:52:41.000Z" itemprop="datePublished">2023-03-30</time>
+       <time datetime="2023-03-29T14:52:41.000Z" itemprop="datePublished">2023-03-29</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/">kafka-2 消费者</a>
+       <a class="article-link" href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/">kafka-1 生产者</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
+         <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
        </div>
      
    </div>
@@ -1454,14 +1423,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
+       <time datetime="2022-04-15T14:52:41.000Z" itemprop="datePublished">2022-04-15</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/04/25/kafka-leader%E9%80%89%E4%B8%BE/">kafka分区leader选举</a>
+       <a class="article-link" href="/2022/04/15/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/">kafka-4 日志存储</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>分区leader的选举由控制器负责实施。</p>
+         <p>Kafka中，一个分区对应一个日志，为了防止日志过大，又引入了日志段的概念（LogSegment），将日志切分为多个日志段，以便于维护和清理。一个LogSegment对应磁盘上的一个日志文件和两个索引文件。</p>
        </div>
      
    </div>
@@ -1471,6 +1440,68 @@
       <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
      
       <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2023-03-30T14:52:41.000Z" itemprop="datePublished">2023-03-30</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/">kafka-2 消费者</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-05-13T16:00:00.000Z" itemprop="datePublished">2022-05-14</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/dubbo/" class="label label-default mb">dubbo</a>
      
      
    </div>
@@ -1516,14 +1547,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-04-19T14:52:41.000Z" itemprop="datePublished">2022-04-19</time>
+       <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/">kafka小知识</a>
+       <a class="article-link" href="/2022/04/25/kafka-leader%E9%80%89%E4%B8%BE/">kafka分区leader选举</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>多生产者、多消费者、高性能、可伸缩、有消息堆积能力的 <strong>消息队列</strong> 。</p>
+         <p>分区leader的选举由控制器负责实施。</p>
        </div>
      
    </div>
@@ -1533,68 +1564,6 @@
       <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
      
       <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-04-15T14:52:41.000Z" itemprop="datePublished">2022-04-15</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/04/15/kafka%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/">kafka日志存储</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka中，一个分区对应一个日志，为了防止日志过大，又引入了日志段的概念（LogSegment），将日志切分为多个日志段，以便于维护和清理。一个LogSegment对应磁盘上的一个日志文件和两个索引文件。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-21T10:25:19.000Z" itemprop="datePublished">2022-03-21</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/21/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
      
      
    </div>
@@ -1640,6 +1609,68 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
+       <time datetime="2022-03-21T10:25:19.000Z" itemprop="datePublished">2022-03-21</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/21/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-04-19T14:52:41.000Z" itemprop="datePublished">2022-04-19</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/">kafka小知识</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>多生产者、多消费者、高性能、可伸缩、有消息堆积能力的 <strong>消息队列</strong> 。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
        <time datetime="2022-03-22T10:25:19.000Z" itemprop="datePublished">2022-03-22</time>
      </div>
      <h3 itemprop="name">
@@ -1648,68 +1679,6 @@
      
        <div class="article-entry text-muted" itemprop="description">
          <p>本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-24T06:21:43.000Z" itemprop="datePublished">2022-03-24</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">redis学习3-过期键清除策略</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-25T03:32:23.000Z" itemprop="datePublished">2022-03-25</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习4-RDB持久化</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
        </div>
      
    </div>
@@ -1834,6 +1803,68 @@
      
        <div class="article-entry text-muted" itemprop="description">
          <p>在主从架构的redis集群中，为了保证主从服务器数据的一致性，redis通过复制和广播，尽力保证数据的一致性。本节会介绍reids复制的具体实现。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-03-25T03:32:23.000Z" itemprop="datePublished">2022-03-25</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习4-RDB持久化</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-03-24T06:21:43.000Z" itemprop="datePublished">2022-03-24</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">redis学习3-过期键清除策略</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
        </div>
      
    </div>
@@ -1883,37 +1914,6 @@
 
         </div>
         
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2023-03-29T14:52:41.000Z" itemprop="datePublished">2023-03-29</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/">kafka-1 生产者</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
       </div>
       
       <h3 class="panel-title mb-1x">
@@ -1921,37 +1921,6 @@
         <small class="text-muted">(Total 3 articles)</small>
       </h3>
       <div class="row">
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-05-13T16:00:00.000Z" itemprop="datePublished">2022-05-14</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/dubbo/" class="label label-default mb">dubbo</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
         
         <div class="col-md-6">
           
@@ -2015,6 +1984,37 @@
 
         </div>
         
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-05-13T16:00:00.000Z" itemprop="datePublished">2022-05-14</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/dubbo/" class="label label-default mb">dubbo</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
       </div>
       
       <h3 class="panel-title mb-1x">
@@ -2028,14 +2028,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2023-03-30T14:52:41.000Z" itemprop="datePublished">2023-03-30</time>
+       <time datetime="2023-03-29T14:52:41.000Z" itemprop="datePublished">2023-03-29</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/">kafka-2 消费者</a>
+       <a class="article-link" href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/">kafka-1 生产者</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
+         <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
        </div>
      
    </div>
@@ -2090,14 +2090,45 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
+       <time datetime="2022-04-15T14:52:41.000Z" itemprop="datePublished">2022-04-15</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/04/25/kafka-leader%E9%80%89%E4%B8%BE/">kafka分区leader选举</a>
+       <a class="article-link" href="/2022/04/15/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/">kafka-4 日志存储</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>分区leader的选举由控制器负责实施。</p>
+         <p>Kafka中，一个分区对应一个日志，为了防止日志过大，又引入了日志段的概念（LogSegment），将日志切分为多个日志段，以便于维护和清理。一个LogSegment对应磁盘上的一个日志文件和两个索引文件。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2023-03-30T14:52:41.000Z" itemprop="datePublished">2023-03-30</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/">kafka-2 消费者</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
        </div>
      
    </div>
@@ -2152,6 +2183,37 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
+       <time datetime="2022-04-25T14:52:41.000Z" itemprop="datePublished">2022-04-25</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/04/25/kafka-leader%E9%80%89%E4%B8%BE/">kafka分区leader选举</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>分区leader的选举由控制器负责实施。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
        <time datetime="2022-04-19T14:52:41.000Z" itemprop="datePublished">2022-04-19</time>
      </div>
      <h3 itemprop="name">
@@ -2178,68 +2240,6 @@
 
         </div>
         
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-04-15T14:52:41.000Z" itemprop="datePublished">2022-04-15</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/04/15/kafka%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/">kafka日志存储</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka中，一个分区对应一个日志，为了防止日志过大，又引入了日志段的概念（LogSegment），将日志切分为多个日志段，以便于维护和清理。一个LogSegment对应磁盘上的一个日志文件和两个索引文件。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2023-03-29T14:52:41.000Z" itemprop="datePublished">2023-03-29</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/">kafka-1 生产者</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/kafka/" class="label label-default mb">kafka</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
       </div>
       
       <h3 class="panel-title mb-1x">
@@ -2247,37 +2247,6 @@
         <small class="text-muted">(Total 10 articles)</small>
       </h3>
       <div class="row">
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-21T10:25:19.000Z" itemprop="datePublished">2022-03-21</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/21/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
         
         <div class="col-md-6">
           
@@ -2315,6 +2284,37 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
+       <time datetime="2022-03-21T10:25:19.000Z" itemprop="datePublished">2022-03-21</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/21/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
        <time datetime="2022-03-22T10:25:19.000Z" itemprop="datePublished">2022-03-22</time>
      </div>
      <h3 itemprop="name">
@@ -2323,68 +2323,6 @@
      
        <div class="article-entry text-muted" itemprop="description">
          <p>本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-24T06:21:43.000Z" itemprop="datePublished">2022-03-24</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">redis学习3-过期键清除策略</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
-     
-      <a href="/tags/redis/" class="label label-default mb">redis</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-03-25T03:32:23.000Z" itemprop="datePublished">2022-03-25</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习4-RDB持久化</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
        </div>
      
    </div>
@@ -2509,6 +2447,68 @@
      
        <div class="article-entry text-muted" itemprop="description">
          <p>在主从架构的redis集群中，为了保证主从服务器数据的一致性，redis通过复制和广播，尽力保证数据的一致性。本节会介绍reids复制的具体实现。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-03-25T03:32:23.000Z" itemprop="datePublished">2022-03-25</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/25/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习4-RDB持久化</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="label label-default mb">中间件</a>
+     
+      <a href="/tags/redis/" class="label label-default mb">redis</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-03-24T06:21:43.000Z" itemprop="datePublished">2022-03-24</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">redis学习3-过期键清除策略</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
        </div>
      
    </div>
