@@ -191,6 +191,21 @@
                 
               </p>
               <p class="item-title">
+                <a href="/2023/04/09/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/" class="title">kafka-4 日志存储</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-09T14:52:41.000Z" itemprop="datePublished">2023-04-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
                 <a href="/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/" class="title">写出整洁代码的tips</a>
               </p>
               <p class="item-date">
@@ -244,21 +259,6 @@
             </div>
           </li>
           
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2023/03/23/Dubbo%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%B0%86%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%88%90%E4%BA%86Map/" class="title">Dubbo远程调用将对象转成了Map</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-03-23T06:10:32.000Z" itemprop="datePublished">2023-03-23</time>
-              </p>
-            </div>
-          </li>
-          
       </ul>
     </div>
   </div>
@@ -272,6 +272,49 @@
   <main class="main" role="main">
   
   <div class="content article-list">
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/">红黑树</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>红黑树是特殊的AVL树(二叉平衡树)，设计红黑树的目的，就是解决平衡树的维护起来比较麻烦的问题，红黑树读取略逊于AVL，维护强于AVL，每次插入和删除的平均旋转次数应该是远小于平衡树。</p>
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/" class="article-date">
+	  <time datetime="2022-10-02T07:25:19.000Z" itemprop="datePublished">Oct 2</time>
+	</a>
+</span>
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/02/%E7%BA%A2%E9%BB%91%E6%A0%91/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 608(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 2(minutes)</span>
+	
+
+  </p>
+</article>
+
     
       <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="article-header">
@@ -647,49 +690,6 @@
     
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.9k(words)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 7(minutes)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/">深拷贝和浅拷贝工具</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>前几天写代码的时候，需要拷贝对象，就使用了<code>org.apache.commons.beanutils.BeanUtils</code>的<code>BeanUtils.copyProperties(Object dest, Object orig)</code>拷贝对象，后面又修改了新对象的属性，就导致原对象也被修改了，仔细一研究才发现这个工具只是进行了浅拷贝。索性整理一下现在比较常用的一些深拷贝和浅拷贝工具。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/" class="article-date">
-	  <time datetime="2022-06-14T07:10:35.000Z" itemprop="datePublished">Jun 14</time>
-	</a>
-</span>
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>, <a class="article-tag-link-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.5k(words)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 7(minutes)</span>
