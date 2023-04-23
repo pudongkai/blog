@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://eoccc.gitee.io/2024/03/27/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/</loc>
+    <lastmod>2023-04-23</lastmod>
+  </url>
+  <url>
+    <loc>https://eoccc.gitee.io/2022/10/27/%E7%AE%97%E6%B3%95-%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2023-04-22</lastmod>
+  </url>
+  <url>
+    <loc>https://eoccc.gitee.io/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-G1/</loc>
+    <lastmod>2023-04-19</lastmod>
+  </url>
+  <url>
+    <loc>https://eoccc.gitee.io/2022/04/25/kafka-6%20leader%E9%80%89%E4%B8%BE/</loc>
+    <lastmod>2023-04-12</lastmod>
+  </url>
+  <url>
+    <loc>https://eoccc.gitee.io/2022/04/25/kafka-5%20%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2023-04-12</lastmod>
+  </url>
+  <url>
     <loc>https://eoccc.gitee.io/2023/04/09/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/</loc>
-    <lastmod>2023-04-11</lastmod>
+    <lastmod>2023-04-12</lastmod>
   </url>
   <url>
     <loc>https://eoccc.gitee.io/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/</loc>
@@ -115,14 +135,6 @@
   <url>
     <loc>https://eoccc.gitee.io/2022/03/24/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/</loc>
     <lastmod>2022-08-30</lastmod>
-  </url>
-  <url>
-    <loc>https://eoccc.gitee.io/2022/04/25/kafka%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/</loc>
-    <lastmod>2022-08-25</lastmod>
-  </url>
-  <url>
-    <loc>https://eoccc.gitee.io/2022/04/25/kafka-leader%E9%80%89%E4%B8%BE/</loc>
-    <lastmod>2022-08-21</lastmod>
   </url>
   <url>
     <loc>https://eoccc.gitee.io/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/</loc>
