@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Queue 之 help gc | Eoccc的博客</title>
+  <meta name="description" content="java.util.concurrent.LinkedBlockingQueue#dequeue有一行代码h.next &#x3D; h 被注释上了help gc，那么它到底是怎么帮助gc的呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Queue 之 help gc">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="java.util.concurrent.LinkedBlockingQueue#dequeue有一行代码h.next &#x3D; h 被注释上了help gc，那么它到底是怎么帮助gc的呢？">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624225338150.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624225534349.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624230007345.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624230206795.png">
+<meta property="og:image" content="https://eoccc.gitee.io/.io//640-20230624231339106.png">
+<meta property="og:image" content="https://eoccc.gitee.io/.io//640-20230624231640223.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624235930226.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/640-20230625000229506.png">
+<meta property="article:published_time" content="2023-06-14T10:25:19.000Z">
+<meta property="article:modified_time" content="2023-06-24T16:05:01.540Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="技术笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624225338150.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/27/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/" class="title">协程-小试牛刀</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-27T07:10:35.000Z" itemprop="datePublished">2024-03-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" class="title">Queue 之 help gc</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-14T10:25:19.000Z" itemprop="datePublished">2023-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/04/09/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/" class="title">kafka-4 日志存储</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-09T14:52:41.000Z" itemprop="datePublished">2023-04-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/" class="title">写出整洁代码的tips</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-04T14:52:41.000Z" itemprop="datePublished">2023-04-04</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/" class="title">kafka-3 客户端</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-03T14:52:41.000Z" itemprop="datePublished">2023-04-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Queue 之 help gc" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Queue 之 help gc
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" class="article-date">
+	  <time datetime="2023-06-14T10:25:19.000Z" itemprop="datePublished">2023-06-14</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 484(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p><code>java.util.concurrent.LinkedBlockingQueue#dequeue</code>有一行代码<code>h.next = h</code> 被注释上了help gc，那么它到底是怎么帮助gc的呢？</p>
+<span id="more"></span>
+<p><code>LinkedBlockingQueue#dequeue</code>源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> E <span class="title function_">dequeue</span><span class="params">()</span> &#123;</span><br><span class="line">    Node&lt;E&gt; h = head;</span><br><span class="line">    Node&lt;E&gt; first = h.next;</span><br><span class="line">    h.next = h; <span class="comment">// help GC</span></span><br><span class="line">    head = first;</span><br><span class="line">    <span class="type">E</span> <span class="variable">x</span> <span class="operator">=</span> first.item;</span><br><span class="line">    first.item = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码移除并返回了队列的头节点，具体分成几个步骤：</p>
+<ol>
+<li>h指向head节点</li>
+<li>first指向第一个node</li>
+</ol>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624225338150.png" alt="640-20230624225338150.png"></p>
+<ol start="3">
+<li>h.next 指向自己 (help gc)</li>
+</ol>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624225534349.png" alt="640-20230624225534349.png"></p>
+<ol start="4">
+<li>将 head 指向 first</li>
+<li>取到 first 的 value （作为返回值）</li>
+<li>将 first 的value 置为 null</li>
+</ol>
+<p>这段代码执行完之后，链表的变化：</p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624230007345.png" alt="640-20230624230007345.png"></p>
+<p>那么，如果说没有 <code>h.next = h</code> 这行代码，执行之后会变成：</p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624230206795.png" alt="640-20230624230206795.png"></p>
+<p>这时，头节点已经没有任何引用指向它了，也就是GC不可达，理论上会被垃圾回收器回收。</p>
+<p>JVM大佬讲了，如果没有这行代码，会造成跨代引用，从而导致不可回收（直到发生FGC），视频第23分钟：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.infoq.com/presentations/twitter-services/</span><br></pre></td></tr></table></figure>
+<p><strong>过程分析：</strong></p>
+<ol>
+<li>我们创建了一个队列，由于队列是一个大对象，或者生命比较长，被分配在了老年代，合情合理</li>
+<li>往队列里面添加了两个新元素A、B。由于是新对象，所以被分配在了年轻代，完全ok</li>
+</ol>
+<p><img src="/.io//640-20230624231339106.png" alt="图片"></p>
+<ol start="3">
+<li>然后插入新的元素C、D、E，干掉A、B。这时A、B已经GC不可达，会被垃圾回收器回收，没问题</li>
+</ol>
+<p><img src="/.io//640-20230624231640223.png" alt="图片"></p>
+<ol start="3">
+<li>经过几轮的ygc之后，C节点由于一直没有被移除，晋升到老年代</li>
+</ol>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/640-20230624235930226.png" alt="640-20230624235930226.png"></p>
+<ol start="4">
+<li>这时C出队，由于C在老年代，ygc时不会被回收，直到fgc</li>
+<li>如果接着出队D，此时老年代的C还指向D，D也不会被回收</li>
+</ol>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/640-20230625000229506.png" alt="640-20230625000229506.png"></p>
+<p>因此，在出队的时候，一定需要断开头节点和下一个节点的连接。</p>
+<p><strong>那么为什么一定要指向它自己呢？改成<code>h.next = null</code>行不行？</strong></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" title="Queue 之 help gc" target="_blank" rel="external">https://eoccc.gitee.io/2023/06/14/Queue 之 help gc/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2024/03/27/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/" title="协程-小试牛刀"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/04/09/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/" title="kafka-4 日志存储"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

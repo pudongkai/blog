@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>DDD大杂烩 | Eoccc的博客</title>
+  <meta name="description" content="DDD领域。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDD大杂烩">
+<meta property="og:url" content="https://eoccc.gitee.io/2022/06/04/DDD-1%20%E9%A2%86%E5%9F%9F/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="DDD领域。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-04T07:25:19.000Z">
+<meta property="article:modified_time" content="2023-06-24T09:41:06.318Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="DDD">
+<meta property="article:tag" content="随笔">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2022/06/04/DDD-1%20%E9%A2%86%E5%9F%9F/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/27/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/" class="title">协程-小试牛刀</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-27T07:10:35.000Z" itemprop="datePublished">2024-03-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" class="title">Queue 之 help gc</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-14T10:25:19.000Z" itemprop="datePublished">2023-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/04/09/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/" class="title">kafka-4 日志存储</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-09T14:52:41.000Z" itemprop="datePublished">2023-04-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/" class="title">写出整洁代码的tips</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-04T14:52:41.000Z" itemprop="datePublished">2023-04-04</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/" class="title">kafka-3 客户端</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-03T14:52:41.000Z" itemprop="datePublished">2023-04-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="toc-number">1.</span> <span class="toc-text"> 设计的两个阶段</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text"> 领域模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%90%E5%9F%9F"><span class="toc-number">2.1.</span> <span class="toc-text"> 子域</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%AD%90%E5%9F%9F"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 核心子域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%AD%90%E5%9F%9F"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 通用子域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%AF%E6%92%91%E5%AD%90%E5%9F%9F"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 支撑子域</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%90%E7%95%8C%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">2.2.</span> <span class="toc-text"> 限界上下文</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-DDD-1 领域" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      DDD大杂烩
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/04/DDD-1%20%E9%A2%86%E5%9F%9F/" class="article-date">
+	  <time datetime="2022-06-04T07:25:19.000Z" itemprop="datePublished">2022-06-04</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/DDD/" rel="tag">DDD</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/04/DDD-1%20%E9%A2%86%E5%9F%9F/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.5k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 5(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>DDD领域。</p>
+<span id="more"></span>
+<h1 id="设计的两个阶段"><a class="markdownIt-Anchor" href="#设计的两个阶段"></a> 设计的两个阶段</h1>
+<p>领域驱动设计一般分为两个阶段：</p>
+<blockquote>
+<ol>
+<li>以一种领域专家、设计人员、开发人员都能理解的“通用语言”作为相互交流的工具，在不断交流的过程中发现和挖出一些主要的领域概念，然后将这些概念设计成一个领域模型；</li>
+<li>由领域模型驱动软件设计，用代码来表现该领域模型。领域需求的最初细节，在功能层面通过领域专家的讨论得出。</li>
+</ol>
+</blockquote>
+<h1 id="领域模型"><a class="markdownIt-Anchor" href="#领域模型"></a> 领域模型</h1>
+<p>领域模型具有以下特点：</p>
+<blockquote>
+<ol>
+<li>领域模型是对具有某个边界的领域的一个抽象，反映了领域内用户业务需求的本质；领域模型是有边界的，只反应了我们在领域内所关注的部分；</li>
+<li>领域模型只反映业务，和任何技术实现无关；领域模型不仅能反映领域中的一些实体概念，如货物，书本，应聘记录，地址，等；还能反映领域中的一些过程概念，如资金转账，等；</li>
+<li>领域模型确保了我们的软件的业务逻辑都在一个模型中，都在一个地方；这样对提高软件的可维护性，业务可理解性以及可重用性方面都有很好的帮助；</li>
+<li>领域模型能够帮助开发人员相对平滑地将领域知识转化为软件构造；</li>
+<li>领域模型贯穿软件分析、设计，以及开发的整个过程；领域专家、设计人员、开发人员通过领域模型进行交流，彼此共享知识与信息；因为大家面向的都是同一个模型，所以可以防止需求走样，可以让软件设计开发人员做出来的软件真正满足需求；</li>
+<li>要建立正确的领域模型并不简单，需要领域专家、设计、开发人员积极沟通共同努力，然后才能使大家对领域的认识不断深入，从而不断细化和完善领域模型；</li>
+<li>为了让领域模型看的见，我们需要用一些方法来表示它；图是表达领域模型最常用的方式，但不是唯一的表达方式，代码或文字描述也能表达领域模型；</li>
+<li>领域模型是整个软件的核心，是软件中最有价值和最具竞争力的部分；设计足够精良且符合业务需求的领域模型能够更快速的响应需求变化；</li>
+</ol>
+</blockquote>
+<h2 id="子域"><a class="markdownIt-Anchor" href="#子域"></a> 子域</h2>
+<p>更加细分的子域，为了实现更加具体的划分，我们可以将领域划分为多个子域，每个子域都是一个相对独立的、具有完整业务含义的部分。</p>
+<p>如我们可以将电商领域划分为商品域、订单域、支付域等子域。</p>
+<p>子域的划分会影响到系统的划分，以及人员的分匹配。</p>
+<h3 id="核心子域"><a class="markdownIt-Anchor" href="#核心子域"></a> 核心子域</h3>
+<p>核心域是整个业务系统的核心，所有的业务都要围绕着核心域展开。</p>
+<h3 id="通用子域"><a class="markdownIt-Anchor" href="#通用子域"></a> 通用子域</h3>
+<p>通用子域不属于任何业务子域，它包含一些通用的业务逻辑和数据，可以为其他子域提供一些基础的支持和服务。一些通用子域的例子：</p>
+<ol>
+<li>身份认证和授权</li>
+<li>日志和监控</li>
+<li>缓存和数据库</li>
+<li>消息队列</li>
+<li>数据库连接池和线程池管理</li>
+</ol>
+<h3 id="支撑子域"><a class="markdownIt-Anchor" href="#支撑子域"></a> 支撑子域</h3>
+<p>为特定业务领域提供一些基础的支持和服务的子域。通常不直接参与业务的执行流程，但是对整个业务领域的运作至关重要。一些支撑子域的例子：</p>
+<ol>
+<li>数据库和数据存储</li>
+<li>配置管理</li>
+<li>文件系统和对象存储</li>
+</ol>
+<p>通用子域和支撑子域的区别在于它们的职责和作用不同。通用子域是为整个业务领域提供基础的支持和服务，而支撑子域是为特定业务领域提供支撑和服务</p>
+<h2 id="限界上下文"><a class="markdownIt-Anchor" href="#限界上下文"></a> 限界上下文</h2>
+<p>限界上下文（Bounded Context），用于划分和组织领域模型和相关业务逻辑的边界。将复杂的领域分解为更小的、可管理的部分，提供了一种清晰的组织结构和语义模型。它帮助团队更好地理解和交流业务需求，减少了复杂性和混乱，并支持了领域驱动设计的实施。</p>
+<p>限界上下文具有以下特点和作用：</p>
+<ol>
+<li>边界定义：限界上下文明确定义了一个领域内的边界，将其与其他上下文和子域区分开来。这个边界可以基于业务概念、职责、组织结构或者其他因素来确定。</li>
+<li>语义一致性：在一个限界上下文内，领域模型和相关的业务规则应该是一致的，并与该上下文的边界相匹配。这种语义一致性有助于提高团队的沟通和理解。</li>
+<li>解耦合与自治性：不同的限界上下文应该是相对独立的，可以有自己的内部模型、业务逻辑和数据存储方式。这种解耦合和自治性可以减少系统的复杂性，使得不同上下文的演化和维护更加独立和可控。</li>
+<li>上下文映射：当多个限界上下文之间存在关联或交互时，上下文映射用于定义它们之间的关系和通信方式。这有助于确保不同上下文之间的一致性和协作。</li>
+<li>抽象与实现：限界上下文将抽象的领域模型映射到具体的实现中，包括数据库模式、编程语言、框架等。这种映射使得领域模型能够在具体的技术栈下得以实现和运行。</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2022/06/04/DDD-1%20%E9%A2%86%E5%9F%9F/" title="DDD大杂烩" target="_blank" rel="external">https://eoccc.gitee.io/2022/06/04/DDD-1 领域/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/06/06/DDD-2%20%E6%A6%82%E5%BF%B5%E5%A4%A7%E6%9D%82%E7%83%A9/" title="DDD大杂烩"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/" title="dubbo优雅停机"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
