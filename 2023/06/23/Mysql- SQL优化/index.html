@@ -22,7 +22,7 @@
   <meta name="description" content="数据库插入也有门道。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql- SQL优化">
-<meta property="og:url" content="https://eoccc.gitee.io/2023/06/23/Mysql-%20%E6%8F%92%E5%85%A5/index.html">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
 <meta property="og:description" content="数据库插入也有门道。">
 <meta property="og:locale" content="en_US">
@@ -32,13 +32,13 @@
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702173309657.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702173616680.png">
 <meta property="article:published_time" content="2023-06-23T08:25:19.000Z">
-<meta property="article:modified_time" content="2023-07-02T09:47:20.117Z">
+<meta property="article:modified_time" content="2023-07-02T10:28:18.754Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172225136-8289876.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2023/06/23/Mysql-%20%E6%8F%92%E5%85%A5/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -202,7 +202,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/23/Mysql-%20%E6%8F%92%E5%85%A5/" class="title">Mysql- SQL优化</a>
+                <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" class="title">Mysql- SQL优化</a>
               </p>
               <p class="item-date">
                 <time datetime="2023-06-23T08:25:19.000Z" itemprop="datePublished">2023-06-23</time>
@@ -285,14 +285,14 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E4%BC%98%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text"> 插入优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5"><span class="toc-number">1.1.</span> <span class="toc-text"> 插入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E5%88%86%E8%A3%82"><span class="toc-number">1.2.</span> <span class="toc-text"> 页分裂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E5%90%88%E5%B9%B6"><span class="toc-number">1.3.</span> <span class="toc-text"> 页合并</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E9%94%AE%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text"> 主键的优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#order-by-%E4%BC%98%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text"> order by 优化</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E4%BC%98%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text"> 插入优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5"><span class="toc-number">1.1.</span> <span class="toc-text"> 插入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E5%88%86%E8%A3%82"><span class="toc-number">1.2.</span> <span class="toc-text"> 页分裂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E5%90%88%E5%B9%B6"><span class="toc-number">1.3.</span> <span class="toc-text"> 页合并</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E9%94%AE%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text"> 主键的优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#order-by-%E4%BC%98%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text"> order by 优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#group-by-%E4%BC%98%E5%8C%96"><span class="toc-number">4.</span> <span class="toc-text"> group by 优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#limt-%E4%BC%98%E5%8C%96"><span class="toc-number">5.</span> <span class="toc-text"> limt 优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#count-%E4%BC%98%E5%8C%96"><span class="toc-number">6.</span> <span class="toc-text"> count 优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#update-%E4%BC%98%E5%8C%96"><span class="toc-number">7.</span> <span class="toc-text"> update 优化</span></a></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-Mysql- 插入" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-Mysql- SQL优化" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
@@ -307,7 +307,7 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2023/06/23/Mysql-%20%E6%8F%92%E5%85%A5/" class="article-date">
+	<a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" class="article-date">
 	  <time datetime="2023-06-23T08:25:19.000Z" itemprop="datePublished">2023-06-23</time>
 	</a>
 </span>
@@ -321,10 +321,10 @@
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/23/Mysql-%20%E6%8F%92%E5%85%A5/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 496(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 899(words)</span>
 	
 	
 
@@ -386,6 +386,7 @@
 <li>业务操作时，尽量不要修改主键</li>
 </ol>
 <h1 id="order-by-优化"><a class="markdownIt-Anchor" href="#order-by-优化"></a> order by 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">order</span> <span class="keyword">by</span> age;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>
 <p>Using filesort：不直接通过索引返回排序结果的排序。通过索引或全表扫描，读取满足条件的记录，然后在排序缓冲区sort buffer中排序。</p>
@@ -394,6 +395,51 @@
 <p>Using index：通过有序索引顺序扫描直接返回有序记录，不需要额外排序。</p>
 </li>
 </ul>
+<ol>
+<li>
+<p>如果索引没有覆盖排序字段，会回表查询，使用filesort排序</p>
+</li>
+<li>
+<p>如果我们通过多个字断进行排序，而且排序方式不一样，会导致不使用索引：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name,phone,age <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">order</span> <span class="keyword">by</span> phone <span class="keyword">asc</span>, age <span class="keyword">desc</span>;</span><br></pre></td></tr></table></figure>
+<p>我们可以对需要排序的字断以及排序方式建立索引：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> index idx_phone_age <span class="keyword">user</span>(phone <span class="keyword">asc</span>, age <span class="keyword">desc</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>总结：</p>
+<blockquote>
+<ol>
+<li>根据排序字段建立合适的索引，多字段排序时，遵循最左前缀原则</li>
+<li>使用覆盖索引</li>
+<li>多字段排序时，一个升序一个降序，创建联合索引时制定排序规则</li>
+<li>不可避免filesort时，可以适当增大排序缓冲区sort_buffer_size（默认256kb）</li>
+</ol>
+</blockquote>
+<h1 id="group-by-优化"><a class="markdownIt-Anchor" href="#group-by-优化"></a> group by 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">group</span> <span class="keyword">by</span> age;</span><br></pre></td></tr></table></figure>
+<p>Using index：使用索引进行分组</p>
+<p>Using temporary：使用临时表进行分组。</p>
+<blockquote>
+<ol>
+<li>进行分组操作时，使用索引提高效率</li>
+<li>通过多字段进行分组时，遵循最左前缀原则</li>
+</ol>
+</blockquote>
+<h1 id="limt-优化"><a class="markdownIt-Anchor" href="#limt-优化"></a> limt 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tb_sku limit <span class="number">100000</span>, <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>当表的数据量比较大了，对越靠后的记录进行limt操作时，效率越低。</p>
+<p>通过覆盖索引 + 字查询进行优化：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> s.<span class="operator">*</span> form tb_sku s, (<span class="keyword">select</span> id <span class="keyword">from</span> tb_sku limit <span class="number">100000</span>, <span class="number">10</span>) a <span class="keyword">where</span> s.id<span class="operator">=</span>a.id;</span><br></pre></td></tr></table></figure>
+<h1 id="count-优化"><a class="markdownIt-Anchor" href="#count-优化"></a> count 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> tb_sku;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>MyIsam 记录了表的总行数，可以直接返回</li>
+<li>InnoDb 需要查询所有记录，进行计数</li>
+</ul>
+<p>优化：自己计数，如在redis中自己维护一个计数。</p>
+<h1 id="update-优化"><a class="markdownIt-Anchor" href="#update-优化"></a> update 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> age<span class="operator">=</span><span class="number">20</span> <span class="keyword">where</span> name<span class="operator">=</span><span class="string">&#x27;小明&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>如果where后面的条件没有使用索引，innodb会锁住整个表。</p>
 
       
     </div>
@@ -403,7 +449,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2023/06/23/Mysql-%20%E6%8F%92%E5%85%A5/" title="Mysql- SQL优化" target="_blank" rel="external">https://eoccc.gitee.io/2023/06/23/Mysql- 插入/</a>
+      <a href="https://eoccc.gitee.io/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" title="Mysql- SQL优化" target="_blank" rel="external">https://eoccc.gitee.io/2023/06/23/Mysql- SQL优化/</a>
     </li>
     
     <li class="post-copyright-license">
