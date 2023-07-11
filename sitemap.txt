@@ -1,3 +1,5 @@
+https://eoccc.gitee.io/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8G1/
+https://eoccc.gitee.io/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8ZGC/
 https://eoccc.gitee.io/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/
 https://eoccc.gitee.io/2022/06/16/SOLID%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/
 https://eoccc.gitee.io/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/
@@ -15,7 +17,6 @@ https://eoccc.gitee.io/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/
 https://eoccc.gitee.io/2021/12/13/%E5%A4%9A%E7%BA%A7%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/
 https://eoccc.gitee.io/2022/04/25/kafka-6%20leader%E9%80%89%E4%B8%BE/
 https://eoccc.gitee.io/2022/10/27/%E7%AE%97%E6%B3%95-%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/
-https://eoccc.gitee.io/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-G1/
 https://eoccc.gitee.io/2022/04/25/kafka-5%20%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/
 https://eoccc.gitee.io/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/
 https://eoccc.gitee.io/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/
@@ -26,7 +27,6 @@ https://eoccc.gitee.io/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/
 https://eoccc.gitee.io/2022/04/02/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/
 https://eoccc.gitee.io/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-jdk%E5%B7%A5%E5%85%B7/
 https://eoccc.gitee.io/2021/02/12/Integer%E7%BC%93%E5%AD%98/
-https://eoccc.gitee.io/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/
 https://eoccc.gitee.io/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/
 https://eoccc.gitee.io/2022/08/07/%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD%E6%80%BB%E7%BB%93/
 https://eoccc.gitee.io/2022/09/27/Mysql-ShardingSphere%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/

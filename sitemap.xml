@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://eoccc.gitee.io/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8G1/</loc>
+    
+    <lastmod>2023-07-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://eoccc.gitee.io/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8ZGC/</loc>
+    
+    <lastmod>2023-07-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://eoccc.gitee.io/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/</loc>
     
     <lastmod>2023-07-11</lastmod>
@@ -155,15 +173,6 @@
   </url>
   
   <url>
-    <loc>https://eoccc.gitee.io/2022/12/04/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-G1/</loc>
-    
-    <lastmod>2023-04-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://eoccc.gitee.io/2022/04/25/kafka-5%20%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/</loc>
     
     <lastmod>2023-04-12</lastmod>
@@ -248,15 +257,6 @@
     <loc>https://eoccc.gitee.io/2021/02/12/Integer%E7%BC%93%E5%AD%98/</loc>
     
     <lastmod>2023-03-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://eoccc.gitee.io/2022/12/08/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA-ZGC/</loc>
-    
-    <lastmod>2023-02-07</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
