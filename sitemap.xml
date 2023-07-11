@@ -527,14 +527,14 @@
   </url>
   
   <url>
-    <loc>https://eoccc.gitee.io/tags/JVM/</loc>
+    <loc>https://eoccc.gitee.io/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2023-07-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://eoccc.gitee.io/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/</loc>
+    <loc>https://eoccc.gitee.io/tags/JVM/</loc>
     <lastmod>2023-07-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
