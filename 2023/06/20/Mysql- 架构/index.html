@@ -29,10 +29,10 @@
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/28d0034482b249a98168aed306faae72.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/20230701172516383.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/v2-e44f8f9761bdbceca13dff1df91a2232_1440w.jpg">
-<meta property="og:image" content="https://eoccc.gitee.io/.io//image-20230710151651642.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230710151651642.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230710154147502.png">
 <meta property="article:published_time" content="2023-06-20T08:25:19.000Z">
-<meta property="article:modified_time" content="2023-07-11T02:09:00.872Z">
+<meta property="article:modified_time" content="2023-07-11T06:55:07.479Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -204,9 +204,6 @@
               <p class="item-title">
                 <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" class="title">Mysql- SQL优化</a>
               </p>
-              <p class="item-date">
-                <time datetime="2023-06-23T08:25:19.000Z" itemprop="datePublished">2023-06-23</time>
-              </p>
             </div>
           </li>
           
@@ -218,9 +215,6 @@
               </p>
               <p class="item-title">
                 <a href="/2023/06/20/Mysql-%20%E6%9E%B6%E6%9E%84/" class="title">Mysql- 架构</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-06-20T08:25:19.000Z" itemprop="datePublished">2023-06-20</time>
               </p>
             </div>
           </li>
@@ -234,9 +228,6 @@
               <p class="item-title">
                 <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" class="title">Queue 之 help gc</a>
               </p>
-              <p class="item-date">
-                <time datetime="2023-06-14T10:25:19.000Z" itemprop="datePublished">2023-06-14</time>
-              </p>
             </div>
           </li>
           
@@ -249,9 +240,6 @@
               <p class="item-title">
                 <a href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/" class="title">协程-小试牛刀</a>
               </p>
-              <p class="item-date">
-                <time datetime="2023-06-06T14:53:04.949Z" itemprop="datePublished">2023-06-06</time>
-              </p>
             </div>
           </li>
           
@@ -263,9 +251,6 @@
               </p>
               <p class="item-title">
                 <a href="/2023/04/09/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/" class="title">kafka-4 日志存储</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-04-09T14:52:41.000Z" itemprop="datePublished">2023-04-09</time>
               </p>
             </div>
           </li>
@@ -425,7 +410,7 @@ Mysql支持的存储引擎：InnoDB、MyISAM、MEMORY、CSV、BLACKHOLE、FEDERA
 <p>回滚id（Roll pointer）：每次对记录进行修改时，innoDB会把旧版写入到undo log，然后通过Roll pointer隐藏列指向旧版的记录。</p>
 </blockquote>
 <h2 id="内存架构"><a class="markdownIt-Anchor" href="#内存架构"></a> 内存架构</h2>
-<img src="/.io//image-20230710151651642.png" alt="image-20230710151651642" style="zoom:50%;">
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230710151651642.png" alt="image-20230710151651642" style="zoom:50%;">
 <h3 id="缓冲池"><a class="markdownIt-Anchor" href="#缓冲池"></a> 缓冲池</h3>
 <p>缓冲池（Buffer Pool）是主内存中的一个区域，用于存储磁盘上经常进行操作的数据，在执行增删改查操作时，先操作缓冲池中的数据（若缓冲池中没有需要的数据，则从磁盘加载并缓存），然后再以一定的频率刷新到磁盘，从而减少磁盘IO，提升效率。</p>
 <p>缓冲池中的数据以page为单位，并使用双向链表（page内部的记录使用单向链表连接）管理数据。根据page的状态，将page分为三种：</p>
