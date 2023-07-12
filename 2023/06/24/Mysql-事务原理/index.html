@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Mysql-事务原理 | Eoccc的博客</title>
+  <meta name="description" content="事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作 要么同时成功，要么同时失败。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql-事务原理">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作 要么同时成功，要么同时失败。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713010333701.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713010827085.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713015125895.png">
+<meta property="article:published_time" content="2023-06-24T08:25:19.000Z">
+<meta property="article:modified_time" content="2023-07-12T18:47:51.433Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713010333701.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/" class="title">Mysql-事务原理</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" class="title">Mysql- SQL优化</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/20/Mysql-%20%E6%9E%B6%E6%9E%84/" class="title">Mysql-架构</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" class="title">Queue 之 help gc</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/" class="title">协程-小试牛刀</a>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text"> 事务的特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E6%80%A7%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text"> 持久性的实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text"> 原子性的实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mvcc"><span class="toc-number">1.3.</span> <span class="toc-text"> MVCC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E5%BC%8F%E5%AD%97%E6%AE%B5"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 隐式字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undo-log%E5%9C%A8mvcc%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text"> Undo Log在MVCC中的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read-view%E5%9C%A8mvcc%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.3.</span> <span class="toc-text"> Read View在MVCC中的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rc%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.4.</span> <span class="toc-text"> RC隔离级别的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rr%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.5.</span> <span class="toc-text"> RR隔离级别的原理</span></a></li></ol></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Mysql-事务原理" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mysql-事务原理
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/" class="article-date">
+	  <time datetime="2023-06-24T08:25:19.000Z" itemprop="datePublished">2023-06-24</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.1k(words)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作<br>
+要么同时成功，要么同时失败。</p>
+<span id="more"></span>
+<h1 id="事务的特性"><a class="markdownIt-Anchor" href="#事务的特性"></a> 事务的特性</h1>
+<blockquote>
+<p>Atomic（原子性）：事务中的操作，要么都成功，都失败</p>
+<p>Consistency（一致性）：数据从一个正确的状态到另一个正确的状态</p>
+<p>Isolation（隔离性）：事务之间互相影响，保证同时执行的事务互相之间没有干扰</p>
+<p>Durability（持久性）：存到磁盘中，即使机器断电，数据还是有的</p>
+</blockquote>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713010333701.png" alt="image-20230713010333701" style="zoom:45%;">
+<h2 id="持久性的实现原理"><a class="markdownIt-Anchor" href="#持久性的实现原理"></a> 持久性的实现原理</h2>
+<p><strong>Redo Log</strong></p>
+<blockquote>
+<p>重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务的持久性。</p>
+<p>该日志文件由两部分组成：<strong>重做日志缓冲</strong>(redo log buffer)以及<strong>重做日志文件</strong>(redo log file)。前者是在内存中，后者在磁盘中。当事务提交之后会把所有修改信息都存到该日志文件中，用于在刷新脏页到磁盘发生错误时进行数据恢复使用。</p>
+</blockquote>
+<p>当提交一个事务时，Mysql会先将事务对记录的修改缓存在Buffer Pool中，然后以一定的频率刷到磁盘。当服务器发生错误的时候，会导致Buffer Pool中的脏页没有刷到磁盘，造成更新丢失。</p>
+<p>在InnoDB中，有两个参数可以控制redo log的刷新频率：</p>
+<blockquote>
+<ol>
+<li>innodb_log_buffer_size：指定redo log缓冲池的大小。当缓冲池中的数据达到一定量时，就会触发刷新操作</li>
+<li>innodb_flush_log_at_trx_commit：指定redo log的刷新策略。有三个可选值：
+<ul>
+<li>0：表示不进行redo log的刷新操作，性能最高，但是可能会丢失一定量的数据；</li>
+<li>1：表示每次提交事务都会将redo log缓冲池中的数据刷新到磁盘上（默认值），保证数据的持久性，但是性能相对较低；</li>
+<li>2：表示每次提交事务时，只将redo log缓冲池中的数据写入操作系统缓存中，然后由操作系统异步刷新到磁盘上。这个选项可以提高性能，但是可能会丢失一些数据。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<p>为了解决这个问题，Mysql提交一个事务时，同时会把事务造成的数据变化缓存在Redolog Buffer中，然后刷到redolog文件中。当系统发生错误的时候，可以从redolog中恢复记录（当刷新策略配置为1时，最多丢失一条记录）。</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713010827085.png" alt="image-20230713010827085" style="zoom:50%;">
+<h2 id="原子性的实现原理"><a class="markdownIt-Anchor" href="#原子性的实现原理"></a> 原子性的实现原理</h2>
+<p><strong>Undo log</strong></p>
+<blockquote>
+<p>回滚日志，用于记录数据被修改前的信息，作用包含两个：<strong>回滚</strong> 和 <strong>MVCC</strong>（多版本并发控制）</p>
+<p>undo log和redo log记录物理日志不一样，它是逻辑日志。可以认为当delete一条记录时，undo log中会记录一条对应的insert记录，反之亦然，当update一条记录时，它记录一条对应相反的update记录。当执行rollback时，就可以从undo log中的逻辑记录读取到相应的内容并进行回滚。</p>
+<p>Undo log销毁：undo log在事务执行时产生，事务提交时，并不会立即删除undo log，因为这些日志可能还用于MVCC</p>
+<p>Undo log存储：undo log采用段的方式进行管理和记录，存放在 rolback segment 回滚段中，内部包含1024个undo log segment</p>
+</blockquote>
+<h2 id="mvcc"><a class="markdownIt-Anchor" href="#mvcc"></a> MVCC</h2>
+<p>MVCC实现了事务的隔离性。指维护一个数据的多个版本，使得读写操作没有冲突。MVCC的具体实现，还需要依赖于数据库记录中的三个隐式字段、undo log日志、readView。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">隔离级别</th>
+<th style="text-align:center">脏读</th>
+<th style="text-align:center">不可重复读</th>
+<th style="text-align:center">幻读</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Read Uncommitted</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td>一个事务可以读取另一个未提交事务的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">Read Committed</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td>一个事务可以读到另一个事务提交后的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">Repeatable Read</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">√</td>
+<td>innoDB默认，在一个事务中多次读取的数据保持一致</td>
+</tr>
+<tr>
+<td style="text-align:center">Serializable</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td>事务串行化顺序执行，每次读取数据都会加锁，效率低下</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>更新丢失:</strong> 两个事务同时更新一行数据，最后一个事务的更新会覆盖掉第一个事务的更新，从而导致第一个事务更新的数据丢失，这是由于没有加锁造成的；<br>
+<strong>脏读:</strong> 事务读取尚未提交的数据;<br>
+<strong>不可重复读:</strong> 更新行导致，在同一事务中，两次读取同一数据，得到内容不同，也就是有其他事务更改了这些数据<br>
+<strong>幻读:</strong> 插入行导致，一个事务在执行过程中读取到了另一个事务已提交的插入数据。</p>
+</blockquote>
+<h3 id="隐式字段"><a class="markdownIt-Anchor" href="#隐式字段"></a> 隐式字段</h3>
+<p>InnoDB在创建字段时，除了我们显式指定的字段，还会为我们添加三个隐式的字段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">隐式字段</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">DB_TRX_ID</td>
+<td>保存最近修改事务ID，记录插入这条记录或最后一次修改该记录的事务ID</td>
+</tr>
+<tr>
+<td style="text-align:center">DB_ROLL_PTR</td>
+<td>回滚指针，指向这条记录的上一个版本，用于配合undo log，指向上一个版本</td>
+</tr>
+<tr>
+<td style="text-align:center">DB_ROW_ID</td>
+<td>隐藏主键，如果表结构没有指定主键，将会生成该隐藏字段</td>
+</tr>
+</tbody>
+</table>
+<h3 id="undo-log在mvcc中的作用"><a class="markdownIt-Anchor" href="#undo-log在mvcc中的作用"></a> Undo Log在MVCC中的作用</h3>
+<p>回滚日志，在insert、update、delete的时候产生的便于数据回滚的日志。<br>
+当insert的时候，产生的undo log日志只在回滚时需要，在事务提交后，可被立即删除。<br>
+而update、delete的时候，产生的undo log日志不仅在回滚时需要，在快照读时也需要，不会立即被删除。</p>
+<p>不同事务或相同事务对同一条记录进行修改，会导致该记录的undo log生成一条记录版本链表，链表的头部是最新的旧记录，链表尾部是最早的旧记录：</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713015125895.png" alt="image-20230713015125895" style="zoom:50%;">
+<h3 id="read-view在mvcc中的作用"><a class="markdownIt-Anchor" href="#read-view在mvcc中的作用"></a> Read View在MVCC中的作用</h3>
+<p>ReadView (读视图)是 快照读时MVCC提取数据的依据，记录并维护系统当前活跃的事务(未提交的) id。<br>
+ReadView中包含了四个核心字段:</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m_ids</td>
+<td>当前活跃的事务ID集合</td>
+</tr>
+<tr>
+<td>min_trx_id</td>
+<td>当前活跃的最小活跃事务ID</td>
+</tr>
+<tr>
+<td>max_trx_id</td>
+<td>预分配事务ID，当前最大事务ID+1（因为事务ID是自增的）</td>
+</tr>
+<tr>
+<td>creator_trx_id</td>
+<td>ReadView创建者的事务ID</td>
+</tr>
+</tbody>
+</table>
+<p>当隔离级别是RC时，版本数据链的访问规则（当前事务ID：trx_id）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">A[版本数据链的访问规则]--&gt;B[trx_id == creator_trx_id]</span><br><span class="line">B--&gt;E[可以访问--说明这个版本的数据是当前事务修改的]</span><br><span class="line">A--&gt;C[trx_id &lt; min_trx_id]</span><br><span class="line">C--&gt;F[可以访问--说明这个版本已经提交了]</span><br><span class="line">A--&gt;D[trx_id &gt; max_trx_id]</span><br><span class="line">D--&gt;G[不可以访问--说明这个事务还没提交]</span><br><span class="line">A--&gt;H[min_trx_id &lt;= trx_id &lt;= max_trx_id]</span><br><span class="line">H--&gt;I[trx_id在m_ids集合中]</span><br><span class="line">I--&gt;K[不可以访问--说明这个事务还处于活跃状态没提交]</span><br><span class="line">H--&gt;J[trx_id不在m_ids集合中]</span><br><span class="line">J--&gt;L[可以访问--说明这个事务已提交]</span><br></pre></td></tr></table></figure>
+<h3 id="rc隔离级别的原理"><a class="markdownIt-Anchor" href="#rc隔离级别的原理"></a> RC隔离级别的原理</h3>
+<p>每次执行快照读都会生成一个readview。</p>
+<h3 id="rr隔离级别的原理"><a class="markdownIt-Anchor" href="#rr隔离级别的原理"></a> RR隔离级别的原理</h3>
+<ul>
+<li>
+<p>仅第一次执行快照读时生成一个readview，后续复用readview。</p>
+</li>
+<li>
+<p>使用间隙锁/临键锁防止产生不可重复读：</p>
+<blockquote>
+<ol>
+<li>
+<p>索引上的等值查询（唯一索引），给不存在的记录加锁时，优化为间隙锁</p>
+<p>因为索引不存在，索引只能加间隙锁，防止在事务执行过程中其他事务插入索引相同的记录</p>
+</li>
+<li>
+<p>索引上的等值查询（普通索引），向右遍历时最后一个值不满足查询需求时，next-key lock 退化为间隙锁</p>
+<p>因为普通索引是非唯一索引，如果查数据的时候另一个事务插入了一条索引一样的数据，就会产生幻读</p>
+</li>
+<li>
+<p>索引上的范围查询（唯一索引），会访问到不满足条件的第一个值为止</p>
+</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<p>注意：间隙锁唯一目的是防止其他事务插入间隙。间隙锁可以共存，一个事务采用的间隙锁不会阻止另一个事务在同一间隙上加间隙锁。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/" title="Mysql-事务原理" target="_blank" rel="external">https://eoccc.gitee.io/2023/06/24/Mysql-事务原理/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" title="Mysql- SQL优化"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
