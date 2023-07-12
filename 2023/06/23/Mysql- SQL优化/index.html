@@ -19,12 +19,12 @@
   
   
   <title>Mysql- SQL优化 | Eoccc的博客</title>
-  <meta name="description" content="数据库插入也有门道。">
+  <meta name="description" content="数据库insert、order by、group by、limit、count、update操作的优化。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql- SQL优化">
 <meta property="og:url" content="https://eoccc.gitee.io/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
-<meta property="og:description" content="数据库插入也有门道。">
+<meta property="og:description" content="数据库insert、order by、group by、limit、count、update操作的优化。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172225136-8289876.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172612547-20230702172813631.png">
@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702173309657.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702173616680.png">
 <meta property="article:published_time" content="2023-06-23T08:25:19.000Z">
-<meta property="article:modified_time" content="2023-07-02T10:28:18.754Z">
+<meta property="article:modified_time" content="2023-07-12T19:06:27.327Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -304,7 +304,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 899(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 920(words)</span>
 	
 	
 
@@ -312,7 +312,7 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>数据库插入也有门道。</p>
+        <p>数据库insert、order by、group by、limit、count、update操作的优化。</p>
 <span id="more"></span>
 <h1 id="插入优化"><a class="markdownIt-Anchor" href="#插入优化"></a> 插入优化</h1>
 <h2 id="插入"><a class="markdownIt-Anchor" href="#插入"></a> 插入</h2>
@@ -339,6 +339,7 @@
 </li>
 </ol>
 <h2 id="页分裂"><a class="markdownIt-Anchor" href="#页分裂"></a> 页分裂</h2>
+<p>乱序插入会导致主键索引页分裂。</p>
 <p>如下图，当需要插入新的数据50的时候：</p>
 <ol>
 <li>
@@ -408,7 +409,7 @@
 <h1 id="limt-优化"><a class="markdownIt-Anchor" href="#limt-优化"></a> limt 优化</h1>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tb_sku limit <span class="number">100000</span>, <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
 <p>当表的数据量比较大了，对越靠后的记录进行limt操作时，效率越低。</p>
-<p>通过覆盖索引 + 字查询进行优化：</p>
+<p>通过覆盖索引 + 子查询进行优化：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> s.<span class="operator">*</span> form tb_sku s, (<span class="keyword">select</span> id <span class="keyword">from</span> tb_sku limit <span class="number">100000</span>, <span class="number">10</span>) a <span class="keyword">where</span> s.id<span class="operator">=</span>a.id;</span><br></pre></td></tr></table></figure>
 <h1 id="count-优化"><a class="markdownIt-Anchor" href="#count-优化"></a> count 优化</h1>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> tb_sku;</span><br></pre></td></tr></table></figure>

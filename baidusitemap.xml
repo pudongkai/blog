@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://eoccc.gitee.io/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2023-07-12</lastmod>
+  </url>
+  <url>
     <loc>https://eoccc.gitee.io/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/</loc>
     <lastmod>2023-07-12</lastmod>
   </url>
@@ -31,10 +35,6 @@
   <url>
     <loc>https://eoccc.gitee.io/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/</loc>
     <lastmod>2023-07-11</lastmod>
-  </url>
-  <url>
-    <loc>https://eoccc.gitee.io/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/</loc>
-    <lastmod>2023-07-02</lastmod>
   </url>
   <url>
     <loc>https://eoccc.gitee.io/2022/11/02/Mysql%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</loc>
