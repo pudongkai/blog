@@ -29,8 +29,9 @@
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713010333701.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713010827085.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713015125895.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713025127081.png">
 <meta property="article:published_time" content="2023-06-24T08:25:19.000Z">
-<meta property="article:modified_time" content="2023-07-12T18:47:51.433Z">
+<meta property="article:modified_time" content="2023-07-12T18:53:24.360Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -268,7 +269,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text"> 事务的特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E6%80%A7%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text"> 持久性的实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text"> 原子性的实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mvcc"><span class="toc-number">1.3.</span> <span class="toc-text"> MVCC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E5%BC%8F%E5%AD%97%E6%AE%B5"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 隐式字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undo-log%E5%9C%A8mvcc%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text"> Undo Log在MVCC中的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read-view%E5%9C%A8mvcc%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.3.</span> <span class="toc-text"> Read View在MVCC中的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rc%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.4.</span> <span class="toc-text"> RC隔离级别的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rr%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.5.</span> <span class="toc-text"> RR隔离级别的原理</span></a></li></ol></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text"> 事务的特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E6%80%A7%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text"> 持久性的实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text"> 原子性和一致性的实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mvcc"><span class="toc-number">1.3.</span> <span class="toc-text"> MVCC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E5%BC%8F%E5%AD%97%E6%AE%B5"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 隐式字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undo-log%E5%9C%A8mvcc%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text"> Undo Log在MVCC中的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read-view%E5%9C%A8mvcc%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.3.</span> <span class="toc-text"> Read View在MVCC中的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rc%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.4.</span> <span class="toc-text"> RC隔离级别的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rr%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.5.</span> <span class="toc-text"> RR隔离级别的原理</span></a></li></ol></li></ol></li></ol>
     </nav>
   </div>
 </aside>
@@ -288,12 +289,7 @@
 
       
       <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/" class="article-date">
-	  <time datetime="2023-06-24T08:25:19.000Z" itemprop="datePublished">2023-06-24</time>
-	</a>
-</span>
+        
         
         
   <span class="article-tag">
@@ -348,7 +344,7 @@
 </blockquote>
 <p>为了解决这个问题，Mysql提交一个事务时，同时会把事务造成的数据变化缓存在Redolog Buffer中，然后刷到redolog文件中。当系统发生错误的时候，可以从redolog中恢复记录（当刷新策略配置为1时，最多丢失一条记录）。</p>
 <img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713010827085.png" alt="image-20230713010827085" style="zoom:50%;">
-<h2 id="原子性的实现原理"><a class="markdownIt-Anchor" href="#原子性的实现原理"></a> 原子性的实现原理</h2>
+<h2 id="原子性和一致性的实现原理"><a class="markdownIt-Anchor" href="#原子性和一致性的实现原理"></a> 原子性和一致性的实现原理</h2>
 <p><strong>Undo log</strong></p>
 <blockquote>
 <p>回滚日志，用于记录数据被修改前的信息，作用包含两个：<strong>回滚</strong> 和 <strong>MVCC</strong>（多版本并发控制）</p>
@@ -371,23 +367,23 @@
 <tbody>
 <tr>
 <td style="text-align:center">Read Uncommitted</td>
-<td style="text-align:center">√</td>
-<td style="text-align:center">√</td>
-<td style="text-align:center">√</td>
+<td style="text-align:center">y</td>
+<td style="text-align:center">y</td>
+<td style="text-align:center">y</td>
 <td>一个事务可以读取另一个未提交事务的数据</td>
 </tr>
 <tr>
 <td style="text-align:center">Read Committed</td>
 <td style="text-align:center"></td>
-<td style="text-align:center">√</td>
-<td style="text-align:center">√</td>
+<td style="text-align:center">y</td>
+<td style="text-align:center">y</td>
 <td>一个事务可以读到另一个事务提交后的数据</td>
 </tr>
 <tr>
 <td style="text-align:center">Repeatable Read</td>
 <td style="text-align:center"></td>
 <td style="text-align:center"></td>
-<td style="text-align:center">√</td>
+<td style="text-align:center">y</td>
 <td>innoDB默认，在一个事务中多次读取的数据保持一致</td>
 </tr>
 <tr>
@@ -465,6 +461,7 @@ ReadView中包含了四个核心字段:</p>
 </tbody>
 </table>
 <p>当隔离级别是RC时，版本数据链的访问规则（当前事务ID：trx_id）：</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230713025127081.png" alt="image-20230713025127081" style="zoom:48%;">
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">A[版本数据链的访问规则]--&gt;B[trx_id == creator_trx_id]</span><br><span class="line">B--&gt;E[可以访问--说明这个版本的数据是当前事务修改的]</span><br><span class="line">A--&gt;C[trx_id &lt; min_trx_id]</span><br><span class="line">C--&gt;F[可以访问--说明这个版本已经提交了]</span><br><span class="line">A--&gt;D[trx_id &gt; max_trx_id]</span><br><span class="line">D--&gt;G[不可以访问--说明这个事务还没提交]</span><br><span class="line">A--&gt;H[min_trx_id &lt;= trx_id &lt;= max_trx_id]</span><br><span class="line">H--&gt;I[trx_id在m_ids集合中]</span><br><span class="line">I--&gt;K[不可以访问--说明这个事务还处于活跃状态没提交]</span><br><span class="line">H--&gt;J[trx_id不在m_ids集合中]</span><br><span class="line">J--&gt;L[可以访问--说明这个事务已提交]</span><br></pre></td></tr></table></figure>
 <h3 id="rc隔离级别的原理"><a class="markdownIt-Anchor" href="#rc隔离级别的原理"></a> RC隔离级别的原理</h3>
 <p>每次执行快照读都会生成一个readview。</p>
