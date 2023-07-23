@@ -191,7 +191,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/" class="title">Mysql-事务原理</a>
+                <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" class="title">redis学习10-集群</a>
               </p>
             </div>
           </li>
@@ -203,7 +203,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" class="title">Mysql- SQL优化</a>
+                <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="title">redis学习9-哨兵Sentinel</a>
               </p>
             </div>
           </li>
@@ -215,7 +215,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/20/Mysql-%20%E6%9E%B6%E6%9E%84/" class="title">Mysql-架构</a>
+                <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" class="title">redis学习8-复制（主从架构）</a>
               </p>
             </div>
           </li>
@@ -227,7 +227,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" class="title">Queue 之 help gc</a>
+                <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="title">redis学习7-时钟周期serverCron</a>
               </p>
             </div>
           </li>
@@ -239,7 +239,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/" class="title">协程-小试牛刀</a>
+                <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="title">redis学习6-客户端和服务器</a>
               </p>
             </div>
           </li>
@@ -263,15 +263,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/">Mysql-事务原理</a>
+      <a class="article-title" href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/">redis学习10-集群</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作<br>
-要么同时成功，要么同时失败。</p>
+    <p>Redis集群会将数据库分为16384个槽（slot），集群中的每个节点可以处理0～16384个槽，redis的每个键只会落在其中的一个槽中。当数据库中的每个槽都有redis节点处理的时候，集群才会处于可用状态。</p>
   </div>
   
   <p class="article-meta">
@@ -279,14 +278,14 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/#comments" class="article-comment-link">Comments</a></span>
     
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.1k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.6k(words)</span>
 	
 	
 
@@ -299,14 +298,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/">Mysql- SQL优化</a>
+      <a class="article-title" href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/">redis学习9-哨兵Sentinel</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>数据库insert、order by、group by、limit、count、update操作的优化。</p>
+    <p>哨兵Sentinel是redis集群高可用的解决方案：由一个或多个Sentinel节点组成，监视任意多个主服务器及主服务器下的所有从服务器，当主服务器下线的时候，从其从服务器中选择一个升级成主服务器。</p>
   </div>
   
   <p class="article-meta">
@@ -314,14 +313,14 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/#comments" class="article-comment-link">Comments</a></span>
     
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 920(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.6k(words)</span>
 	
 	
 
@@ -334,14 +333,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/06/20/Mysql-%20%E6%9E%B6%E6%9E%84/">Mysql-架构</a>
+      <a class="article-title" href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/">redis学习8-复制（主从架构）</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>Mysql架构：组件、内存、磁盘、后台线程。</p>
+    <p>在主从架构的redis集群中，为了保证主从服务器数据的一致性，redis通过复制和广播，尽力保证数据的一致性。本节会介绍reids复制的具体实现。</p>
   </div>
   
   <p class="article-meta">
@@ -349,14 +348,14 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/20/Mysql-%20%E6%9E%B6%E6%9E%84/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/#comments" class="article-comment-link">Comments</a></span>
     
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 3.3k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.5k(words)</span>
 	
 	
 
@@ -369,14 +368,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/">Queue 之 help gc</a>
+      <a class="article-title" href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/">redis学习7-时钟周期serverCron</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p><code>java.util.concurrent.LinkedBlockingQueue#dequeue</code>有一行代码<code>h.next = h</code> 被注释上了help gc，那么它到底是怎么帮助gc的呢？</p>
+    <p>Redis服务器的serverCron方法默认每100ms执行一次，这个方法负责管理redis的资源，保证redis能够良好的运行。本文介绍cerverCron方法的功能。</p>
   </div>
   
   <p class="article-meta">
@@ -384,116 +383,11 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 880(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/">协程-小试牛刀</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>JDK还不支持协程，终究是一大遗憾。好消息是jdk19引入了虚线程，弥补了这一遗憾，但是还需要经历一定时间的验证，公司生产环境的jdk一般也没有使用这么高版本的jdk。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1k(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/09/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/">kafka-4 日志存储</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>Kafka中，一个分区对应一个日志，为了防止日志过大，又引入了日志段的概念（LogSegment），将日志切分为多个日志段，以便于维护和清理。一个LogSegment对应磁盘上的一个日志文件和两个索引文件。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/04/09/kafka-4%20%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.1k(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/">写出整洁代码的tips</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>一开始就要写整洁的代码，如果有不整洁的代码就要及时的整改，绝对不要有以后再改,以后再说的想法，因为**<font color="red">letter equals never!</font>**</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/04/04/%E5%86%99%E5%87%BA%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81%E7%9A%84tips/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/#comments" class="article-comment-link">Comments</a></span>
     
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.4k(words)</span>
@@ -509,14 +403,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/">kafka-3 客户端</a>
+      <a class="article-title" href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/">redis学习6-客户端和服务器</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>总结kafka客户端的分区策略、幂等性和事务。</p>
+    <p>Redis一个服务器可以与多个客户端进行网络连接，每个客户端可以向服务器发送命令请求，服务器接受并处理客户端发送的命令，并向客户端返回命令回复。</p>
   </div>
   
   <p class="article-meta">
@@ -524,11 +418,116 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/04/03/kafka-3%20%E5%AE%A2%E6%88%B7%E7%AB%AF/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.7k(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/07/06/redis%E5%AD%A6%E4%B9%A05-AOF%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习5-AOF持久化</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍AOF持久化方式。</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/06/redis%E5%AD%A6%E4%B9%A05-AOF%E6%8C%81%E4%B9%85%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 961(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/07/05/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/">redis学习4-RDB持久化</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>Redis是内存数据库，如果不做持久化，一旦服务器退出，就会丢失所有数据。因此redis提供了两种持久化方式用于持久化数据：RDB和AOF。本篇文章介绍RDB持久化方式。</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/05/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 796(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/07/04/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/">redis学习3-过期键清除策略</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/04/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/#comments" class="article-comment-link">Comments</a></span>
     
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.3k(words)</span>
@@ -544,14 +543,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/">kafka-2 消费者</a>
+      <a class="article-title" href="/2023/07/02/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/">redis学习2-五种数据类型实现</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>Kafka的消费者负责订阅topic，并从订阅的topic上拉取消息。kafka的消费层还有一个消费组（consumer group），每个consumer都有一个消费组，消息会发给订阅了这个topic的<strong>所有</strong>消费组，并由消费组中的<strong>一个</strong>消费者进行消费。</p>
+    <p>本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。</p>
   </div>
   
   <p class="article-meta">
@@ -559,14 +558,14 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/03/30/kafka-2%20%E6%B6%88%E8%B4%B9%E8%80%85/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/02/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/#comments" class="article-comment-link">Comments</a></span>
     
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.1k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.4k(words)</span>
 	
 	
 
@@ -579,14 +578,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/">kafka-1 生产者</a>
+      <a class="article-title" href="/2023/07/01/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">redis学习1-底层数据结构</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>Kafka的生产者发送数据时，先将数据缓存到记录收集器RecordAccumulator中，再由发送线程Sender将消息批量地发送给服务端。</p>
+    <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
   </div>
   
   <p class="article-meta">
@@ -594,14 +593,14 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/03/29/kafka-1%20%E7%94%9F%E4%BA%A7%E8%80%85/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/01/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/#comments" class="article-comment-link">Comments</a></span>
     
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.5k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.2k(words)</span>
 	
 	
 

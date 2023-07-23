@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>redis学习6-客户端和服务器 | Eoccc的博客</title>
+  <meta name="description" content="Redis一个服务器可以与多个客户端进行网络连接，每个客户端可以向服务器发送命令请求，服务器接受并处理客户端发送的命令，并向客户端返回命令回复。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis学习6-客户端和服务器">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="Redis一个服务器可以与多个客户端进行网络连接，每个客户端可以向服务器发送命令请求，服务器接受并处理客户端发送的命令，并向客户端返回命令回复。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/wM5TR4Y6q.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/aEdPJFwbw.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/zm2WdRfBa.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/Rrl7XfhcL.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/3FqAC4JPx.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/2Zr_wPq74.jpeg">
+<meta property="article:published_time" content="2023-07-07T03:20:29.000Z">
+<meta property="article:modified_time" content="2023-07-23T14:21:23.348Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/wM5TR4Y6q.jpeg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" class="title">redis学习10-集群</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="title">redis学习9-哨兵Sentinel</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" class="title">redis学习8-复制（主从架构）</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="title">redis学习7-时钟周期serverCron</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="title">redis学习6-客户端和服务器</a>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.</span> <span class="toc-text"> 客户端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisclient"><span class="toc-number">2.</span> <span class="toc-text"> redisClient</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientfd"><span class="toc-number">2.1.</span> <span class="toc-text"> redisClient.fd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientname"><span class="toc-number">2.2.</span> <span class="toc-text"> redisClient.name</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisclientflags"><span class="toc-number">3.</span> <span class="toc-text"> redisClient.flags</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redisclientquerybuf"><span class="toc-number">3.1.</span> <span class="toc-text"> redisClient.querybuf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E4%B8%8E%E5%8F%82%E6%95%B0"><span class="toc-number">3.2.</span> <span class="toc-text"> 命令与参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">3.3.</span> <span class="toc-text"> 执行命令的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">3.4.</span> <span class="toc-text"> 输出缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">3.5.</span> <span class="toc-text"> 身份验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4"><span class="toc-number">3.6.</span> <span class="toc-text"> 时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">4.</span> <span class="toc-text"> 关闭客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E6%99%AE%E9%80%9A%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">4.1.</span> <span class="toc-text"> 关闭普通客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E4%BC%AA%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">4.2.</span> <span class="toc-text"> 关闭伪客户端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">5.</span> <span class="toc-text"> 服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%AF%B7%E6%B1%82%E6%89%A7%E8%A1%8C%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">5.1.</span> <span class="toc-text"> 命令请求执行的过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E5%89%8D%E7%9A%84%E6%A0%A1%E9%AA%8C"><span class="toc-number">5.2.</span> <span class="toc-text"> 执行命令前的校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">5.3.</span> <span class="toc-text"> 执行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E7%9A%84%E5%90%8E%E7%BB%AD%E6%93%8D%E4%BD%9C"><span class="toc-number">5.4.</span> <span class="toc-text"> 执行命令的后续操作</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-redis学习6-客户端和服务器" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis学习6-客户端和服务器
+    </h1>
+  
+
+      
+      <div class="article-meta">
+
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.7k(words)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Redis一个服务器可以与多个客户端进行网络连接，每个客户端可以向服务器发送命令请求，服务器接受并处理客户端发送的命令，并向客户端返回命令回复。</p>
+<span id="more"></span>
+<h2 id="客户端"><a class="markdownIt-Anchor" href="#客户端"></a> 客户端</h2>
+<p>Redis会为每一个客户端创建一个redisClient对象，用来保存客户端的信息，并使用链表来保存多个客户端。</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/wM5TR4Y6q.jpeg" alt="img/wM5TR4Y6q.jpeg" style="zoom:50%;">
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisClient</span> &#123;</span></span><br><span class="line">  <span class="type">int</span> fd;        <span class="comment">//套接字</span></span><br><span class="line">  robj *name;    <span class="comment">//客户端名称</span></span><br><span class="line">  <span class="type">int</span> flags;     <span class="comment">//客户端的角色和状态</span></span><br><span class="line">  sds querybuf;  <span class="comment">//输入缓冲区</span></span><br><span class="line">  robj **argv;   <span class="comment">//命令和参数</span></span><br><span class="line">  <span class="type">int</span> argc;      <span class="comment">//命令和参数的长度</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">redisCommand</span> *<span class="title">cmd</span>;</span>   <span class="comment">//执行命令的函数</span></span><br><span class="line">  <span class="type">char</span> buf[REDIS_REPLY_CHUNK_BYTES];  <span class="comment">//固定长度的输出缓冲区</span></span><br><span class="line">  <span class="type">int</span> bufpos;    <span class="comment">//输出缓冲区已使用的长度</span></span><br><span class="line">  <span class="built_in">list</span> *reply;   <span class="comment">//动态长度的输出缓冲区</span></span><br><span class="line">  <span class="type">int</span> authenticated;       <span class="comment">//身份验证</span></span><br><span class="line">  <span class="type">time_t</span> ctime;            <span class="comment">//客户端创建时间</span></span><br><span class="line">  <span class="type">time_t</span> lastinteraction;  <span class="comment">//最后一次交互时间</span></span><br><span class="line">  <span class="type">time_t</span> obuf_soft_limit_reached_time;  <span class="comment">//输出缓冲区第一次达到软性限制的时间</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="redisclient"><a class="markdownIt-Anchor" href="#redisclient"></a> redisClient</h2>
+<h3 id="redisclientfd"><a class="markdownIt-Anchor" href="#redisclientfd"></a> redisClient.fd</h3>
+<p>redisClient.fd记录了客户端正在使用的套接字描述符。根据客户端类型的不同，fd的值可以是-1或者大于-1。</p>
+<blockquote>
+<p>-1：伪客户端。伪客户端是服务器创建的，用来载入AOF文件或者执行Lua脚本，这种客户端不需要网络连接，自然不存在文件描述符。</p>
+<p>大于-1：普通客户端。使用套接字与服务器进行网络通信，fd记录了套接字的文件描述符。</p>
+</blockquote>
+<h3 id="redisclientname"><a class="markdownIt-Anchor" href="#redisclientname"></a> <a href="http://redisClient.name">redisClient.name</a></h3>
+<p>默认情况下，一个普通客户端是没有名字的，Redis可以用以下命令为客户端设置一个名字：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLIENT setname myName</span><br></pre></td></tr></table></figure>
+<p>然后使用以下命令，可以看到name属性：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLIENT list</span><br></pre></td></tr></table></figure>
+<h2 id="redisclientflags"><a class="markdownIt-Anchor" href="#redisclientflags"></a> redisClient.flags</h2>
+<p>redisClient.flags记录了客户端的角色，以及客户端目前的状态。flags可以有一个或多个值，如：</p>
+<blockquote>
+<p>flags = &lt;flag&gt;</p>
+<p>flags = &lt;flag1&gt;|&lt;flag2&gt;|&lt;flag3&gt;|…</p>
+</blockquote>
+<p>flags可以有以下值：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">标志</th>
+<th style="text-align:left">标志代码的含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">REDIS_MASTER</td>
+<td style="text-align:left">客户端是一个主服务器</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_SLAVE</td>
+<td style="text-align:left">客户端是一个从服务器</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_PRE_PSYNC</td>
+<td style="text-align:left">客户端版本低于2.8，不能使用PSYNC与这个从服务器进行同步，这个标志只能在REDIS_SLAVE标志打开时使用</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_LUA_CLIENT</td>
+<td style="text-align:left">用于处理Lua脚本的伪客户端</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_MONITOR</td>
+<td style="text-align:left">客户端正在执行MONITOR指令</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_UNIX_SOCKET</td>
+<td style="text-align:left">服务器使用UNIX套接字来连接客户端</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_BLOCKED</td>
+<td style="text-align:left">客户端处于阻塞状态</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_UNBLOCKED</td>
+<td style="text-align:left">客户端从REDIS_BLOCKED状态脱离出来</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_MULTI</td>
+<td style="text-align:left">客户端正在执行事务</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_DIRTY_CAS</td>
+<td style="text-align:left">事务使用WATCH命令监视的键已经被修改</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_DIRTY_EXEC</td>
+<td style="text-align:left">事务在命令入队时出现错误</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_CLOSE_ASAP</td>
+<td style="text-align:left">客户端的输出缓冲区超过了服务器允许的范围，服务器在执行下一次sercerCron函数时会关闭这个客户端，积存在输出缓冲区的内容会被释放，不会返回给客户端</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_CLOSE_AFTER_REPLY</td>
+<td style="text-align:left">用户对这个客户端执行了<code>CLIENT KILL</code>命令，或者客户端发送给服务器的命令中包含错误的协议内容，服务器会把输出缓冲区的所有内容发送给客户端，然后关闭客户端</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_ASKING</td>
+<td style="text-align:left">客户端向集群发送了<code>ASKING</code>命令</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_FORCE_AOF</td>
+<td style="text-align:left">强制服务器将当前执行的命令写入到AOF文件</td>
+</tr>
+<tr>
+<td style="text-align:left">REDIS_FORCE_REPL</td>
+<td style="text-align:left">强制主服务器将当前执行的命令复制给所有从服务器</td>
+</tr>
+</tbody>
+</table>
+<h3 id="redisclientquerybuf"><a class="markdownIt-Anchor" href="#redisclientquerybuf"></a> redisClient.querybuf</h3>
+<p>querybuf属性指向了redis输入缓冲区，类型为动态字符串。输入缓冲区的大小可以动态的扩容和缩容，但是它最大不能超过1GB，如果超过1GB，redis会关闭客户端。下图展示了querybuf的结构：</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/aEdPJFwbw.jpeg" alt="img/aEdPJFwbw.jpeg" style="zoom:33%;">
+<h3 id="命令与参数"><a class="markdownIt-Anchor" href="#命令与参数"></a> 命令与参数</h3>
+<p>Redis服务器将客户端发送的命令保存到输入缓冲区后，就会解析请求的内容，并将请求中的命令和参数保存到redisClient的<code>argv</code>和<code>argc</code>中。</p>
+<p>其中<code>argv</code>是一个字符串数组，<code>argv[0]</code>存储了命令，后面的元素是命令的参数。<code>argc</code>则记录了<code>argv</code>的长度。</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/zm2WdRfBa.jpeg" alt="img/zm2WdRfBa.jpeg" style="zoom:33%;">
+<h3 id="执行命令的函数"><a class="markdownIt-Anchor" href="#执行命令的函数"></a> 执行命令的函数</h3>
+<p>Redis维护了一个保存了命令实现函数的字典，服务器解析完命令后，就会根据<code>argv[0]</code>中的命令去这个字典中查找执行命令的函数，然后将指向这个函数的指针赋值给<code>redisClient.cmd</code></p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/Rrl7XfhcL.jpeg" alt="img/Rrl7XfhcL.jpeg" style="zoom:33%;">
+<h3 id="输出缓冲区"><a class="markdownIt-Anchor" href="#输出缓冲区"></a> 输出缓冲区</h3>
+<p>执行命令得到的回复会被保存在客户端的输出缓冲区中，每个redis客户端都有两个输出缓冲区：</p>
+<blockquote>
+<p>redisClient.buf[REDIS_REPLY_CHUNK_BYTES]：是一个REDIS_REPLY_CHUNK_BYTES字节大小的缓冲区，默认是16kb，用于保存那些较短的回复，如ok，另外由<code>redisClient.bufpos</code>保存已经使用的缓冲区大小</p>
+<p>redisClient.reply：是一个可变大小的缓冲区，用来保存比较长的回复</p>
+</blockquote>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/3FqAC4JPx.jpeg" alt="img/3FqAC4JPx.jpeg" style="zoom:33%;"><img src="https://gitee.com/eoccc/pic-shack/raw/master/2Zr_wPq74.jpeg" alt="img" style="zoom:33%;"></p>
+<h3 id="身份验证"><a class="markdownIt-Anchor" href="#身份验证"></a> 身份验证</h3>
+<p>Redis使用<code>redisClient.authenticated</code>字段保存客户端是否通过了身份验证。</p>
+<blockquote>
+<p>authenticated值为0的时候，表示未通过身份验证，除了<code>AUTH</code>指令之外，客户端发送的其他所有指令都会被拒绝执行</p>
+<p>authenticated值为1的时候，表示通过身份验证。</p>
+</blockquote>
+<h3 id="时间"><a class="markdownIt-Anchor" href="#时间"></a> 时间</h3>
+<p>Redis客户端中保存了几个和时间相关的属性：</p>
+<blockquote>
+<p>redisClient.ctime：创建客户端的时间</p>
+<p>redisClient.lastinteraction：客户端与服务器最后一次互动的时间</p>
+<p>redisClient.obuf_soft_limit_reached_time：输出缓冲区第一次达到软性限制的时间</p>
+</blockquote>
+<p><strong>硬性限制：</strong> 客户端的输出缓冲区超过硬性限制之后，服务器会立即关闭这个客户端。</p>
+<p><strong>软性限制：</strong> 如果客户端输出缓冲区达到了软性限制的大小，但还没达到硬性限制的大小，redis会记录一下这个时间。之后服务器会监视这个客户端，如果这个客户端的输出缓冲区一直超过软性限制，并且时间达到指定的时长，服务器就会关闭这个客户端；如果这期间输出缓冲区小于软性限制，则会将时间清零。</p>
+<h2 id="关闭客户端"><a class="markdownIt-Anchor" href="#关闭客户端"></a> 关闭客户端</h2>
+<h3 id="关闭普通客户端"><a class="markdownIt-Anchor" href="#关闭普通客户端"></a> 关闭普通客户端</h3>
+<p>普通客户端关闭原因：</p>
+<blockquote>
+<ol>
+<li>客户端进程退出或被杀死，客户端与服务器之间的网络连接将被关闭，造成客户端被关闭</li>
+<li>客户端向服务器发送带有不符合协议格式的命令请求，客户端也会被服务器关闭</li>
+<li>客户端是CLIENT KILL命令的目标，将会被关闭</li>
+<li>用户为服务器设置了timeout配置选项，客户端的空转时间超过timeout设置的值，客户端将被关闭</li>
+<li>客户端发送命令请求超过输入缓冲区的限制大小（默认1GB），客户端就会被服务器关闭</li>
+<li>发送客户端的命令回复的大小超过了输出缓冲区的限制大小，客户端会被关闭</li>
+</ol>
+</blockquote>
+<h3 id="关闭伪客户端"><a class="markdownIt-Anchor" href="#关闭伪客户端"></a> 关闭伪客户端</h3>
+<ol>
+<li>
+<p>执行lua脚本的客户端</p>
+<p>服务器在初始化时创建负责执行lua脚本中redis命令的伪客户端，并将伪客户端关联的服务器记录在redisServer结构中的lua_client属性中，在服务器运行时一直存在，在服务器关闭的时候这个伪客户端才会关闭</p>
+</li>
+<li>
+<p>载入AOF文件的客户端</p>
+<p>服务器在载入AOF文件时，会创建一个伪客户端用于执行AOF文件包含的redis命令，载入完成后关闭伪客户端</p>
+</li>
+</ol>
+<h2 id="服务器"><a class="markdownIt-Anchor" href="#服务器"></a> 服务器</h2>
+<p>服务器与多个客户端建立连接，接收并处理客户端发来的请求，给客户端返回命令的执行结果，并在数据库中保存执行命令产生的数据。</p>
+<h3 id="命令请求执行的过程"><a class="markdownIt-Anchor" href="#命令请求执行的过程"></a> 命令请求执行的过程</h3>
+<blockquote>
+<ol>
+<li>客户端发送命令，将命令转成redis协议，然后通过套接字发给服务器</li>
+<li>服务器接收请求，将redis协议的命令存到输入缓冲区</li>
+<li>服务器队输入缓冲区中的内容进行解析，提取出其中的命令以及参数，放到<code>argv</code>和<code>aegc</code>中</li>
+<li>服务器根据命令区查找执行命令的方法，放到<code>cmd</code>中</li>
+<li>服务器调用命令执行器，执行命令</li>
+</ol>
+</blockquote>
+<h3 id="执行命令前的校验"><a class="markdownIt-Anchor" href="#执行命令前的校验"></a> 执行命令前的校验</h3>
+<p>服务器在执行命令之前，还会进行如下的校验，然后才会执行命令：</p>
+<blockquote>
+<ol>
+<li>检查客户端的<code>cmd</code>是否指向null，如果是，说明没有找到客户端请求的命令的执行函数，不能继续执行，给客户端返回错误</li>
+<li>检查请求中命令的参数是否齐全，不齐全就不能执行命令，给客户端返回一个错误</li>
+<li>检查客户端是否通过身份验证，没有通过的客户端只能执行<code>AUTH</code>命令</li>
+<li>如果服务器开通了maxmemory功能，会检查服务器的内存占用情况，需要时进行回收，回收失败不执行命令，并给客户端返回一个错误</li>
+<li>如果上一个<code>BGSAVE</code>命令执行失败，并且服务器打开了<code>stop_writes_on_bgsave_error</code>，服务器会拒绝执行命令，并返回一个错误</li>
+<li>如果服务器正在载入数据，只会执行<code>INFO</code>, <code>SHUTDOWN</code>, <code>PUBLISH</code>命令</li>
+<li>如果服务器正在执行Lua脚本，会处于阻塞状态，只会执行<code>SHUTDOWN nosave</code>和<code>SCRIPT KILL</code>命令，其他命令会被拒绝</li>
+<li>如果服务器真正执行事务，只会执行<code>EXEC</code> <code>DISCARD</code> <code>MULTI</code> <code>WAtCH</code>命令</li>
+<li>如果服务器打开了监视器功能，会将命令和参数发送给监视器</li>
+</ol>
+</blockquote>
+<h3 id="执行命令"><a class="markdownIt-Anchor" href="#执行命令"></a> 执行命令</h3>
+<p>redisClient里面已经包含了执行命令需要的所有信息，redis会直接执行命令，并将命令产生的结果放到输出缓冲区。然后redis还会为客户端套接字关联命令回复处理器，以便将命令的回复发送给客户端。套接字变成可写状态，命令回复处理器将输出缓冲区中的内容写入到套接字，然后清空输出缓冲区。</p>
+<h3 id="执行命令的后续操作"><a class="markdownIt-Anchor" href="#执行命令的后续操作"></a> 执行命令的后续操作</h3>
+<p>执行命令后续操作：</p>
+<blockquote>
+<ol>
+<li>如果服务器开启了慢查询功能，那么慢查询日志模块会判断需不需要为刚才的命令添加一条慢查询日志</li>
+<li>更新刚才的redisCommand的<code>millionsecond</code>属性，记录执行命令的耗时，并将<code>calls</code>属性加1</li>
+<li>如果开启了AOF功能，并且命令修改了数据库，将刚刚执行的命令写入到AOF缓冲区</li>
+<li>如果有其他服务器在复制这台服务器，并且命令修改了数据库，把刚刚执行的命令广播出去</li>
+</ol>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="redis学习6-客户端和服务器" target="_blank" rel="external">https://eoccc.gitee.io/2023/07/07/redis学习6-客户端和服务器/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" title="redis学习7-时钟周期serverCron"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/07/06/redis%E5%AD%A6%E4%B9%A05-AOF%E6%8C%81%E4%B9%85%E5%8C%96/" title="redis学习5-AOF持久化"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

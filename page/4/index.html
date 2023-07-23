@@ -191,7 +191,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/" class="title">Mysql-事务原理</a>
+                <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" class="title">redis学习10-集群</a>
               </p>
             </div>
           </li>
@@ -203,7 +203,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" class="title">Mysql- SQL优化</a>
+                <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="title">redis学习9-哨兵Sentinel</a>
               </p>
             </div>
           </li>
@@ -215,7 +215,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/20/Mysql-%20%E6%9E%B6%E6%9E%84/" class="title">Mysql-架构</a>
+                <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" class="title">redis学习8-复制（主从架构）</a>
               </p>
             </div>
           </li>
@@ -227,7 +227,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" class="title">Queue 之 help gc</a>
+                <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="title">redis学习7-时钟周期serverCron</a>
               </p>
             </div>
           </li>
@@ -239,7 +239,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/" class="title">协程-小试牛刀</a>
+                <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="title">redis学习6-客户端和服务器</a>
               </p>
             </div>
           </li>
@@ -263,14 +263,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2022/06/04/DDD-1%20%E9%A2%86%E5%9F%9F/">DDD大杂烩</a>
+      <a class="article-title" href="/2022/09/26/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-分库分表</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>DDD领域。</p>
+    <p>不管是IO瓶颈，还是CPU瓶颈，最终都会导致数据库的活跃连接数增加，进而逼近甚至达到数据库可承载活跃连接数的阈值。在业务Service来看就是，可用数据库连接少甚至无连接可用。</p>
   </div>
   
   <p class="article-meta">
@@ -278,11 +278,252 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/DDD/" rel="tag">DDD</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/04/DDD-1%20%E9%A2%86%E5%9F%9F/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/26/Mysql-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2k(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/09/11/Lombok%20@Builder%E6%B3%A8%E8%A7%A3%E5%AF%BC%E8%87%B4%E9%BB%98%E8%AE%A4%E5%80%BC%E5%A4%B1%E6%95%88/">Lombok @Builder注解导致默认值失效</a>
+    </h1>
+  
+
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/11/Lombok%20@Builder%E6%B3%A8%E8%A7%A3%E5%AF%BC%E8%87%B4%E9%BB%98%E8%AE%A4%E5%80%BC%E5%A4%B1%E6%95%88/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 557(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/">时间轮</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>JDK中Timer和DelayQueue可以实现定时任务和延时操作的功能，但是O(nlogn)的时间复杂度在高并发的时候存在性能瓶颈，因此Kafka、Netty、ZooKeeper、Quartz等组件都使用了时间轮作为定时器。</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/08/10/%E6%97%B6%E9%97%B4%E8%BD%AE/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 977(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/08/10/protobuf%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">protobuf序列化和反序列化</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>Protobuf是一个很优秀的序列化和反序列化工具，具有较高的效率，并且使用紧凑的二进制码，能够减小内存占用，但是有一些坑，需要我们能够正确的使用。这篇博客就来记录一些Protobuf的使用和一些踩过的坑。</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>, <a class="article-tag-link-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/08/10/protobuf%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 492(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/08/07/%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD%E6%80%BB%E7%BB%93/">开发经验教训总结</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>从一个个故障的血泪教训，以及代码的坏味道中，总结一些开发经验。</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/08/07/%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD%E6%80%BB%E7%BB%93/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.2k(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/">软引用和弱的使用场景</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>我们日常开发中一般不会使用到软引用，因此对这块可能比较陌生，看过一些使用场景，但是过一段时间可能就忘记了，这篇博客就整理一下软引用的使用场景。</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/10/%E8%BD%AF%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%B1%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 204(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">缓存淘汰算法总结</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>以前看到过一些缓存淘汰的算法，觉得很是精妙，比如大名鼎鼎的LRU、LFU、FIFO，以及mysql版的LRU，redis的缓存淘汰策略，GuavaCache的缓存淘汰算法，等等。写篇博客总结一下～～</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/20/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/#comments" class="article-comment-link">Comments</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.9k(words)</span>
+	
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/06/16/SOLID%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">SOLID编程模式</a>
+    </h1>
+  
+
+  </div>
+  
+  <div class="article-entry text-muted" itemprop="description">
+    <p>&quot;Solid&quot;是一种编程模式，是指面向对象编程中的五个基本设计原则，也被称为SOLID原则。这些原则旨在帮助开发人员编写更可靠、可扩展和可维护的代码。</p>
+  </div>
+  
+  <p class="article-meta">
+    
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/DDD/" rel="tag">DDD</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/16/SOLID%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/#comments" class="article-comment-link">Comments</a></span>
     
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.5k(words)</span>
@@ -298,14 +539,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
+      <a class="article-title" href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/">深拷贝和浅拷贝工具</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
+    <p>前几天写代码的时候，需要拷贝对象，就使用了<code>org.apache.commons.beanutils.BeanUtils</code>的<code>BeanUtils.copyProperties(Object dest, Object orig)</code>拷贝对象，后面又修改了新对象的属性，就导致原对象也被修改了，仔细一研究才发现这个工具只是进行了浅拷贝。索性整理一下现在比较常用的一些深拷贝和浅拷贝工具。</p>
   </div>
   
   <p class="article-meta">
@@ -313,14 +554,14 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/dubbo/" rel="tag">dubbo</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a>, <a class="article-tag-link-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/14/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%B7%A5%E5%85%B7/#comments" class="article-comment-link">Comments</a></span>
     
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 824(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.5k(words)</span>
 	
 	
 
@@ -333,14 +574,14 @@
     
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/">深入浅出对比数组和链表</a>
+      <a class="article-title" href="/2022/06/08/DDD-3%20%E6%9E%B6%E6%9E%84/">架构</a>
     </h1>
   
 
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <p>数组和链表是我们日常编程中非常常用的两种数据结构，那么它们的性能表现如何，本文由浅入深对此进行一些分析。</p>
+    <p>DDD的几种架构模型。</p>
   </div>
   
   <p class="article-meta">
@@ -348,259 +589,14 @@
     
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+	<a class="article-tag-link-link" href="/tags/DDD/" rel="tag">DDD</a>
   </span>
 
 
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/07/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AF%B9%E6%AF%94%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8/#comments" class="article-comment-link">Comments</a></span>
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/08/DDD-3%20%E6%9E%B6%E6%9E%84/#comments" class="article-comment-link">Comments</a></span>
     
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.5k(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/">dubbo服务暴露</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/dubbo/" rel="tag">dubbo</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 256(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/">dubbo服务消费</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>在整体上看，Dubbo框架做服务消费也分为两大部分，第一步通过持有远程服务实例生成 Invoker，这个Invoker在客户端是核心的远程代理对象。第二步会把Invoker通过动态代理转换成实现用户接口的动态代理引用。这里的Invoker承载了网络连接、服务调用和重试等功能。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/dubbo/" rel="tag">dubbo</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 618(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/04/25/kafka-5%20%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/">kafka-5 副本管理</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>Kafka分区使用多副本机制来提升可靠性，只有leader副本能对外提供读写服务，follower副本只负责在内部进行消息同步，当leader副本不可用时，从follower副本中选择一个成为新的leader副本。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/04/25/kafka-5%20%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.1k(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/04/25/kafka-6%20leader%E9%80%89%E4%B8%BE/">kafka-6 分区leader选举</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>分区leader的选举由控制器负责实施。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/04/25/kafka-6%20leader%E9%80%89%E4%B8%BE/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 455(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/04/23/%E5%8F%8D%E5%B0%84%E5%BC%82%E5%B8%B8%EF%BC%9F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E7%9A%84%E9%94%85/">反射异常？类型转换的锅</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>前两天一个同事上线了代码，然后就飙了一阵<code>java.lang.NoSuchMethodException</code>，一时还不知所以，看不出代码存在什么问题，拉了好几个人在看，最后查到时反射的获取方法的时候，对象的类型不匹配，导致异常。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/04/23/%E5%8F%8D%E5%B0%84%E5%BC%82%E5%B8%B8%EF%BC%9F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E7%9A%84%E9%94%85/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 655(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/">kafka小知识</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>多生产者、多消费者、高性能、可伸缩、有消息堆积能力的 <strong>消息队列</strong> 。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/04/19/kafka%E5%B0%8F%E7%9F%A5%E8%AF%86/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 4.1k(words)</span>
-	
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/04/02/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/">redis学习10-集群</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>Redis集群会将数据库分为16384个槽（slot），集群中的每个节点可以处理0～16384个槽，redis的每个键只会落在其中的一个槽中。当数据库中的每个槽都有redis节点处理的时候，集群才会处于可用状态。</p>
-  </div>
-  
-  <p class="article-meta">
-    
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
-  </span>
-
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/04/02/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/#comments" class="article-comment-link">Comments</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.6k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 25(words)</span>
 	
 	
 

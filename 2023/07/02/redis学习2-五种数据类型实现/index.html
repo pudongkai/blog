@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>redis学习2-五种数据类型实现 | Eoccc的博客</title>
+  <meta name="description" content="本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis学习2-五种数据类型实现">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/07/02/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/JqcJckTu7_.jpeg">
+<meta property="og:image" content="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F0568c246j00rfd48g0024c000m500qem.jpg&thumbnail=660x2147483647&quality=80&type=jpg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723154646517.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/X4ZibxXj2.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/bFSjZeUqZ.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/s4vWvaesd.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/TteeZPrrT.jpeg">
+<meta property="og:image" content="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F6259cb35j00rfd48g000bc000b7007ym.jpg&thumbnail=660x2147483647&quality=80&type=jpg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/QYyoC4LIS.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/EY3MJnqtR.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723164942510.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/k655yYYQ2S.jpeg">
+<meta property="article:published_time" content="2023-07-02T10:25:19.000Z">
+<meta property="article:modified_time" content="2023-07-23T14:22:10.786Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/JqcJckTu7_.jpeg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/07/02/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" class="title">redis学习10-集群</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="title">redis学习9-哨兵Sentinel</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" class="title">redis学习8-复制（主从架构）</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="title">redis学习7-时钟周期serverCron</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="title">redis学习6-客户端和服务器</a>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#reisobject"><span class="toc-number">1.</span> <span class="toc-text"> reisObject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-string"><span class="toc-number">2.</span> <span class="toc-text"> 1. String</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%97%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text"> 2. 列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%93%88%E5%B8%8C%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.</span> <span class="toc-text"> 3. 哈希对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-set%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.</span> <span class="toc-text"> 4. Set集合对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-zset%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="toc-number">6.</span> <span class="toc-text"> 5. ZSet有序集合</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-redis学习2-五种数据类型实现" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis学习2-五种数据类型实现
+    </h1>
+  
+
+      
+      <div class="article-meta">
+
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/02/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.4k(words)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>本文介绍redis应用层的五种数据结构的实现：string、list、hash、set、zset。</p>
+<span id="more"></span>
+<h2 id="reisobject"><a class="markdownIt-Anchor" href="#reisobject"></a> reisObject</h2>
+<p>上一节我们讲了redis的底层数据结构的实现，如简单动态字符串SDS、链表、字典、跳跃表、整数集合、压缩列表，但是redis并不是直接使用这些数据结构来实现键值对数据库，而是基于这些数据结构创建了一套数据对象，包含：String、List、Hash、Set、ZSet。这些对象由一个或多个redis基本数据结构实现。</p>
+<p>每个对象里面包含了：</p>
+<blockquote>
+<ol>
+<li>对象类型。redis会根据对象类型判断一个对象能否执行给定的命令</li>
+<li>基于引用计数法实现垃圾回收</li>
+<li>对象共享机制，节约内存</li>
+<li>记录访问时间，实现LRU清除内存</li>
+</ol>
+</blockquote>
+<p>redisObject的定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">  <span class="type">unsigned</span> type:<span class="number">4</span>;      <span class="comment">// 类型: string,list,hash,set,zset</span></span><br><span class="line">  <span class="type">unsigned</span> encoding:<span class="number">4</span>;  <span class="comment">// 编码，即ptr指向的对象的编码类型（底层实现）</span></span><br><span class="line">  <span class="type">void</span> *ptr;            <span class="comment">// 指向底层实现数据结构的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Redis五种对象类型的编码方式，可以使用<code>OBJECT ENCODING</code>命令查看，每个类型都使用了至少两种底层数据结构：</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/JqcJckTu7_.jpeg" alt="img/JqcJckTu7_.jpeg" style="zoom:30%;">
+<img src="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F0568c246j00rfd48g0024c000m500qem.jpg&thumbnail=660x2147483647&quality=80&type=jpg" alt="img" style="zoom:75%;">
+<h2 id="1-string"><a class="markdownIt-Anchor" href="#1-string"></a> 1. String</h2>
+<p>字符串的编码可以是int、embstr和raw。</p>
+<blockquote>
+<ul>
+<li>
+<p>如果一个字符串是整数值，且可以用long表示，那么redisObject的ptr存的是整数，编码为int</p>
+<p>并且，如果数字的大小在LONG_MAX范围内，则不需要SDS，可以将数值直接保存在ptr指针的位置（刚好8字节）</p>
+</li>
+<li>
+<p>如果一个字符串的长度小于44字节，那么编码方式为embstr</p>
+</li>
+<li>
+<p>如果一个字符串的长度大于44字节，那么编码方式为raw</p>
+</li>
+</ul>
+</blockquote>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723154646517.png" alt="image-20230723154646517" style="zoom:43%;">
+<p><strong>embstr和raw的区别：</strong> 两种编码方式都使用redisObject和sdshdr来存储，但是raw会调用两次内存分配，分别创建redisObject和sdshdr对象，而embstr编码只调用一次内存分配，申请一个<strong>连续的内存空间</strong>创建两个对象。</p>
+<p>embstr的优点：</p>
+<blockquote>
+<ol>
+<li>对象头和SDS使用一段连续的内存空间，只调用一次内存空间分配</li>
+<li>embstr的内存只需要释放一次</li>
+<li>embstr使用连续的内存空间，能够更好的利用缓存带来的优势</li>
+</ol>
+</blockquote>
+<p><em>浮点数的存储：</em> 浮点数在redis中也是以字符串的形式存储，但是在有需要的时候，redis会将字符串转换为浮点数。</p>
+<p><em>编码转换：</em> redis对字符串的操作可能会导致编码类型的转换，如执行<code>append</code>命令后，字符串的长度由小于44变成大于44字节，编码会由embstr变为raw。</p>
+<h2 id="2-列表"><a class="markdownIt-Anchor" href="#2-列表"></a> 2. 列表</h2>
+<p>列表的编码可以是压缩列表(ziplist)或链表(linkedlist)。</p>
+<blockquote>
+<ol>
+<li>元素数量小于512个，且每个元素的长度小于64字节，使用压缩列表</li>
+<li>任意一个条件不满足，编码会变为链表linkedList</li>
+<li>两个阈值都可以配置：<code>list-max-ziplist-value</code>，<code>list-max-ziplist-entries</code></li>
+</ol>
+</blockquote>
+<p><strong>基于ziplist实现列表：</strong></p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/X4ZibxXj2.jpeg" alt="img/bFSjZeUqZ.jpeg" style="zoom:57%;">
+<p><strong>基于linkedlist实现列表：</strong> 每个node都是一个StringObject。</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/bFSjZeUqZ.jpeg" alt="img/bFSjZeUqZ.jpeg" style="zoom:57%;">
+<h2 id="3-哈希对象"><a class="markdownIt-Anchor" href="#3-哈希对象"></a> 3. 哈希对象</h2>
+<p>哈希编码可以是压缩列表(ziplist)和字典(hashtable)。</p>
+<blockquote>
+<ol>
+<li>当所有键值对的键和值的长度都小于64字节，且键值对个数小于512个时，使用ziplist实现</li>
+<li>任一条件不满足时，使用hashtable实现</li>
+<li>redis对键值对操作，导致以上条件不满足时，编码会变成hashtable</li>
+<li>以上阈值可以配置：<code>hash-max-ziplist-value</code>，<code>hash-max-ziplist-entries</code></li>
+</ol>
+</blockquote>
+<p>当通过ziplist实现哈希对象时，redis会将键和值对象依此压入压缩列表：</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/s4vWvaesd.jpeg" alt="img/s4vWvaesd.jpeg" style="zoom:50%;">
+<p>当使用hashtable实现哈希对象时，键和值都是StringObject，保存在字典中：</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/TteeZPrrT.jpeg" alt="img/TteeZPrrT.jpeg" style="zoom:43%;">
+<p><em>使用hash可以减少redis的内存占用，因为使用简单的key-value来存储，redis会为key和value都创建一个redisObject，redis的数据类型有很多，不同的数据类型都会有相同的元数据要存储（如编码方式、最后访问时间、被引用次数等），这些元数据会造成空间浪费。</em></p>
+<img src="https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2022%2F0721%2F6259cb35j00rfd48g000bc000b7007ym.jpg&thumbnail=660x2147483647&quality=80&type=jpg" alt="img" style="zoom:60%;">
+<h2 id="4-set集合对象"><a class="markdownIt-Anchor" href="#4-set集合对象"></a> 4. Set集合对象</h2>
+<p>集合对象通过intset或hashtable实现。</p>
+<blockquote>
+<ol>
+<li>所有元素都为整数类型，且数量小于512个，使用intset实现</li>
+<li>不满足任一条件，使用hashtable实现</li>
+<li>redis操作导致不满足条件，编码由intset变成hashtable</li>
+<li>以上阈值可以配置：<code>set-max-tset-tries</code></li>
+</ol>
+</blockquote>
+<p><strong>使用intset实现集合对象的数据结构：</strong></p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/QYyoC4LIS.jpeg" alt="img/QYyoC4LIS.jpeg" style="zoom:50%;">
+<p><strong>使用hashtable实现集合对象的数据结构：</strong> 每个元素都保存在字典的key中，value为null。</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/EY3MJnqtR.jpeg" alt="img/EY3MJnqtR.jpeg" style="zoom:43%;">
+<h2 id="5-zset有序集合"><a class="markdownIt-Anchor" href="#5-zset有序集合"></a> 5. ZSet有序集合</h2>
+<p>有序集合对象通过ziplist或skiplist实现。</p>
+<blockquote>
+<ol>
+<li>当所有键值对的键和值的长度都小于64字节，且键值对个数小于512个时，使用ziplist实现</li>
+<li>任一条件不满足时，使用skiplist实现</li>
+<li>redis对键值对操作，导致以上条件不满足时，编码会变成skiplist</li>
+<li>以上阈值可以配置：<code>zset-max-ziplist-entries</code>和<code>zset-max-ziplist-value</code></li>
+</ol>
+</blockquote>
+<p>当使用ziplist实现有序集合时，每个元素由两个ziplist元素组成，第一个保存元素成员，第二个保存元素分值，并且每个元素按分值由小到大排列：</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723164942510.png" alt="image-20230723164942510" style="zoom:45%;">
+<p>当有序集合编码为skiplist时，zset同时使用跳表和字典实现。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zset</span> &#123;</span></span><br><span class="line">    zskiplist *zsl;  <span class="comment">//跳表</span></span><br><span class="line">    dict *dict;      <span class="comment">//字典</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>zset的跳表中保存了集合的所有元素，并按分值由小到大排序。除此之外，zset还有一个字典，key保存了元素的值，value保存了元素的分值。</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/k655yYYQ2S.jpeg" alt="img/k655yYYQ2S.jpeg" style="zoom:50%;">
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2023/07/02/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/" title="redis学习2-五种数据类型实现" target="_blank" rel="external">https://eoccc.gitee.io/2023/07/02/redis学习2-五种数据类型实现/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/07/04/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/" title="redis学习3-过期键清除策略"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/07/01/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="redis学习1-底层数据结构"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

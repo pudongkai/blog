@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Mysql- SQL优化 | Eoccc的博客</title>
+  <meta name="description" content="数据库insert、order by、group by、limit、count、update操作的优化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql- SQL优化">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/06/23/Mysql-SQL%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="数据库insert、order by、group by、limit、count、update操作的优化。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172225136-8289876.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172612547-20230702172813631.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172932009.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702173309657.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702173616680.png">
+<meta property="article:published_time" content="2023-06-23T08:25:19.000Z">
+<meta property="article:modified_time" content="2023-07-12T19:08:45.843Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172225136-8289876.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/06/23/Mysql-SQL%E4%BC%98%E5%8C%96/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" class="title">redis学习10-集群</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="title">redis学习9-哨兵Sentinel</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" class="title">redis学习8-复制（主从架构）</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="title">redis学习7-时钟周期serverCron</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="title">redis学习6-客户端和服务器</a>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E4%BC%98%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text"> 插入优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5"><span class="toc-number">1.1.</span> <span class="toc-text"> 插入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E5%88%86%E8%A3%82"><span class="toc-number">1.2.</span> <span class="toc-text"> 页分裂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E5%90%88%E5%B9%B6"><span class="toc-number">1.3.</span> <span class="toc-text"> 页合并</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E9%94%AE%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text"> 主键的优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#order-by-%E4%BC%98%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text"> order by 优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#group-by-%E4%BC%98%E5%8C%96"><span class="toc-number">4.</span> <span class="toc-text"> group by 优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#limt-%E4%BC%98%E5%8C%96"><span class="toc-number">5.</span> <span class="toc-text"> limt 优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#count-%E4%BC%98%E5%8C%96"><span class="toc-number">6.</span> <span class="toc-text"> count 优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#update-%E4%BC%98%E5%8C%96"><span class="toc-number">7.</span> <span class="toc-text"> update 优化</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Mysql-SQL优化" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mysql- SQL优化
+    </h1>
+  
+
+      
+      <div class="article-meta">
+
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/23/Mysql-SQL%E4%BC%98%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 920(words)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>数据库insert、order by、group by、limit、count、update操作的优化。</p>
+<span id="more"></span>
+<h1 id="插入优化"><a class="markdownIt-Anchor" href="#插入优化"></a> 插入优化</h1>
+<h2 id="插入"><a class="markdownIt-Anchor" href="#插入"></a> 插入</h2>
+<p><strong>批量插入</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> table_name <span class="keyword">values</span> (<span class="number">1</span>, col) (<span class="number">2</span>, col);</span><br></pre></td></tr></table></figure>
+<p><strong>手动提交事务</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> transaction;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> table_name <span class="keyword">values</span> (<span class="number">1</span>, col) (<span class="number">2</span>, col);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> table_name <span class="keyword">values</span> (<span class="number">3</span>, col);</span><br><span class="line"><span class="keyword">commit</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>主键顺序插入</strong></p>
+<p>按照主键顺序插入，效率会比乱序插入高。如果是乱序插入的，会导致页分裂，以及页之间的指针重排。</p>
+<p><strong>大批量插入数据</strong></p>
+<p>如果一次性插入大批量数据，使用insert插入的性能较低，可以使用load指令进行插入。</p>
+<ol>
+<li>
+<p>连接数据库时加上参数 --local-infile</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="comment">--local-infile -u root -p</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>打开加载文件开关（默认关闭）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> <span class="keyword">local</span><span class="operator">-</span>infile<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>执行load指令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load data <span class="keyword">local</span> infile <span class="string">&#x27;file_path&#x27;</span> <span class="keyword">into</span> <span class="keyword">table</span> <span class="string">&#x27;table_name&#x27;</span> fields terminated <span class="keyword">by</span> <span class="string">&#x27;,&#x27;</span> lines terminated <span class="keyword">by</span> <span class="string">&#x27;\n&#x27;</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="页分裂"><a class="markdownIt-Anchor" href="#页分裂"></a> 页分裂</h2>
+<p>乱序插入会导致主键索引页分裂。</p>
+<p>如下图，当需要插入新的数据50的时候：</p>
+<ol>
+<li>
+<p>50需要插入到23之后，但是由于page1已经满了，所以需要申请一个新的page3</p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172225136-8289876.png" alt="image-20230702172225136"></p>
+</li>
+<li>
+<p>将23和47移动到page3，然后把50插入到23之后<br>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172612547-20230702172813631.png" alt="image-20230702172612547"></p>
+</li>
+<li>
+<p>将page3移动到page1和page2之间（设置指针即可）</p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702172932009.png" alt="image-20230702172932009"></p>
+</li>
+</ol>
+<h2 id="页合并"><a class="markdownIt-Anchor" href="#页合并"></a> 页合并</h2>
+<p>当删除一行记录时，innodb会将这行记录标记为删除状态，当删除的记录占用的空间达到<code>MERGE_THRESHOLD</code> （默认为50%）时，会查尝试将附近的页合并，以优化空间使用。</p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702173309657.png" alt="image-20230702173309657"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230702173616680.png" alt="image-20230702173616680"></p>
+<h1 id="主键的优化"><a class="markdownIt-Anchor" href="#主键的优化"></a> 主键的优化</h1>
+<ol>
+<li>尽量降低主键的长度</li>
+<li>插入数据时，尽量顺序插入（使用自增主键）</li>
+<li>尽量不要使用UUID或其他自然主键，如身份证号（因为这些主键是乱序的，而且比较长）</li>
+<li>业务操作时，尽量不要修改主键</li>
+</ol>
+<h1 id="order-by-优化"><a class="markdownIt-Anchor" href="#order-by-优化"></a> order by 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">order</span> <span class="keyword">by</span> age;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>Using filesort：不直接通过索引返回排序结果的排序。通过索引或全表扫描，读取满足条件的记录，然后在排序缓冲区sort buffer中排序。</p>
+</li>
+<li>
+<p>Using index：通过有序索引顺序扫描直接返回有序记录，不需要额外排序。</p>
+</li>
+</ul>
+<ol>
+<li>
+<p>如果索引没有覆盖排序字段，会回表查询，使用filesort排序</p>
+</li>
+<li>
+<p>如果我们通过多个字断进行排序，而且排序方式不一样，会导致不使用索引：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name,phone,age <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">order</span> <span class="keyword">by</span> phone <span class="keyword">asc</span>, age <span class="keyword">desc</span>;</span><br></pre></td></tr></table></figure>
+<p>我们可以对需要排序的字断以及排序方式建立索引：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> index idx_phone_age <span class="keyword">user</span>(phone <span class="keyword">asc</span>, age <span class="keyword">desc</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>总结：</p>
+<blockquote>
+<ol>
+<li>根据排序字段建立合适的索引，多字段排序时，遵循最左前缀原则</li>
+<li>使用覆盖索引</li>
+<li>多字段排序时，一个升序一个降序，创建联合索引时制定排序规则</li>
+<li>不可避免filesort时，可以适当增大排序缓冲区sort_buffer_size（默认256kb）</li>
+</ol>
+</blockquote>
+<h1 id="group-by-优化"><a class="markdownIt-Anchor" href="#group-by-优化"></a> group by 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">group</span> <span class="keyword">by</span> age;</span><br></pre></td></tr></table></figure>
+<p>Using index：使用索引进行分组</p>
+<p>Using temporary：使用临时表进行分组。</p>
+<blockquote>
+<ol>
+<li>进行分组操作时，使用索引提高效率</li>
+<li>通过多字段进行分组时，遵循最左前缀原则</li>
+</ol>
+</blockquote>
+<h1 id="limt-优化"><a class="markdownIt-Anchor" href="#limt-优化"></a> limt 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tb_sku limit <span class="number">100000</span>, <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>当表的数据量比较大了，对越靠后的记录进行limt操作时，效率越低。</p>
+<p>通过覆盖索引 + 子查询进行优化：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> s.<span class="operator">*</span> form tb_sku s, (<span class="keyword">select</span> id <span class="keyword">from</span> tb_sku limit <span class="number">100000</span>, <span class="number">10</span>) a <span class="keyword">where</span> s.id<span class="operator">=</span>a.id;</span><br></pre></td></tr></table></figure>
+<h1 id="count-优化"><a class="markdownIt-Anchor" href="#count-优化"></a> count 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> tb_sku;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>MyIsam 记录了表的总行数，可以直接返回</li>
+<li>InnoDb 需要查询所有记录，进行计数</li>
+</ul>
+<p>优化：自己计数，如在redis中自己维护一个计数。</p>
+<h1 id="update-优化"><a class="markdownIt-Anchor" href="#update-优化"></a> update 优化</h1>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> age<span class="operator">=</span><span class="number">20</span> <span class="keyword">where</span> name<span class="operator">=</span><span class="string">&#x27;小明&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>如果where后面的条件没有使用索引，innodb会锁住整个表。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2023/06/23/Mysql-SQL%E4%BC%98%E5%8C%96/" title="Mysql- SQL优化" target="_blank" rel="external">https://eoccc.gitee.io/2023/06/23/Mysql-SQL优化/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/" title="Mysql-事务原理"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/06/20/Mysql-%E6%9E%B6%E6%9E%84/" title="Mysql-架构"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

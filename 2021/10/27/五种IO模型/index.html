@@ -26,20 +26,26 @@
 <meta property="og:site_name" content="Eoccc的博客">
 <meta property="og:description" content="本文简要介绍五种IO模型，简单分析每个IO模型所解决的问题。五个IO模型：阻塞IO，非阻塞IO，IO多路复用，信号驱动IO，异步IO。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1vcqg1gqrj20xy0g6q3r.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1gzm1wm196uj212k0kumyx.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1gzm1wgapxlj20m20jr3zz.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1gzm1wc2o9ej211e0k0wg3.jpg">
-<meta property="og:image" content="https://eoccc.gitee.io/.io//image-20220719091227569.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/MJWPfNsQa.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/ywkDgIhlL.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/S7w0YML8Q.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/R7kjyVL0y.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20220719091227569.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723212740711.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723213229363.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723181306462.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723213349951.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723183832127.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723183413563.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723211024206.png">
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-2461c8df6a154930afb4e7c345442835_1440w.jpg">
-<meta property="og:image" content="https://pic2.zhimg.com/80/v2-bf11a9d3c0f52da85298baa13000e5c9_1440w.jpg">
-<meta property="og:image" content="https://pic4.zhimg.com/80/v2-5095ab1ffe868a2577bc15310d740293_1440w.jpg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723211212808.png">
 <meta property="article:published_time" content="2021-10-27T07:10:35.000Z">
-<meta property="article:modified_time" content="2022-08-01T04:58:42.278Z">
+<meta property="article:modified_time" content="2023-07-23T13:34:10.279Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="技术笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1vcqg1gqrj20xy0g6q3r.jpg">
+<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/MJWPfNsQa.jpeg">
   <!-- Canonical links -->
   <link rel="canonical" href="https://eoccc.gitee.io/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/index.html">
   
@@ -205,7 +211,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/" class="title">Mysql-事务原理</a>
+                <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" class="title">redis学习10-集群</a>
               </p>
             </div>
           </li>
@@ -217,7 +223,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/23/Mysql-%20SQL%E4%BC%98%E5%8C%96/" class="title">Mysql- SQL优化</a>
+                <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="title">redis学习9-哨兵Sentinel</a>
               </p>
             </div>
           </li>
@@ -229,7 +235,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/20/Mysql-%20%E6%9E%B6%E6%9E%84/" class="title">Mysql-架构</a>
+                <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" class="title">redis学习8-复制（主从架构）</a>
               </p>
             </div>
           </li>
@@ -241,7 +247,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/" class="title">Queue 之 help gc</a>
+                <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="title">redis学习7-时钟周期serverCron</a>
               </p>
             </div>
           </li>
@@ -253,7 +259,7 @@
                 
               </p>
               <p class="item-title">
-                <a href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/" class="title">协程-小试牛刀</a>
+                <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="title">redis学习6-客户端和服务器</a>
               </p>
             </div>
           </li>
@@ -293,7 +299,7 @@
 
       
       <div class="article-meta">
-        
+
         
         
   <span class="article-tag">
@@ -320,26 +326,32 @@
 <h2 id="阻塞iobio"><a class="markdownIt-Anchor" href="#阻塞iobio"></a> 阻塞IO（BIO）</h2>
 <p>应用B发起读取数据申请时，在内核数据没有准备好之前，应用B会一直处于等待数据状态，直到内核把数据准备好了交给应用B才结束。</p>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 应用进程向内核发起recvfrom读取数据。</span><br><span class="line"><span class="bullet">2.</span> 准备数据报（应用进程阻塞）。</span><br><span class="line"><span class="bullet">3.</span> 将数据从内核负责到应用空间。</span><br><span class="line"><span class="bullet">4.</span> 复制完成后，返回成功提示。</span><br></pre></td></tr></table></figure>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1vcqg1gqrj20xy0g6q3r.jpg" alt="image-20220222093007182" style="zoom:40%;">
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/MJWPfNsQa.jpeg" alt="img" style="zoom:50%;">
 <h2 id="非阻塞io"><a class="markdownIt-Anchor" href="#非阻塞io"></a> 非阻塞IO</h2>
 <p>当应用B发起读取数据申请时，如果内核数据没有准备好会即刻告诉应用B，不会让B在这里等待。但是应用B会不断地向服务器发起调用，直到拿到数据。</p>
 <p>**好处：**释放了需要IO的线程。</p>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 应用进程向内核发起recvfrom读取数据。</span><br><span class="line"><span class="bullet">2.</span> 没有数据报准备好，即刻返回<span class="code">`EWOULDBLOCK`</span>错误码。</span><br><span class="line"><span class="bullet">3.</span> 应用进程向内核发起recvfrom读取数据。</span><br><span class="line"><span class="bullet">4.</span> 已有数据包准备好就进行一下 步骤，否则还是返回错误码。</span><br><span class="line"><span class="bullet">5.</span> 将数据从内核拷贝到用户空间。</span><br><span class="line"><span class="bullet">6.</span> 完成后，返回成功提示。</span><br></pre></td></tr></table></figure>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1gzm1wm196uj212k0kumyx.jpg" alt="image-20220222093322060" style="zoom:40%;">
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/ywkDgIhlL.jpeg" alt="img/ywkDgIhlL.jpeg" style="zoom:50%;">
 <h2 id="io多路复用nio"><a class="markdownIt-Anchor" href="#io多路复用nio"></a> IO多路复用（NIO）</h2>
 <p>一个线程监控多个网络请求，这样就可以只需要一个或几个线程就可以完成数据状态询问的操作，当有数据准备就绪之后再分配对应的线程去读取数据，这么做就可以节省出大量的线程资源出来。<br>
 进程通过将一个或多个fd传递给select，阻塞在select操作上，select帮我们侦测多个fd是否准备就绪（slect、poll、epoll ），当有fd准备就绪时，select返回数据可读状态，应用程序再调用recvfrom读取数据。<br>
 **好处：**解决了非阻塞IO中每个请求开启一个线程进行IO的资源消耗。</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1gzm1wgapxlj20m20jr3zz.jpg" alt="img" style="zoom:40%;"><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1gzm1wc2o9ej211e0k0wg3.jpg" alt="image-20220222095159132" style="zoom:35%;"></p>
-<img src="/.io//image-20220719091227569.png" alt="image-20220719091227569" style="zoom:50%;">
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/S7w0YML8Q.jpeg" alt="img/S7w0YML8Q.jpeg" style="zoom:50%;"><img src="https://gitee.com/eoccc/pic-shack/raw/master/R7kjyVL0y.jpeg" alt="img/R7kjyVL0y.jpeg" style="zoom:36%;"></p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20220719091227569.png" alt="image-20220719091227569" style="zoom:50%;">
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723212740711.png" alt="image-20230723212740711"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723213229363.png" alt="image-20230723213229363"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723181306462.png" alt="image-20230723181306462"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723213349951.png" alt="image-20230723213349951"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723183832127.png" alt="image-20230723183832127"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723183413563.png" alt="image-20230723183413563"></p>
 <h2 id="信号驱动io模型"><a class="markdownIt-Anchor" href="#信号驱动io模型"></a> 信号驱动IO模型</h2>
 <p>首先开启套接口信号驱动IO功能，并通过系统调用sigaction执行一个信号处理函数，此时请求即刻返回，当数据准备就绪时，就生成对应进程的SIGIO信号，通过信号回调通知应用线程调用recvfrom来读取数据。<br>
 **好处：**解决了IO多路复用模型中select大量无效的数据状态轮询操作。</p>
-<p><img src="https://pic2.zhimg.com/80/v2-2461c8df6a154930afb4e7c345442835_1440w.jpg" alt="img" style="zoom:47%;"><img src="https://pic2.zhimg.com/80/v2-bf11a9d3c0f52da85298baa13000e5c9_1440w.jpg" alt="img" style="zoom:47%;"></p>
+<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723211024206.png" alt="image-20230723211024206" style="zoom:43%;"><img src="https://pic2.zhimg.com/80/v2-2461c8df6a154930afb4e7c345442835_1440w.jpg" alt="img" style="zoom:47%;"></p>
 <h2 id="异步ioaio"><a class="markdownIt-Anchor" href="#异步ioaio"></a> 异步IO（AIO）</h2>
 <p>应用告知内核启动某个操作，并让内核在整个操作完成之后，通知应用，这种模型与信号驱动模型的主要区别在于，信号驱动IO只是由内核通知我们何时可以开始下一个IO操作，而异步IO模型是由内核通知我们操作什么时候完成。<br>
 **好处：**解决了IO多路复用和信号驱动IO模型中，应用程序需要先后发送询问请求、接收数据请求两个阶段的模式。</p>
-<img src="https://pic4.zhimg.com/80/v2-5095ab1ffe868a2577bc15310d740293_1440w.jpg" alt="img" style="zoom:50%;">
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723211212808.png" alt="image-20230723211212808" style="zoom:50%;">
 
       
     </div>

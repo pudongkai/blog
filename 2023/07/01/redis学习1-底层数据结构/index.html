@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>redis学习1-底层数据结构 | Eoccc的博客</title>
+  <meta name="description" content="本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis学习1-底层数据结构">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/07/01/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eoccc.gitee.io/.io//image-20230720014531357.png">
+<meta property="og:image" content="https://eoccc.gitee.io/.io//image-20230720015833546.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/bEcyFCzsQ.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/_fpaLdih4.jpeg">
+<meta property="og:image" content="https://eoccc.gitee.io/.io//wCRzeEOjR.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723032028196.png">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/1P3MUzEsz.jpeg">
+<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/O8pUbHusi.jpeg">
+<meta property="article:published_time" content="2023-07-01T10:25:19.000Z">
+<meta property="article:modified_time" content="2023-07-22T19:35:53.074Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eoccc.gitee.io/.io//image-20230720014531357.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/07/01/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" class="title">redis学习10-集群</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="title">redis学习9-哨兵Sentinel</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" class="title">redis学习8-复制（主从架构）</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="title">redis学习7-时钟周期serverCron</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/07/redis%E5%AD%A6%E4%B9%A06-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="title">redis学习6-客户端和服务器</a>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.</span> <span class="toc-text"> 简单动态字符串</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#intset"><span class="toc-number">2.</span> <span class="toc-text"> intset</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text"> 链表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8"><span class="toc-number">4.</span> <span class="toc-text"> 压缩列表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#quicklist"><span class="toc-number">5.</span> <span class="toc-text"> quicklist</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E5%85%B8"><span class="toc-number">6.</span> <span class="toc-text"> 字典</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B7%B3%E8%B7%83%E8%A1%A8"><span class="toc-number">7.</span> <span class="toc-text"> 跳跃表</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-redis学习1-底层数据结构" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis学习1-底层数据结构
+    </h1>
+  
+
+      
+      <div class="article-meta">
+
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/01/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.2k(words)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>本文介绍redis底层的数据结构，redis通过这些数据结构实现了业务层的五种数据结构：string、list、hash、set、zset。</p>
+<span id="more"></span>
+<h1 id="简单动态字符串"><a class="markdownIt-Anchor" href="#简单动态字符串"></a> 简单动态字符串</h1>
+<p>Redis对简单动态字符串（Simple Dynamic String，SDS）的底层定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* flags字段对应的值 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SDS_TYPE_5  0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SDS_TYPE_8  1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SDS_TYPE_16 2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SDS_TYPE_32 3</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SDS_TYPE_64 4</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr8</span> &#123;</span></span><br><span class="line">    <span class="type">uint8_t</span> len; <span class="comment">/* 保存buf的长度，即SDS所保存的字符串的长度 */</span></span><br><span class="line">    <span class="type">uint8_t</span> alloc; <span class="comment">/* SDS申请的字节数，不包含header（除了buf的其他字段）和结束表示 */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> flags; <span class="comment">/* SDS的类型，用来控制header的大小 */</span></span><br><span class="line">    <span class="type">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<img src="/.io//image-20230720014531357.png" alt="image-20230720014531357" style="zoom:43%;">
+<p><strong>SDS动态扩容</strong>，redis对SDS的内存做了优化：</p>
+<blockquote>
+<ol>
+<li>空间预分配：SDS在free空间不够时进行扩容，并重新分配空间<br>
+扩容后SDS的长度小于1M时，SDS将为buf分配长度为len的未使用空间，分配后为: len+len+1<br>
+扩容后SDS的长度大于1M时，SDS将为buf分配长度为1M的未使用空间，分配后为: len+1M+1</li>
+<li>惰性空间释放<br>
+SDS字符串变短时，并不马上缩短buf长度，而是通过free字段暂时保存着部分字节</li>
+</ol>
+</blockquote>
+<p>SDS的优点：</p>
+<blockquote>
+<ol>
+<li>SDS可以直接重用C字符串的一些库函数</li>
+<li>获取字符串长度的复杂读为O(1)，而C字符串为O(N)</li>
+<li>避免缓存溢出，sdscat函数在追加字符串之前会先检查是否有足够的空间</li>
+<li>避免重新分配内存，由于C字符串没有记录长度，其buf长度为n+1，每次对字符串进行操作的时候都要重新分配内存</li>
+<li>可以存储二进制信息</li>
+</ol>
+</blockquote>
+<h1 id="intset"><a class="markdownIt-Anchor" href="#intset"></a> intset</h1>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span></span><br><span class="line">    <span class="type">uint32_t</span> encoding;  <span class="comment">/* 编码方式，支持存放16位（short）、32位（int）、64位（long）整数 */</span></span><br><span class="line">    <span class="type">uint32_t</span> length;    <span class="comment">/* 数组长度 */</span></span><br><span class="line">    <span class="type">int8_t</span> contents[];  <span class="comment">/* 保存元素 */</span></span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
+<p>为了方便查找，Redis会将intset中所有的整数按照升序依次保存在contents数组中，结构如图:</p>
+<img src="/.io//image-20230720015833546.png" alt="image-20230720015833546" style="zoom:45%;">
+<p><strong>intset升级</strong></p>
+<p>由于intset内部的每一个元素的编码方式都是统一的，当新插入的数据超过原来编码方式的范围时，intset会把编码方式升级到合适的编码方式。同时将数组中已有的元素重新根据新的编码方式进行编码。</p>
+<p><strong>注意：</strong></p>
+<blockquote>
+<ol>
+<li>intset查找元素从小到大排列，采用的是二分查找算法</li>
+<li>intset插入数据的时候需要先扩容空间</li>
+<li>intset的数组使用的是连续的空间，插入和删除都会涉及内存空间的移动，当数组中的元素比较多的时候，性能会下降</li>
+</ol>
+</blockquote>
+<h1 id="链表"><a class="markdownIt-Anchor" href="#链表"></a> 链表</h1>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/bEcyFCzsQ.jpeg" alt="bEcyFCzsQ.jpeg" style="zoom:60%;">
+<p>在Redis中，链表应用于列表键、发布与订阅、慢查询、监视器。</p>
+<ul>
+<li>采用一个list来持有链表，包含链表长度等信息</li>
+<li>链表的节点使用listNode来实现</li>
+<li>是双向链表</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span> </span><br><span class="line">   listNode * head;</span><br><span class="line">   listNode * tail;</span><br><span class="line">   <span class="type">unsigned</span> <span class="type">long</span> len;   <span class="comment">// 链表所包含的节点数量</span></span><br><span class="line">   ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> &#123;</span> </span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> * <span class="title">prev</span>;</span>    <span class="comment">// 前置节点</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> * <span class="title">next</span>;</span>    <span class="comment">// 后置节点</span></span><br><span class="line">   <span class="type">void</span> * value;       <span class="comment">// 节点的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="压缩列表"><a class="markdownIt-Anchor" href="#压缩列表"></a> 压缩列表</h1>
+<p>压缩列表是为了节约内存而开发的顺序型数据结构。列表键或哈希键只包含少量元素，且每项都是小整数或较短的字符串时，会使用压缩列表ziplist。</p>
+<blockquote>
+<ul>
+<li>zlbytes：4字节，记录压缩列表占用的字节数</li>
+<li>zltail：4字节，记录压缩列表的尾节点距离起始地址的偏移量</li>
+<li>zllen：2字节，记录压缩列表包括的节点数量</li>
+<li>entryX：列表节点</li>
+<li>zlend：1字节，特殊值 0xFF(255)，标识压缩列表的末端</li>
+</ul>
+</blockquote>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/_fpaLdih4.jpeg" alt="_fpaLdih4.jpeg" style="zoom:60%;">
+<p><strong>压缩列表节点：</strong></p>
+<blockquote>
+<ul>
+<li>
+<p>previous_entry_length：前一个节点的长度</p>
+<p>如果前一个节点的长度小于254字节：previous_entry_length属性的长度为1字节</p>
+<p>如果前一个节点的长度大于等于254字节：previous_entry_length属性的长度为5字节</p>
+</li>
+<li>
+<p>encoding：保存的数据的数据类型及长度</p>
+</li>
+<li>
+<p>content：字节数组或整数</p>
+</li>
+</ul>
+</blockquote>
+<img src="/.io//wCRzeEOjR.jpeg" alt="img/wCRzeEOjR.jpeg" style="zoom:70%;">
+<p>通过前一节点长度我们可以从任意位置遍历列表（可能是1字节，可能是5字节，比较trick的技巧），编码由编码前两位决定编码长度，content记录内容；</p>
+<p><strong>压缩列表连锁更新：</strong></p>
+<blockquote>
+<ul>
+<li>删除或新增节点，当新=entry的previous_entry_length节点的字节数与原来这个位置的entry的不一致时， 会导致后面所有entry的previous_entry_length也发生变化，从而造成连锁更新；</li>
+<li>连锁更新的性能虽然比较差，但是出现的几率很小</li>
+</ul>
+</blockquote>
+<h1 id="quicklist"><a class="markdownIt-Anchor" href="#quicklist"></a> quicklist</h1>
+<p>ZipList虽然比较节省内存，但是当元素过多时，会影响效率。Redis采用分片的方式来解决这一问题。</p>
+<p><strong>quicklist</strong>是3.2版本引入的一个新的数据结构，是ziplist和 linkedlist 的组合，它将 linkedlist 按段切分，每一段使用 ziplist 来紧凑存储，多个 ziplist 之间使用双向指针串接起来。</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723032028196.png" alt="image-20230723032028196" style="zoom:43%;">
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">quicklist</span> &#123;</span></span><br><span class="line">    quicklistNode *head;</span><br><span class="line">    quicklistNode *tail;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> count;        <span class="comment">/* total count of all entries in all listpacks */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> len;          <span class="comment">/* number of quicklistNodes */</span></span><br><span class="line">    <span class="type">signed</span> <span class="type">int</span> fill : QL_FILL_BITS;       <span class="comment">/* fill factor for individual nodes */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> compress : QL_COMP_BITS; <span class="comment">/* depth of end nodes not to compress;0=off */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> bookmark_count: QL_BM_BITS;</span><br><span class="line">    quicklistBookmark bookmarks[];</span><br><span class="line">&#125; quicklist;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> *entry;</span><br><span class="line">    <span class="type">size_t</span> sz;             <span class="comment">/* entry size in bytes */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> count : <span class="number">16</span>;     <span class="comment">/* count of items in listpack */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> encoding : <span class="number">2</span>;   <span class="comment">/* RAW==1 or LZF==2 */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> container : <span class="number">2</span>;  <span class="comment">/* PLAIN==1 or PACKED==2 */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> recompress : <span class="number">1</span>; <span class="comment">/* was this node previous compressed? */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> attempted_compress : <span class="number">1</span>; <span class="comment">/* node can&#x27;t compress; too small */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> dont_compress : <span class="number">1</span>; <span class="comment">/* prevent compression of entry that will be used later */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> extra : <span class="number">9</span>; <span class="comment">/* more bits to steal for future usage */</span></span><br><span class="line">&#125; quicklistNode;</span><br></pre></td></tr></table></figure>
+<p>为了避免QuickList中的每个ZipList中entry过多，Redis提供了一个配置项: <code>list-max-ziplist-size</code>来限制。</p>
+<p>如果值为正，则代表ZipList的允许的entry个数的最大值</p>
+<p>如果值为负，则代表ZipList的最大内存大小，分5种情况：</p>
+<blockquote>
+<p>-1： 每个ZipList的内存占用不能超过4kb</p>
+<p>-2：每个ZipList的内存占用不能超过8kb（默认）</p>
+<p>-3：每个zipList的内存占用不能超过16kb</p>
+<p>-4：每个ZipList的内存占用不能超过32kb</p>
+<p>-5：每个ZipList的内存占用不能超过64kb</p>
+</blockquote>
+<p>除了控制ZipList的大小，QuickList还可以对节点的ZipList做压缩。通过配置项<code>list-compress-depth</code>来控制。因为链表般都是从首尾访问较多，所以首尾是不压缩的。这个参数是控制首尾不压缩的节点个数:</p>
+<blockquote>
+<p>0：特殊值，代表不压缩</p>
+<p>1：首尾各有1个节点不压缩，中间节点压缩</p>
+<p>2：首尾各有2个节点不压缩，中间节点压缩以此类推</p>
+<p>3：以此类推</p>
+</blockquote>
+<h1 id="字典"><a class="markdownIt-Anchor" href="#字典"></a> 字典</h1>
+<p>字典由3层数据结构组成：<code>dict</code>，<code>dictht</code>，<code>dictEntry</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">  dictType *type;  <span class="comment">// 用于操作特定类型键值对的函数</span></span><br><span class="line">  <span class="type">void</span> *privdata;  <span class="comment">// 需要传给指定函数的可选参数</span></span><br><span class="line">  dictht ht[<span class="number">2</span>];    <span class="comment">// 保存了两个dictht的数组，这两个数组用于rehash</span></span><br><span class="line">  <span class="type">int</span> rehashidx;   <span class="comment">// rehash索引，-1:没有在rehash，0:开始rehash，&gt;0:当前rehash进度</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">  dictEntry **table;       <span class="comment">// 哈希表数组</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> size;      <span class="comment">// 哈希表大小</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> sizemask;  <span class="comment">// 哈希表大小掩码，用于计算索引值，总是等于size-1</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> used;      <span class="comment">// 该哈希表已用节点的数量</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="type">void</span> *key;    <span class="comment">// 键</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span>&#123;</span>        <span class="comment">// 值</span></span><br><span class="line">        <span class="type">void</span> *val;</span><br><span class="line">        uint64_tu64;</span><br><span class="line">        int64_ts64;</span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span> <span class="comment">// 指向下个哈希表节点，形成链表</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>hash冲突：</strong> 与HashMap的实现类似，数组用于保存键值对节点，当发生冲突时，采用链表法解决冲突</p>
+<p><strong>rehash：</strong> 负载因子 = <code>ht[0].used</code> / <code>ht[0].size</code></p>
+<blockquote>
+<ol>
+<li>服务器<strong>没有执行</strong><code>BGSAVE</code>或<code>BGREWRITEAOF</code>命令，负载因子大于等于1时，进行扩容为原来的2倍</li>
+<li>服务器<strong>正在执行</strong><code>BGSAVE</code>或<code>BGREWRITEAOF</code>命令，负载因子大于等于5时，进行扩容为原来的2倍</li>
+<li>负载因子小于0.1时，进行缩容为原来的1/2</li>
+</ol>
+</blockquote>
+<p><strong>渐进式rehash：</strong> 程序对字典中的key进行添加、查找、删除、更新等操作时，程序会将相应dictEntry上的所有键值对rehash到<code>ht[1]</code>，rehashidx自增1。<code>ht[0]</code>上的所有键值对都rehash到<code>ht[1]</code>上时，将rehashidx置为-1。</p>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/1P3MUzEsz.jpeg" alt="1P3MUzEsz.jpeg" style="zoom:50%;">
+<h1 id="跳跃表"><a class="markdownIt-Anchor" href="#跳跃表"></a> 跳跃表</h1>
+<p>跳跃表支持平均O(logN)，最差O(N)的复杂度 ，并且可以实现顺序操作。查询效率可以和平衡树媲美，并且实现更简单，所以不少程序使用跳跃表代替平衡树。</p>
+<blockquote>
+<ol>
+<li>redis采用跳跃表作为有序集合<code>zset</code>的底层实现之一；</li>
+<li>跳跃表由<code>zskiplist</code>和<code>zskiplistNode</code>组成。<code>zskiplist</code>用于保存跳跃表的信息，如头节点、尾节点、长度、层高；<code>zskiplistNode</code>保存跳跃表的节点</li>
+<li>每个跳跃表节点的层高都是1至32的随机数（每个节点可以有1～32个指针）</li>
+<li>多个节点的分值可以相同，但是一个节点的分值永远一致</li>
+<li>节点按score由小到大排序，score相同时按成员对象由小到大排序</li>
+</ol>
+</blockquote>
+<img src="https://gitee.com/eoccc/pic-shack/raw/master/O8pUbHusi.jpeg" alt="O8pUbHusi.jpeg" style="zoom:57%;">
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2023/07/01/redis%E5%AD%A6%E4%B9%A01-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="redis学习1-底层数据结构" target="_blank" rel="external">https://eoccc.gitee.io/2023/07/01/redis学习1-底层数据结构/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/07/02/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/" title="redis学习2-五种数据类型实现"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/06/26/Mysql-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" title="Mysql-主从复制"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
