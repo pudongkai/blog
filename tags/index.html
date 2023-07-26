@@ -1021,6 +1021,35 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
+       <time datetime="2023-06-14T10:25:19.000Z" itemprop="datePublished">2023-06-14</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/">Queue 之 help gc</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p><code>java.util.concurrent.LinkedBlockingQueue#dequeue</code>有一行代码<code>h.next = h</code> 被注释上了help gc，那么它到底是怎么帮助gc的呢？</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
        <time datetime="2022-08-10T10:25:19.000Z" itemprop="datePublished">2022-08-10</time>
      </div>
      <h3 itemprop="name">
@@ -1054,14 +1083,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2021-10-27T07:10:35.000Z" itemprop="datePublished">2021-10-27</time>
+       <time datetime="2023-06-06T14:53:04.949Z" itemprop="datePublished">2023-06-06</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/">IO模型</a>
+       <a class="article-link" href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/">协程-小试牛刀</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>本文简要介绍五种IO模型，简单分析每个IO模型所解决的问题。五个IO模型：阻塞IO，非阻塞IO，IO多路复用，信号驱动IO，异步IO。</p>
+         <p>JDK还不支持协程，终究是一大遗憾。好消息是jdk19引入了虚线程，弥补了这一遗憾，但是还需要经历一定时间的验证，公司生产环境的jdk一般也没有使用这么高版本的jdk。</p>
        </div>
      
    </div>
@@ -1083,14 +1112,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2023-06-06T14:53:04.949Z" itemprop="datePublished">2023-06-06</time>
+       <time datetime="2021-10-27T07:10:35.000Z" itemprop="datePublished">2021-10-27</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2023/06/06/%E5%8D%8F%E7%A8%8B-%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80/">协程-小试牛刀</a>
+       <a class="article-link" href="/2021/10/27/%E4%BA%94%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/">IO模型</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>JDK还不支持协程，终究是一大遗憾。好消息是jdk19引入了虚线程，弥补了这一遗憾，但是还需要经历一定时间的验证，公司生产环境的jdk一般也没有使用这么高版本的jdk。</p>
+         <p>本文简要介绍五种IO模型，简单分析每个IO模型所解决的问题。五个IO模型：阻塞IO，非阻塞IO，IO多路复用，信号驱动IO，异步IO。</p>
        </div>
      
    </div>
@@ -1260,26 +1289,34 @@
 
         </div>
         
+      </div>
+      
+      <h3 class="panel-title mb-1x">
+        <a href="/tags/JVM/" title="#JVM"># JVM</a>
+        <small class="text-muted">(Total 3 articles)</small>
+      </h3>
+      <div class="row">
+        
         <div class="col-md-6">
           
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2023-06-14T10:25:19.000Z" itemprop="datePublished">2023-06-14</time>
+       <time datetime="2022-12-04T07:25:43.000Z" itemprop="datePublished">2022-12-04</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2023/06/14/Queue%20%E4%B9%8B%20help%20gc/">Queue 之 help gc</a>
+       <a class="article-link" href="/2022/12/04/JVM-jdk%E5%B7%A5%E5%85%B7/">JVM虚拟机-jdk工具</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p><code>java.util.concurrent.LinkedBlockingQueue#dequeue</code>有一行代码<code>h.next = h</code> 被注释上了help gc，那么它到底是怎么帮助gc的呢？</p>
+         <p>JDK自带了很多小工具，打包、部署、签名、调试、监控、运维等 各种场景都可能会用到它们。</p>
        </div>
      
    </div>
    
    <div class="panel-footer">
      
-      <a href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" class="label label-default mb">技术笔记</a>
+      <a href="/tags/JVM/" class="label label-default mb">JVM</a>
      
      
    </div>
@@ -1288,14 +1325,6 @@
 
 
         </div>
-        
-      </div>
-      
-      <h3 class="panel-title mb-1x">
-        <a href="/tags/JVM/" title="#JVM"># JVM</a>
-        <small class="text-muted">(Total 3 articles)</small>
-      </h3>
-      <div class="row">
         
         <div class="col-md-6">
           
@@ -1355,35 +1384,6 @@
 
         </div>
         
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2022-12-04T07:25:43.000Z" itemprop="datePublished">2022-12-04</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2022/12/04/JVM-jdk%E5%B7%A5%E5%85%B7/">JVM虚拟机-jdk工具</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>JDK自带了很多小工具，打包、部署、签名、调试、监控、运维等 各种场景都可能会用到它们。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/JVM/" class="label label-default mb">JVM</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
       </div>
       
       <h3 class="panel-title mb-1x">
@@ -1426,14 +1426,15 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-09-27T08:25:19.000Z" itemprop="datePublished">2022-09-27</time>
+       <time datetime="2023-06-26T08:25:19.000Z" itemprop="datePublished">2023-06-26</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/09/27/Mysql-ShardingSphere%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-ShardingSphere分库分表</a>
+       <a class="article-link" href="/2023/06/26/Mysql-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">Mysql-主从复制</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p><a href="https://shardingsphere.apache.org/document/current/cn/overview/#shardingsphere-jdbc">Apache ShardingSphere</a>是一款开源的分布式数据库中间件组成的生态圈。它由Sharding-JDBC、Sharding-Proxy和Sharding-Sidecar（规划中）组成。提供标准化的数据分片、分布式事务和数据库治理功能，可适用于如Java同构、异构语言、容器、云原生等各种多样化的应用场景。</p>
+         <p>主从复制是指将主数据库的DDL和 DML 操作通过二进制日志传到从库服务器中，然后在从库上对这些日志重新执行(也叫重做)，从而<br>
+使得从库和主库的数据保持同步。</p>
        </div>
      
    </div>
@@ -1455,15 +1456,44 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2023-06-26T08:25:19.000Z" itemprop="datePublished">2023-06-26</time>
+       <time datetime="2023-06-24T08:25:19.000Z" itemprop="datePublished">2023-06-24</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2023/06/26/Mysql-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">Mysql-主从复制</a>
+       <a class="article-link" href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/">Mysql-事务原理</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>主从复制是指将主数据库的DDL和 DML 操作通过二进制日志传到从库服务器中，然后在从库上对这些日志重新执行(也叫重做)，从而<br>
-使得从库和主库的数据保持同步。</p>
+         <p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作<br>
+要么同时成功，要么同时失败。</p>
+       </div>
+     
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/Mysql/" class="label label-default mb">Mysql</a>
+     
+     
+   </div>
+   
+</article>
+
+
+        </div>
+        
+        <div class="col-md-6">
+          
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2022-09-27T08:25:19.000Z" itemprop="datePublished">2022-09-27</time>
+     </div>
+     <h3 itemprop="name">
+       <a class="article-link" href="/2022/09/27/Mysql-ShardingSphere%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">Mysql-ShardingSphere分库分表</a>
+     </h3>
+     
+       <div class="article-entry text-muted" itemprop="description">
+         <p><a href="https://shardingsphere.apache.org/document/current/cn/overview/#shardingsphere-jdbc">Apache ShardingSphere</a>是一款开源的分布式数据库中间件组成的生态圈。它由Sharding-JDBC、Sharding-Proxy和Sharding-Sidecar（规划中）组成。提供标准化的数据分片、分布式事务和数据库治理功能，可适用于如Java同构、异构语言、容器、云原生等各种多样化的应用场景。</p>
        </div>
      
    </div>
@@ -1572,36 +1602,6 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2023-06-24T08:25:19.000Z" itemprop="datePublished">2023-06-24</time>
-     </div>
-     <h3 itemprop="name">
-       <a class="article-link" href="/2023/06/24/Mysql-%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/">Mysql-事务原理</a>
-     </h3>
-     
-       <div class="article-entry text-muted" itemprop="description">
-         <p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作<br>
-要么同时成功，要么同时失败。</p>
-       </div>
-     
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/Mysql/" class="label label-default mb">Mysql</a>
-     
-     
-   </div>
-   
-</article>
-
-
-        </div>
-        
-        <div class="col-md-6">
-          
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
        <time datetime="2023-07-24T07:25:19.000Z" itemprop="datePublished">2023-07-24</time>
      </div>
      <h3 itemprop="name">
@@ -1639,14 +1639,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-05-13T16:00:00.000Z" itemprop="datePublished">2022-05-14</time>
+       <time datetime="2022-05-03T16:00:00.000Z" itemprop="datePublished">2022-05-04</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
+       <a class="article-link" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/">dubbo服务暴露</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
+         <p>Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。</p>
        </div>
      
    </div>
@@ -1670,14 +1670,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-05-03T16:00:00.000Z" itemprop="datePublished">2022-05-04</time>
+       <time datetime="2022-05-13T16:00:00.000Z" itemprop="datePublished">2022-05-14</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/">dubbo服务暴露</a>
+       <a class="article-link" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。</p>
+         <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
        </div>
      
    </div>
@@ -2267,14 +2267,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-05-13T16:00:00.000Z" itemprop="datePublished">2022-05-14</time>
+       <time datetime="2022-05-03T16:00:00.000Z" itemprop="datePublished">2022-05-04</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
+       <a class="article-link" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/">dubbo服务暴露</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
+         <p>Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。</p>
        </div>
      
    </div>
@@ -2298,14 +2298,14 @@
 <article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
      <div class="article-meta">
-       <time datetime="2022-05-03T16:00:00.000Z" itemprop="datePublished">2022-05-04</time>
+       <time datetime="2022-05-13T16:00:00.000Z" itemprop="datePublished">2022-05-14</time>
      </div>
      <h3 itemprop="name">
-       <a class="article-link" href="/2022/05/04/dubbo%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/">dubbo服务暴露</a>
+       <a class="article-link" href="/2022/05/14/dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA/">dubbo优雅停机</a>
      </h3>
      
        <div class="article-entry text-muted" itemprop="description">
-         <p>Dubbo的服务暴露主要分为两个部分：第一步，将服务实例通过代理转换成Invoker；第二步，将Invoker通过具体协议转换成Exporter，实现服务暴露。</p>
+         <p>优雅停机是Dubbo的重要特性之一，因为核心业务运行时突然中断可能带来严重的后果。</p>
        </div>
      
    </div>
