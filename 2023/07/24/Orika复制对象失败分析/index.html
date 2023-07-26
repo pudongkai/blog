@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Orika复制对象失败分析 | Eoccc的博客</title>
+  <meta name="description" content="分析了一个Orika框架拷贝对象失败的场景。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Orika复制对象失败分析">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/07/24/Orika%E5%A4%8D%E5%88%B6%E5%AF%B9%E8%B1%A1%E5%A4%B1%E8%B4%A5%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Eoccc的博客">
+<meta property="og:description" content="分析了一个Orika框架拷贝对象失败的场景。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-24T07:25:19.000Z">
+<meta property="article:modified_time" content="2023-07-26T13:08:07.355Z">
+<meta property="article:author" content="Eoccc">
+<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="踩坑">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/07/24/Orika%E5%A4%8D%E5%88%B6%E5%AF%B9%E8%B1%A1%E5%A4%B1%E8%B4%A5%E5%88%86%E6%9E%90/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://eoccc.gitee.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/head.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Eoccc</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Peking, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" rel="tag">技术笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/24/Orika%E5%A4%8D%E5%88%B6%E5%AF%B9%E8%B1%A1%E5%A4%B1%E8%B4%A5%E5%88%86%E6%9E%90/" class="title">Orika复制对象失败分析</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" class="title">redis学习10-集群</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/10/redis%E5%AD%A6%E4%B9%A09-%E5%93%A8%E5%85%B5Sentinel/" class="title">redis学习9-哨兵Sentinel</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/09/redis%E5%AD%A6%E4%B9%A08-%E5%A4%8D%E5%88%B6%EF%BC%88%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84%EF%BC%89/" class="title">redis学习8-复制（主从架构）</a>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/08/redis%E5%AD%A6%E4%B9%A07-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9FserverCron/" class="title">redis学习7-时钟周期serverCron</a>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Orika复制对象失败分析" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Orika复制对象失败分析
+    </h1>
+  
+
+      
+      <div class="article-meta">
+
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag">踩坑</a>, <a class="article-tag-link-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/24/Orika%E5%A4%8D%E5%88%B6%E5%AF%B9%E8%B1%A1%E5%A4%B1%E8%B4%A5%E5%88%86%E6%9E%90/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.9k(words)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>分析了一个Orika框架拷贝对象失败的场景。</p>
+<span id="more"></span>
+<h1 id="使用方式"><a class="markdownIt-Anchor" href="#使用方式"></a> 使用方式</h1>
+<p>Orika通过映射来实现对象拷贝，在创建新对象的时候，支持通过set方法和反射的方式来设置属性的值。</p>
+<p>使用方式：</p>
+<ol>
+<li>
+<p>创建一个 <code>MapperFacade</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">MapperFactory</span> <span class="variable">mapperFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DefaultMapperFactory</span>.Builder().build();</span><br><span class="line"><span class="type">MapperFacade</span> <span class="variable">mapperFacade</span> <span class="operator">=</span> mapperFactory.getMapperFacade();</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>使用该<code>MapperFacade</code>对象进行任意的Bean转换</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 我们默认使用这种方式，复制所有能够映射成功的属性</span></span><br><span class="line"><span class="type">ThisObject</span> <span class="variable">oldObj</span> <span class="operator">=</span> getObj();</span><br><span class="line"><span class="type">ThisObject</span> <span class="variable">newObj</span> <span class="operator">=</span> mapperFacade.map(oldObj, ThisObject.class);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以映射成另一个对象</span></span><br><span class="line"><span class="type">ThatObject</span> <span class="variable">thatObj</span> <span class="operator">=</span> mapperFacade.map(oldObj, ThatObject.class);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>可以自定义映射规则</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mapperFactory.classMap(ThisObject.class, ThatObject.class)</span><br><span class="line">  .field(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;fullName&quot;</span>)</span><br><span class="line">  .field(<span class="string">&quot;age&quot;</span>, <span class="string">&quot;currentAge&quot;</span>)</span><br><span class="line">  .exclude(<span class="string">&quot;secretKey&quot;</span>)</span><br><span class="line">  .byDefault()</span><br><span class="line">  .register();</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>可以指定使用特定的构造函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成B对象时，优先使用包含id和name参数的构造函数</span></span><br><span class="line">mapperFactory.classMap(ThisObject.class, ThatObject.class)</span><br><span class="line">  .constructorB(<span class="string">&quot;id&quot;</span>, <span class="string">&quot;name&quot;</span>)</span><br><span class="line">  .register();</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>数组和字段的映射</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mapperFactory.classMap(ThisObject.class, ThatObject.class)</span><br><span class="line">  .field(<span class="string">&quot;nameParts[0]&quot;</span>, <span class="string">&quot;firstName&quot;</span>)</span><br><span class="line">  .field(<span class="string">&quot;nameParts[1]&quot;</span>, <span class="string">&quot;lastName&quot;</span>)</span><br><span class="line">  .register(); </span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>嵌套字段映射</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mapperFactory.classMap(ThisObject.class, ThatObject.class) </span><br><span class="line">  .field(<span class="string">&quot;name.first&quot;</span>, <span class="string">&quot;firstName&quot;</span>)</span><br><span class="line">  .register();</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>自定义转换器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mapperFactory.getConverterFactory().registerConverter(<span class="keyword">new</span> <span class="title class_">CustomConverter</span>&lt;ThisObject, ThatObject&gt;() &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="keyword">public</span> Money <span class="title function_">convert</span><span class="params">(ThisObject source, Type&lt;? extends ThatObject&gt; destinationType, MappingContext mappingContext)</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> ThatObject.of(source.getName());</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>更多用法：<a href="https://juejin.cn/post/7032886752528302087">https://juejin.cn/post/7032886752528302087</a></p>
+<p>官方文档：<a href="http://orika-mapper.github.io/orika-docs/">http://orika-mapper.github.io/orika-docs/</a></p>
+<h1 id="复制失败的原因"><a class="markdownIt-Anchor" href="#复制失败的原因"></a> 复制失败的原因</h1>
+<p>我们需要被复制的对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Money</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Money&gt;, Serializable &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> BigDecimal amount;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Money</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再看下BigDecimal的源码（只看关键属性就行了）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BigDecimal</span> <span class="keyword">extends</span> <span class="title class_">Number</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;BigDecimal&gt; &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> BigInteger intVal;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> scale;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>**现象：**我们使用<code>mapperFacade.map</code>复制之后，生成了一个新的Money对象，但是内部的amount字段没有成功复制。</p>
+<p><strong>原因：</strong></p>
+<blockquote>
+<ol>
+<li>BigDecimal没有提供无参构造方法</li>
+<li>BigDecimal是不可修改的（因为BigDecimal的每个属性都被final修饰）</li>
+</ol>
+</blockquote>
+<p>**解决方式：**针对不能复制的类型，自定义一个转换器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">MapperFactory</span> <span class="variable">mapperFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DefaultMapperFactory</span>.Builder().build();</span><br><span class="line">mapperFactory.getConverterFactory().registerConverter(<span class="keyword">new</span> <span class="title class_">CustomConverter</span>&lt;Money, Money&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Money <span class="title function_">convert</span><span class="params">(Money source, Type&lt;? extends Money&gt; destinationType, MappingContext mappingContext)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Money.of(source.getAmount());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="type">MapperFacade</span> <span class="variable">mapperFacade</span> <span class="operator">=</span> mapperFactory.getMapperFacade();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复制对象</span></span><br><span class="line"><span class="type">Money</span> <span class="variable">copied</span> <span class="operator">=</span> mapperFacade.map(sourceMoney, Money.class);</span><br></pre></td></tr></table></figure>
+<p><code>ma.glasnost.orika.metadata.Type#IMMUTABLE_TYPES</code>维护了一个列表，保存了不可修改的类型，包括：</p>
+<table>
+<thead>
+<tr>
+<th>基本数据类型</th>
+<th>基本数据的包装类型</th>
+<th>jdk6中的不可变数据结构</th>
+<th>jdk8中的不可变数据结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>class java.lang.Byte</td>
+<td>class java.net.URI</td>
+<td>class java.time.chrono.MinguoDate</td>
+</tr>
+<tr>
+<td>char</td>
+<td>class java.lang.Boolean</td>
+<td>class java.util.Currency</td>
+<td>class java.time.LocalDate</td>
+</tr>
+<tr>
+<td>int</td>
+<td>class java.lang.Character</td>
+<td>class java.lang.String</td>
+<td>class java.time.MonthDay</td>
+</tr>
+<tr>
+<td>double</td>
+<td>class java.lang.Double</td>
+<td>class java.util.UUID</td>
+<td>class java.time.YearMonth</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>class java.lang.Float</td>
+<td>class java.net.URL</td>
+<td>class java.time.Duration</td>
+</tr>
+<tr>
+<td>short</td>
+<td>class java.lang.Short</td>
+<td>class java.net.Inet4Address</td>
+<td>class java.time.Period</td>
+</tr>
+<tr>
+<td>float</td>
+<td>class java.lang.Long</td>
+<td>class java.net.Inet6Address</td>
+<td>class java.time.LocalDateTime</td>
+</tr>
+<tr>
+<td>long</td>
+<td>class java.lang.Integer</td>
+<td>class java.math.BigDecimal</td>
+<td>class java.time.ZonedDateTime</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>class java.math.BigInteger</td>
+<td>class java.time.Year</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>class java.util.Locale</td>
+<td>class java.time.OffsetDateTime</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>class java.io.File</td>
+<td>class java.time.chrono.JapaneseEra</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>class java.net.InetSocketAddress</td>
+<td>class java.time.LocalTime</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>class java.time.chrono.ThaiBuddhistDate</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>class java.time.Instant</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>class java.time.chrono.HijrahDate</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>class java.time.OffsetTime</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>class java.time.ZoneOffset</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>class java.time.chrono.JapaneseDate</td>
+</tr>
+</tbody>
+</table>
+<h1 id="源码分析"><a class="markdownIt-Anchor" href="#源码分析"></a> 源码分析</h1>
+<p>映射的核心方法：<code>MapperFacade#map</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;S, D&gt; D <span class="title function_">map</span><span class="params">(<span class="keyword">final</span> S sourceObject,</span></span><br><span class="line"><span class="params">                    <span class="keyword">final</span> Class&lt;D&gt; destinationClass,</span></span><br><span class="line"><span class="params">                    <span class="keyword">final</span> MappingContext context)</span> &#123;</span><br><span class="line">  <span class="type">MappingStrategy</span> <span class="variable">strategy</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">if</span> (destinationClass == <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">MappingException</span>(<span class="string">&quot;&#x27;destinationClass&#x27; is required&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (sourceObject == <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 先看看缓存中是否已经存在映射过的对象，有的话直接从缓存中取</span></span><br><span class="line">  <span class="type">D</span> <span class="variable">result</span> <span class="operator">=</span> context.getMappedObject(sourceObject, TypeFactory.valueOf(destinationClass));</span><br><span class="line">  <span class="keyword">if</span> (result == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 核心1，获取映射策略，这里会生成映射的关系</span></span><br><span class="line">    strategy = resolveMappingStrategy(sourceObject, <span class="literal">null</span>, destinationClass, <span class="literal">false</span>, context);</span><br><span class="line">    <span class="comment">// 核心2，进行对象映射</span></span><br><span class="line">    result = (D) strategy.map(sourceObject, <span class="literal">null</span>, context);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先看下获取映射策略：<code>MapperFacadeImpl#resolveMappingStrategy</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;S, D&gt; MappingStrategy <span class="title function_">resolveMappingStrategy</span><span class="params">(<span class="keyword">final</span> S sourceObject,</span></span><br><span class="line"><span class="params">                                                     <span class="keyword">final</span> java.lang.reflect.Type initialSourceType,</span></span><br><span class="line"><span class="params">                                                     <span class="keyword">final</span> java.lang.reflect.Type initialDestinationType,</span></span><br><span class="line"><span class="params">                                                     <span class="keyword">final</span> <span class="type">boolean</span> mapInPlace,</span></span><br><span class="line"><span class="params">                                                     <span class="keyword">final</span> MappingContext context)</span> &#123;</span><br><span class="line">  <span class="comment">// 如果缓存中已经有了，直接用</span></span><br><span class="line">  <span class="type">Key</span> <span class="variable">key</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Key</span>(getClass(sourceObject), initialSourceType, initialDestinationType, mapInPlace);</span><br><span class="line">  <span class="type">MappingStrategy</span> <span class="variable">strategy</span> <span class="operator">=</span> strategyCache.get(key);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (strategy == <span class="literal">null</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (!mapInPlace &amp;&amp; canCopyByReference(destinationType, resolvedSourceType)) &#123;</span><br><span class="line">      <span class="comment">// 通过引用来复制对象</span></span><br><span class="line">      <span class="comment">// 需要注意的是，如果使用这种方式，实际上是浅拷贝</span></span><br><span class="line">      strategyRecorder.setCopyByReference(<span class="literal">true</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!mapInPlace &amp;&amp; canConvert(resolvedSourceType, destinationType)) &#123;</span><br><span class="line">      <span class="comment">// 通过converter来复制对象（需要自定义converter，我们就是通过这种方式来解决的）</span></span><br><span class="line">      strategyRecorder.setResolvedConverter(mapperFactory.getConverterFactory().getConverter(resolvedSourceType, destinationType));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 根据字段名称以及类型来映射</span></span><br><span class="line">      ...</span><br><span class="line">      <span class="comment">// 生成映射关系，mapper</span></span><br><span class="line">      strategyRecorder.setResolvedMapper(resolveMapper(resolvedSourceType, resolvedDestinationType, context));</span><br><span class="line">      ...</span><br><span class="line">   &#125;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * Set the resolved types on the current mapping context; this can be</span></span><br><span class="line"><span class="comment">   * used by downstream Mappers to determine the originally resolved types</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  context.setResolvedSourceType(strategy.getAType());</span><br><span class="line">  context.setResolvedDestinationType(strategy.getBType());</span><br><span class="line">  context.setResolvedStrategy(strategy);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> strategy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解析mapper：<code>MapperFacadeImpl#resolveMapper</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Mapper&lt;Object, Object&gt; <span class="title function_">resolveMapper</span><span class="params">(<span class="keyword">final</span> Type&lt;?&gt; sourceType,</span></span><br><span class="line"><span class="params">                                             <span class="keyword">final</span> Type&lt;?&gt; destinationType,</span></span><br><span class="line"><span class="params">                                             <span class="keyword">final</span> MappingContext context)</span> &#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="type">MapperKey</span> <span class="variable">mapperKey</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MapperKey</span>(sourceType, destinationType);</span><br><span class="line">  <span class="comment">// 查找映射关系</span></span><br><span class="line">  Mapper&lt;Object, Object&gt; mapper = mapperFactory.lookupMapper(mapperKey, context);</span><br><span class="line">	...</span><br><span class="line">  <span class="keyword">return</span> mapper;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查找映射关系：<code>DefaultMapperFactory#lookupMapper</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Mapper&lt;Object, Object&gt; <span class="title function_">lookupMapper</span><span class="params">(MapperKey mapperKey, MappingContext context)</span> &#123;</span><br><span class="line">  <span class="comment">// 如果缓存里面有，直接用</span></span><br><span class="line">  Mapper&lt;?, ?&gt; mapper = getRegisteredMapper(mapperKey.getAType(), mapperKey.getBType(), <span class="literal">false</span>);</span><br><span class="line">  <span class="keyword">if</span> (internalMapperMustBeGenerated(mapper, mapperKey)) &#123;</span><br><span class="line">    <span class="comment">// 如果必须创建一个新的，设置为null</span></span><br><span class="line">    mapper = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">	</span><br><span class="line">  <span class="comment">// 如果缓存中没有获取到mapper，新创建一个</span></span><br><span class="line">  <span class="keyword">if</span> (mapper == <span class="literal">null</span> &amp;&amp; useAutoMapping) &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 加锁，这块逻辑比较消耗性能，避免重复创建映射关系</span></span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="built_in">this</span>) &#123;</span><br><span class="line">      <span class="comment">// 创建mapper</span></span><br><span class="line">      mapper = buildMapper(classMap, <span class="literal">true</span>, context);</span><br><span class="line">      initializeUsedMappers(mapper, classMap, context);</span><br><span class="line">     	...</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">return</span> (Mapper&lt;Object, Object&gt;) mapper;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建mapper：<code>DefaultMapperFactory#buildMapper</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> GeneratedMapperBase <span class="title function_">buildMapper</span><span class="params">(ClassMap&lt;?, ?&gt; classMap,</span></span><br><span class="line"><span class="params">                                        <span class="type">boolean</span> isAutoGenerated,</span></span><br><span class="line"><span class="params">                                        MappingContext context)</span> &#123;</span><br><span class="line">	...</span><br><span class="line">  <span class="comment">// 使用mapper生成器，生成mapper</span></span><br><span class="line">  <span class="keyword">final</span> <span class="type">GeneratedMapperBase</span> <span class="variable">mapper</span> <span class="operator">=</span> mapperGenerator.build(classMap, context);</span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">// 放到缓存中，可重复使用</span></span><br><span class="line">  classMapRegistry.put(mapperKey, (ClassMap&lt;Object, Object&gt;) classMap);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> mapper;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成mapper：<code>MapperGenerator#build</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> GeneratedMapperBase <span class="title function_">build</span><span class="params">(ClassMap&lt;?, ?&gt; classMap, MappingContext context)</span> &#123;</span><br><span class="line">	<span class="comment">// 对属性生成映射关系</span></span><br><span class="line">  mappedFields.addAll(addMapMethod(mapperCode, <span class="literal">true</span>, classMap, logDetails));</span><br><span class="line">  mappedFields.addAll(addMapMethod(mapperCode, <span class="literal">false</span>, classMap, logDetails));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查找每个属性的映射关系：<code>MapperGenerator#addMapMethod</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Set&lt;FieldMap&gt; <span class="title function_">addMapMethod</span><span class="params">(SourceCodeContext code,</span></span><br><span class="line"><span class="params">                                   <span class="type">boolean</span> aToB, ClassMap&lt;?, ?&gt; classMap,</span></span><br><span class="line"><span class="params">                                   StringBuilder logDetails)</span> &#123;</span><br><span class="line">  Set&lt;FieldMap&gt; mappedFields = <span class="keyword">new</span> <span class="title class_">LinkedHashSet</span>&lt;FieldMap&gt;();</span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">// 创建变量ref</span></span><br><span class="line">  VariableRef source;</span><br><span class="line">  VariableRef destination;</span><br><span class="line">  <span class="keyword">if</span> (aToB) &#123;</span><br><span class="line">      source = <span class="keyword">new</span> <span class="title class_">VariableRef</span>(classMap.getAType(), <span class="string">&quot;source&quot;</span>);</span><br><span class="line">      destination = <span class="keyword">new</span> <span class="title class_">VariableRef</span>(classMap.getBType(), <span class="string">&quot;destination&quot;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      source = <span class="keyword">new</span> <span class="title class_">VariableRef</span>(classMap.getBType(), <span class="string">&quot;source&quot;</span>);</span><br><span class="line">      destination = <span class="keyword">new</span> <span class="title class_">VariableRef</span>(classMap.getAType(), <span class="string">&quot;destination&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">	</span><br><span class="line">  <span class="comment">// 遍历每个属性</span></span><br><span class="line">  <span class="keyword">for</span> (FieldMap currentFieldMap : classMap.getFieldsMapping()) &#123;</span><br><span class="line">		<span class="comment">// 是否需要排除（根据配置）</span></span><br><span class="line">    <span class="keyword">if</span> (currentFieldMap.isExcluded()) &#123;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">		</span><br><span class="line">    <span class="comment">// 这个属性已经创建过映射关系了</span></span><br><span class="line">    <span class="keyword">if</span> (isAlreadyExistsInUsedMappers(currentFieldMap, classMap)) &#123;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">FieldMap</span> <span class="variable">fieldMap</span> <span class="operator">=</span> currentFieldMap;</span><br><span class="line">    <span class="keyword">if</span> (!aToB) &#123;</span><br><span class="line">        fieldMap = fieldMap.flip();</span><br><span class="line">    &#125;</span><br><span class="line">		</span><br><span class="line">    <span class="comment">// 是否忽略字段</span></span><br><span class="line">    <span class="keyword">if</span> (!fieldMap.isIgnored()) &#123;</span><br><span class="line">      <span class="keyword">if</span> (code.aggregateSpecsApply(fieldMap)) &#123;</span><br><span class="line">          <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      ...</span><br><span class="line">      mappedFields.add(currentFieldMap);</span><br><span class="line">      <span class="comment">// 处理一下属性的读写权限</span></span><br><span class="line">      <span class="type">String</span> <span class="variable">sourceCode</span> <span class="operator">=</span> generateFieldMapCode(code, fieldMap, classMap, destination, logDetails);</span><br><span class="line">      ...</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (logDetails != <span class="literal">null</span>) &#123;</span><br><span class="line">        code.debugField(fieldMap, <span class="string">&quot;ignored for this mapping direction&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> mappedFields;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>处理变量的访问权限：<code>MapperGenerator#addMapMethod</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">generateFieldMapCode</span><span class="params">(SourceCodeContext code,</span></span><br><span class="line"><span class="params">                                    FieldMap fieldMap,</span></span><br><span class="line"><span class="params">                                    ClassMap&lt;?, ?&gt; classMap,</span></span><br><span class="line"><span class="params">                                    VariableRef destination,</span></span><br><span class="line"><span class="params">                                    StringBuilder logDetails)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    </span><br><span class="line">  <span class="keyword">final</span> <span class="type">VariableRef</span> <span class="variable">sourceProperty</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VariableRef</span>(fieldMap.getSource(), <span class="string">&quot;source&quot;</span>);</span><br><span class="line">  <span class="keyword">final</span> <span class="type">VariableRef</span> <span class="variable">destinationProperty</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VariableRef</span>(fieldMap.getDestination(), <span class="string">&quot;destination&quot;</span>);</span><br><span class="line">  destinationProperty.setOwner(destination);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// source不可读，直接返回</span></span><br><span class="line">  <span class="comment">// destination没有set方法，并且不能修改，直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (!sourceProperty.isReadable() </span><br><span class="line">      || ((!destinationProperty.isAssignable()) &amp;&amp; destinationProperty.type().isImmutable())) &#123;</span><br><span class="line">      <span class="keyword">if</span> (logDetails != <span class="literal">null</span>) &#123;</span><br><span class="line">          code.debugField(fieldMap, <span class="string">&quot;excluding because &quot;</span>);</span><br><span class="line">          <span class="keyword">if</span> (!sourceProperty.isReadable()) &#123;</span><br><span class="line">              Type&lt;?&gt; sourceType = classMap.getAType().equals(destination.type()) ? classMap.getBType() : classMap.getAType();</span><br><span class="line">              logDetails.append(sourceType + <span class="string">&quot;.&quot;</span> + fieldMap.getSource().getName() + <span class="string">&quot;(&quot;</span> + fieldMap.getSource().getType()</span><br><span class="line">                      + <span class="string">&quot;) is not readable&quot;</span>);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              logDetails.append(destination.type() + <span class="string">&quot;.&quot;</span> + fieldMap.getDestination().getName() + <span class="string">&quot;(&quot;</span></span><br><span class="line">                      + fieldMap.getDestination().getType() + <span class="string">&quot;) is not assignable and cannot be mapped in-place&quot;</span>);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Make sure the source and destination types are accessible to the builder</span></span><br><span class="line">  compilerStrategy.assureTypeIsAccessible(sourceProperty.rawType());</span><br><span class="line">  compilerStrategy.assureTypeIsAccessible(destinationProperty.rawType());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> code.mapFields(fieldMap, sourceProperty, destinationProperty);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里就可以知道了，如果一个属性没有set方法，并且这个属性是不可变的，那么就不能被复制。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://eoccc.gitee.io/2023/07/24/Orika%E5%A4%8D%E5%88%B6%E5%AF%B9%E8%B1%A1%E5%A4%B1%E8%B4%A5%E5%88%86%E6%9E%90/" title="Orika复制对象失败分析" target="_blank" rel="external">https://eoccc.gitee.io/2023/07/24/Orika复制对象失败分析/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://eoccc.gitee.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/head.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://eoccc.gitee.io" target="_blank"><span class="text-dark">Eoccc</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/07/12/redis%E5%AD%A6%E4%B9%A010-%E9%9B%86%E7%BE%A4/" title="redis学习10-集群"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/eoccc" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'L0pHMPyUMhUgOTeyEm1Cv0G6-gzGzoHsz',
+    appKey: '8eUoFNFfLaUHNLzSxQjQLCx6',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
