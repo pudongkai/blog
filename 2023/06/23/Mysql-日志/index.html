@@ -18,24 +18,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>redis学习3-过期键清除策略 | Eoccc的博客</title>
-  <meta name="description" content="Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。">
+  <title>Mysql-架构 | Eoccc的博客</title>
+  <meta name="description" content="回滚日志（undo log）是用来实现事务的原子性和持久性的。当事务需要回滚的时候，就会用到undo log。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis学习3-过期键清除策略">
-<meta property="og:url" content="https://eoccc.gitee.io/2023/07/04/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/index.html">
+<meta property="og:title" content="Mysql-架构">
+<meta property="og:url" content="https://eoccc.gitee.io/2023/06/23/Mysql-%E6%97%A5%E5%BF%97/index.html">
 <meta property="og:site_name" content="Eoccc的博客">
-<meta property="og:description" content="Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。">
+<meta property="og:description" content="回滚日志（undo log）是用来实现事务的原子性和持久性的。当事务需要回滚的时候，就会用到undo log。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723224526012.png">
-<meta property="article:published_time" content="2023-07-04T06:21:43.000Z">
-<meta property="article:modified_time" content="2023-08-04T09:21:57.383Z">
+<meta property="article:published_time" content="2023-06-23T08:25:19.000Z">
+<meta property="article:modified_time" content="2023-08-04T09:50:09.254Z">
 <meta property="article:author" content="Eoccc">
-<meta property="article:tag" content="中间件">
-<meta property="article:tag" content="redis">
+<meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723224526012.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://eoccc.gitee.io/2023/07/04/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/index.html">
+  <link rel="canonical" href="https://eoccc.gitee.io/2023/06/23/Mysql-%E6%97%A5%E5%BF%97/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Eoccc的博客" type="application/atom+xml">
   
@@ -267,21 +264,21 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">Catalogue</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4"><span class="toc-number">1.</span> <span class="toc-text"> 设置过期时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5"><span class="toc-number">2.</span> <span class="toc-text"> 过期删除策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%83%B0%E6%80%A7%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5"><span class="toc-number">2.1.</span> <span class="toc-text"> 惰性删除策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5"><span class="toc-number">2.2.</span> <span class="toc-text"> 定期删除策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aof-rdb%E5%92%8C%E5%A4%8D%E5%88%B6%E5%8A%9F%E8%83%BD%E5%AF%B9%E8%BF%87%E6%9C%9F%E9%94%AE%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text"> AOF、RDB和复制功能对过期键的处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb%E5%AF%B9%E8%BF%87%E6%9C%9F%E9%94%AE%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text"> RDB对过期键的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof%E5%AF%B9%E8%BF%87%E6%9C%9F%E9%94%AE%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text"> AOF对过期键的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E5%AF%B9%E8%BF%87%E6%9C%9F%E9%94%AE%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">3.3.</span> <span class="toc-text"> 复制对过期键的处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E6%97%B6%E7%9A%84%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5"><span class="toc-number">4.</span> <span class="toc-text"> 内存不足时的清除策略</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undo-log"><span class="toc-number">1.</span> <span class="toc-text"> Undo Log</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#redo-log"><span class="toc-number">2.</span> <span class="toc-text"> Redo Log</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#binlog"><span class="toc-number">3.</span> <span class="toc-text"> Binlog</span></a></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-redis学习3-过期键清除策略" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-Mysql-日志" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      redis学习3-过期键清除策略
+      Mysql-架构
     </h1>
   
 
@@ -292,16 +289,16 @@
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/redis/" rel="tag">redis</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+	<a class="article-tag-link-link" href="/tags/Mysql/" rel="tag">Mysql</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/04/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/23/Mysql-%E6%97%A5%E5%BF%97/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.3k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 883(words)</span>
 	
 	
 
@@ -309,68 +306,49 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>Redis为了清除过期的键，采用了一定的策略进行清除。为了兼顾cpu占用和内存可用空间，redis对清除策略做了一些巧妙的设计。</p>
+        <p>回滚日志（undo log）是用来实现事务的原子性和持久性的。当事务需要回滚的时候，就会用到undo log。</p>
 <span id="more"></span>
-<h2 id="设置过期时间"><a class="markdownIt-Anchor" href="#设置过期时间"></a> 设置过期时间</h2>
-<p>Redis可以通过以下四个命令对任意key设置过期时间：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">EXPIRE key seconds          // key将在seconds秒后过期</span><br><span class="line">PEXPIRE key millionSeconds  // key将在millionSeconds毫秒后过期</span><br><span class="line">EXPIREAT key timestamp      // key将在timestamp时过期，单位为秒</span><br><span class="line">PEXPIREAT key timestamp       // key将在timestamp时过期，单位为毫秒</span><br></pre></td></tr></table></figure>
-<p>Redis的底层会将<code>EXPIRE</code> <code>PEXPIRE</code> <code>EXPIREAT</code>三个过期命令转换为<code>PEXPIREAT</code>命令来执行。</p>
-<p>Redis使用一个expires字典保存了所有key的过期时间。字典的key为一个指针，指向了redis中的某一个键；字典的值为一个long类型的整数（对象共享，不会存在浪费空间），保存了这个键过期时间的毫秒级时间戳。</p>
-<p>Redis可以使用以下命令计算或移出过期时间：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TTL key       // 计算key还剩余多少生存时间，秒级</span><br><span class="line">PTTL key      // 计算key还剩余多少生存时间，毫秒级</span><br><span class="line">PERSIST key   // 移出key的过期时间</span><br></pre></td></tr></table></figure>
-<h2 id="过期删除策略"><a class="markdownIt-Anchor" href="#过期删除策略"></a> 过期删除策略</h2>
-<p>清除策略一般有三种：定时清除、惰性删除、定期删除</p>
-<p><strong>定时清除：</strong> 通过使用定时器，定期清除过期的内存。过期的key过多的时候，会导致cpu占用高，进而导致吞吐量降低。</p>
-<p><strong>惰性删除：</strong> 程序只有在取出key的时候才会进行过期检查，对cpu友好，但是对内存不友好。如果一个键一直不被访问，则即使过期也不会被删除。</p>
-<p><strong>定期删除：</strong> 每隔一段时间执行一次删除动作。需要平衡清除周期和内存占用，清除周期短会导致cpu使用高，清除周期长会导致浪费内存。</p>
-<p>Redis服务器采用了<strong>惰性删除策略</strong>和<strong>定期删除策略</strong>对过期键进行清除，在cpu占用率和避免浪费内存空间之间取得平衡。</p>
-<h3 id="惰性删除策略"><a class="markdownIt-Anchor" href="#惰性删除策略"></a> 惰性删除策略</h3>
-<p>在执行所有的读写操作之前，redis都会执行<code>expireIfNeed</code>方法，判断当前键是否过期。</p>
-<blockquote>
-<ul>
-<li>如果过期，<code>expireIfNeed</code>方法会删除过期的键</li>
-<li>如果没有过期，<code>expireIfNeed</code>不做任何操作</li>
-</ul>
-</blockquote>
-<h3 id="定期删除策略"><a class="markdownIt-Anchor" href="#定期删除策略"></a> 定期删除策略</h3>
-<p>redis会定期地执行<code>activExpireCycle</code>函数，在规定的时间内，从expires字典中随机抽取一定数量的键，检查其过期时间，并将过期的键删除。</p>
-<p>redis默认的定期淘汰过期键策略：</p>
+<h1 id="undo-log"><a class="markdownIt-Anchor" href="#undo-log"></a> Undo Log</h1>
+<p><strong>保存的内容：</strong></p>
 <blockquote>
 <ol>
-<li>redis每10秒执行一次过期检查</li>
-<li>每次过期检查会从expires字典中随机抽取20个key进行检查</li>
-<li>删除过期的key</li>
-<li>如果删除的key超过25%，立即进行下一次过期检查</li>
+<li>
+<p>旧数据：记录了事务操作之前的数据，包括修改之前的数据和删除之前的数据。</p>
+</li>
+<li>
+<p>回滚指针：记录了undo log中旧数据的位置信息，以便在事务回滚时快速定位和恢复数据。</p>
+</li>
 </ol>
 </blockquote>
-<h2 id="aof-rdb和复制功能对过期键的处理"><a class="markdownIt-Anchor" href="#aof-rdb和复制功能对过期键的处理"></a> AOF、RDB和复制功能对过期键的处理</h2>
-<h3 id="rdb对过期键的处理"><a class="markdownIt-Anchor" href="#rdb对过期键的处理"></a> RDB对过期键的处理</h3>
-<p><strong>1. 生成RDB文件时：</strong> 通过<code>SAVE</code>或<code>BGSAVE</code>命令生成RDB文件时，redis会忽略过期的键。</p>
-<p><strong>2. 载入RDB文件时：</strong> 如果redis以主服务器模式运行，会淘汰过期的键；如果以从服务器运行，会载入所有的键（从服务器同步数据库的时候，会先清空所有数据，所以载入所有的键对数据库不会有影响）。</p>
-<h3 id="aof对过期键的处理"><a class="markdownIt-Anchor" href="#aof对过期键的处理"></a> AOF对过期键的处理</h3>
-<p><strong>1. 写入AOF文件时：</strong> 如果一个键已经过期，但是还没有淘汰，AOF不会对这个过期键做任何处理，当过期键被删除后，会向AOF文件追加一条DEL命令，显式删除过期的键。</p>
-<p><strong>2. 重写AOF文件时：</strong> redis会检查键的过期时间，过期的键不会被写入AOF文件。</p>
-<h3 id="复制对过期键的处理"><a class="markdownIt-Anchor" href="#复制对过期键的处理"></a> 复制对过期键的处理</h3>
-<p>当服务器在复制模式下运行时，从服务器删除过期键的操作由主服务器控制，由此保证数据的一致性：</p>
-<ul>
-<li>主服务器删除一个过期键之后，会向从服务器发送一条DEL命令，让从服务器删除过期键</li>
-<li>从服务器在执行读命令时遇到过期键，不会删除过期键，而是像未过期键一样处理</li>
-<li>从服务器只有接收到主服务器的DEL命令时，才会删除过期键</li>
-</ul>
-<h2 id="内存不足时的清除策略"><a class="markdownIt-Anchor" href="#内存不足时的清除策略"></a> 内存不足时的清除策略</h2>
+<p><strong>作用：</strong> 当事务回滚时，MySQL引擎会使用undo log中记录的旧数据来恢复数据的原始状态。</p>
+<p><strong>写入时机：</strong> Undo Log的写入时机可以分为两个部分：更新日志(write-ahead logging)和回滚日志(rollback logging)。</p>
 <blockquote>
 <ol>
-<li>noeviction: 返回错误，并且客户端尝试执行，会让更多内存被使用</li>
-<li>allkeys-lru: 尝试回收最少使用的键(LRU)</li>
-<li>volatile-lru: 尝试回收最少使用的键(LRU)，但仅限于在过期集合的键</li>
-<li>allkeys-random: 随机回收所有键</li>
-<li>volatile-random: 回收随机的键使得新添加的数据有空间存放，但仅限于在过期集合的键</li>
-<li>volatile-ttl: 回收在过期集合中的键，并且优先回收存活时间(TTL)较短的键</li>
-<li>allkeys-lfu: 尝试回收最少使用频率的键(LFU)</li>
-<li>volatile-lfu: 尝试回收最少使用频率的键(LFU)，但仅限于在过期集合的键</li>
+<li>更新日志(write-ahead logging)：当一个事务对数据库进行修改时，MySQL会先将修改操作记录在更新日志中，然后再将修改应用到数据库中。这个过程被称为写前日志(write-ahead logging)。写前日志的目的是为了保证事务的原子性和持久性，确保事务在提交前，所有的修改操作都会被记录下来，以便在需要回滚时进行恢复。<strong>写前日志是在事务提交前写入的。</strong></li>
+<li>回滚日志(rollback logging)：当一个事务被回滚时，MySQL会使用Undo Log中的信息来还原数据库中的修改，以便数据库恢复到事务开始之前的状态。回滚日志就是用来记录Undo Log中的信息的，它记录了每个事务所做的修改操作，以便在需要回滚时进行恢复。回滚日志是在事务提交后写入的。</li>
 </ol>
 </blockquote>
-<p><img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230723224526012.png" alt="image-20230723224526012"></p>
+<h1 id="redo-log"><a class="markdownIt-Anchor" href="#redo-log"></a> Redo Log</h1>
+<p><strong>保存的内容：</strong> MySQL引擎执行的每一个修改数据的操作，包括插入、更新和删除等操作。</p>
+<p><strong>作用：</strong> MySQL在发生异常宕机等故障时，可以通过redo log来恢复数据的一致性和完整性。</p>
+<p><strong>写入时机：</strong> MySQL执行事务操作时，会将事务的修改操作记录在redo log缓冲区中。当事务提交时，MySQL将redo log缓冲区中的数据写入磁盘，这个过程称为redo log的刷盘（flush）操作。</p>
+<p>Mysql有两种刷盘方式：</p>
+<blockquote>
+<ol>
+<li>
+<p>同步刷盘：在事务提交时，MySQL会立即将redo log缓冲区中的数据写入磁盘，等待写入完成后才会返回事务提交成功的消息。这种方式可以保证数据的持久性和一致性，但是会影响事务的性能。</p>
+</li>
+<li>
+<p>异步刷盘：在事务提交时，MySQL会将redo log缓冲区中的数据写入到操作系统的缓冲区中，然后立即返回事务提交成功的消息，不等待写入磁盘完成。这种方式可以提高事务的性能，但是会存在数据丢失的风险。</p>
+</li>
+</ol>
+</blockquote>
+<h1 id="binlog"><a class="markdownIt-Anchor" href="#binlog"></a> Binlog</h1>
+<p><strong>保存的内容：</strong> 记录所有对数据库的修改操作的日志。</p>
+<p><strong>作用：</strong> 用于数据备份、数据恢复、数据复制等应用场景。</p>
+<p><strong>写入时机：</strong> Binlog是在事务提交后写入的。（先写redo log，后写binlog）</p>
+<p>具体来说，当一个事务提交时，MySQL会将该事务的修改操作记录到Binlog中。Binlog中会记录该事务的操作类型（如插入、更新、删除等）、修改的表名、修改的行数据等信息。这些信息可以用于在需要时进行数据恢复、数据复制或者进行数据分析等。</p>
+<p><a href="https://blog.csdn.net/qq_22795957/article/details/113920409">https://blog.csdn.net/qq_22795957/article/details/113920409</a></p>
 
       
     </div>
@@ -380,7 +358,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://eoccc.gitee.io/2023/07/04/redis%E5%AD%A6%E4%B9%A03-%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B8%85%E9%99%A4%E7%AD%96%E7%95%A5/" title="redis学习3-过期键清除策略" target="_blank" rel="external">https://eoccc.gitee.io/2023/07/04/redis学习3-过期键清除策略/</a>
+      <a href="https://eoccc.gitee.io/2023/06/23/Mysql-%E6%97%A5%E5%BF%97/" title="Mysql-架构" target="_blank" rel="external">https://eoccc.gitee.io/2023/06/23/Mysql-日志/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -427,12 +405,12 @@
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2023/07/05/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/" title="redis学习4-RDB持久化"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+      <a href="/2023/06/23/Mysql-SQL%E4%BC%98%E5%8C%96/" title="Mysql- SQL优化"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
     </li>
     
     
     <li class="next">
-      <a href="/2023/07/02/redis%E5%AD%A6%E4%B9%A02-%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0/" title="redis学习2-五种数据类型实现"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2023/06/20/Mysql-%E6%9E%B6%E6%9E%84/" title="Mysql-架构"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     

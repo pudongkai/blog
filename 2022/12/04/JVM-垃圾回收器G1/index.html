@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230711232124114.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230712010841845.png">
 <meta property="article:published_time" content="2022-12-04T07:25:43.000Z">
-<meta property="article:modified_time" content="2023-07-12T16:54:02.182Z">
+<meta property="article:modified_time" content="2023-08-03T08:40:43.965Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -315,12 +315,12 @@
 <p>G1把连续的Java堆划分为多个<strong>大小相等</strong>的独立区域(Region)，每一个Region都可以根据需要，扮演新生代的Eden空间、Survivor空间，或者老年代空间。</p>
 <p>Region中还有一类特殊的Humongous区域，专门用来存储大对象。G1认为只要大小超过了一个Region容量一半的对象即可判定为大对象。每个Region的大小可以通过参数<code>-XX:G1HeapRegionSize</code>设定，取值范围为1MB~32MB，且应为2的N次幂。而对于那些超过了整个Region容量的超级大对象，将会被存放在N个连续的HumongousRegion之中，G1的大多数行为都把HumongousRegion作为老年代的一部分来进行看待。</p>
 <img src="https://gitee.com/eoccc/pic-shack/raw/master/image-20230711232124114.png" alt="image-20230711232124114" style="zoom:40%;">
-<p>G1将Region作 为单次回收的最小单元。这样可以有计划地避免在整个Java堆中进行全区域的垃圾收集。更具体的处理思路是让G1收集器去跟踪各个Region里面的垃圾堆积的“价值”大小，价值即回收所获得的空间大小以及回收所需时间的经验值，然后在后台维护一个优先级列表，每次根据用户设定允许的收集停顿时间(使用参数-XX:MaxGCPauseMillis指定，默认值是200毫秒)，优先处理回收价值收益最大的那些Region。</p>
+<p>G1将Region作为单次回收的最小单元。这样可以有计划地避免在整个Java堆中进行全区域的垃圾收集。更具体的处理思路是让G1收集器去跟踪各个Region里面的垃圾堆积的“价值”大小，价值即回收所获得的空间大小以及回收所需时间的经验值，然后在后台维护一个优先级列表，每次根据用户设定允许的收集停顿时间(使用参数-XX:MaxGCPauseMillis指定，默认值是200毫秒)，优先处理回收价值收益最大的那些Region。</p>
 <h1 id="g1需要解决的问题"><a class="markdownIt-Anchor" href="#g1需要解决的问题"></a> G1需要解决的问题</h1>
 <ul>
 <li>
 <p>G1垃圾收集器如何处理跨Region引用对象的问题？</p>
-<p>G1使用记忆集（RSet）避免全堆作为GC Roots扫描，但在G1收集器上的记忆集要复杂很多，它的每个Region都维护有自己的记忆集，这些记忆集会记录下别的Region 指向自己的指针，并标记这些指针分别在哪些卡页的范围之内，是一种“双向”的卡表结构。</p>
+<p>G1使用记忆集（RSet）避免全堆作为GC Roots扫描，但在G1收集器上的记忆集要复杂很多，它的每个Region都维护有自己的记忆集，这些记忆集会记录下别的Region指向自己的指针，并标记这些指针分别在哪些卡页的范围之内，是一种“双向”的卡表结构。</p>
 <p>G1的记忆集在存储结构的本质上是一种哈希表，Key是别的Region的起始地址，Value是一个集合，里面存储的是卡表的索引。</p>
 <p>由于Region数量比传统收集器的分代数量明显要多得多，因此G1收集器要比其他的传统垃圾收集器有着更高的内存占用负担，<strong>G1至少要耗费大约相当于Java堆容量10%至20%的额外内存来维持收集器工作。</strong></p>
 </li>
@@ -330,7 +330,7 @@
 </li>
 <li>
 <p>怎样建立起可靠的停顿预测模型?</p>
-<p>G1收集器的停顿 预测模型是以衰减均值(Decaying Average)为理论基础来实现的，在垃圾收集过程中，G1收集器会记录每个Region的回收耗时、每个Region记忆集里的脏卡数量等各个可测量的步骤花费的成本，并分析得出平均值、标准偏差、置信度等统计信息。然后通过这些信息预测由哪些Region组成回收集可以获得最高的收益。</p>
+<p>G1收集器的停顿预测模型是以衰减均值(Decaying Average)为理论基础来实现的，在垃圾收集过程中，G1收集器会记录每个Region的回收耗时、每个Region记忆集里的脏卡数量等各个可测量的步骤花费的成本，并分析得出平均值、标准偏差、置信度等统计信息。然后通过这些信息预测由哪些Region组成回收集可以获得最高的收益。</p>
 </li>
 </ul>
 <h1 id="回收过程"><a class="markdownIt-Anchor" href="#回收过程"></a> 回收过程</h1>

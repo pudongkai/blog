@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230716183642681.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/Ra0t2kSg9.jpeg">
 <meta property="article:published_time" content="2023-07-05T03:32:23.000Z">
-<meta property="article:modified_time" content="2023-07-23T14:12:56.340Z">
+<meta property="article:modified_time" content="2023-08-04T09:37:41.459Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -302,7 +302,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/05/redis%E5%AD%A6%E4%B9%A04-RDB%E6%8C%81%E4%B9%85%E5%8C%96/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 796(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 794(words)</span>
 	
 	
 
@@ -329,7 +329,7 @@
 <p>RDB文件载入期间，redis服务器会一直处于阻塞状态</p>
 </li>
 <li>
-<p>如果redis开启了AOF功能，会优先使用AOF文件来还愿数据</p>
+<p>如果redis开启了AOF功能，会优先使用AOF文件来还原数据</p>
 </li>
 </ul>
 <h1 id="redis自动保存"><a class="markdownIt-Anchor" href="#redis自动保存"></a> Redis自动保存</h1>
@@ -356,12 +356,12 @@
 </blockquote>
 </li>
 </ol>
-<p><em>问题：在子进程进程持久化的过程中，如果发生了大量的写操作，会产生大量的数据拷贝，从未导致大量的内存占用。</em></p>
+<p><em>问题：在子进程进程持久化的过程中，如果发生了大量的写操作，会产生大量的数据拷贝，从而导致大量的内存占用。</em></p>
 <h1 id="rdb文件结构"><a class="markdownIt-Anchor" href="#rdb文件结构"></a> RDB文件结构</h1>
 <p>RDB文件结构图：</p>
 <img src="https://gitee.com/eoccc/pic-shack/raw/master/Ra0t2kSg9.jpeg" alt="img/Ra0t2kSg9.jpeg" style="zoom:50%;">
 <ul>
-<li>REDIS部分为一个固定值，保存老人&quot;REDIS&quot;的二进制码</li>
+<li>REDIS部分为一个固定值，保存&quot;REDIS&quot;的二进制码</li>
 <li>db_version为一个长为4字节的整数，记录了RDB的版本号</li>
 <li>database部分保存了0个或多个数据库，以及各个数据库中的键值对</li>
 <li>EOF为一个长度为1字节的常量，标识RDB正文的结束位置</li>

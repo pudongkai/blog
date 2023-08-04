@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230710151651642.png">
 <meta property="og:image" content="https://gitee.com/eoccc/pic-shack/raw/master/image-20230710154147502.png">
 <meta property="article:published_time" content="2023-06-20T08:25:19.000Z">
-<meta property="article:modified_time" content="2023-07-27T09:45:24.403Z">
+<meta property="article:modified_time" content="2023-08-03T17:02:25.947Z">
 <meta property="article:author" content="Eoccc">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -304,7 +304,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/20/Mysql-%E6%9E%B6%E6%9E%84/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 3.4k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 3.6k(words)</span>
 	
 	
 
@@ -460,7 +460,14 @@ Mysql支持的存储引擎：InnoDB、MyISAM、MEMORY、CSV、BLACKHOLE、FEDERA
 <p>重做日志（Redo Log）是用来实现事务的持久性。该日志文件由两部分组成：重做日志缓冲（redo log buffer）以及重做日志文件（redo log），前者是在内存中，后者在磁盘中。当事务提交之后会把所有修改信息都会存到该日志中，用于在刷新脏页到磁盘发生错误时，进行数据恢复。</p>
 <p>Redo Log 在事务提交之后才会写入。</p>
 <h3 id="回滚日志"><a class="markdownIt-Anchor" href="#回滚日志"></a> 回滚日志</h3>
-<p>回滚日志（undo log）是用来回滚的。在事务提交之前就开始写，主要是为了提升性能。当事务需要回滚的时候，就会用到undo log。</p>
+<p>回滚日志（undo log）是用来实现事务的原子性和持久性的。当事务需要回滚的时候，就会用到undo log。</p>
+<p>Undo Log的写入时机可以分为两个部分：更新日志(write-ahead logging)和回滚日志(rollback logging)。</p>
+<blockquote>
+<ol>
+<li>更新日志(write-ahead logging)：当一个事务对数据库进行修改时，MySQL会先将修改操作记录在更新日志中，然后再将修改应用到数据库中。这个过程被称为写前日志(write-ahead logging)。写前日志的目的是为了保证事务的原子性和持久性，确保事务在提交前，所有的修改操作都会被记录下来，以便在需要回滚时进行恢复。<strong>写前日志是在事务提交前写入的。</strong></li>
+<li>回滚日志(rollback logging)：当一个事务被回滚时，MySQL会使用Undo Log中的信息来还原数据库中的修改，以便数据库恢复到事务开始之前的状态。回滚日志就是用来记录Undo Log中的信息的，它记录了每个事务所做的修改操作，以便在需要回滚时进行恢复。回滚日志是在事务提交后写入的。</li>
+</ol>
+</blockquote>
 <h2 id="后台线程"><a class="markdownIt-Anchor" href="#后台线程"></a> 后台线程</h2>
 <h3 id="master-thread"><a class="markdownIt-Anchor" href="#master-thread"></a> Master Thread</h3>
 <p>核心后台线程，负责：</p>
@@ -564,7 +571,7 @@ Mysql支持的存储引擎：InnoDB、MyISAM、MEMORY、CSV、BLACKHOLE、FEDERA
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2023/06/23/Mysql-SQL%E4%BC%98%E5%8C%96/" title="Mysql- SQL优化"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+      <a href="/2023/06/23/Mysql-%E6%97%A5%E5%BF%97/" title="Mysql-架构"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
     </li>
     
     
